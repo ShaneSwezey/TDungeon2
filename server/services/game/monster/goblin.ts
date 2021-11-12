@@ -1,13 +1,15 @@
-import { attackHeroes } from "../actions/attack";
+//import { attackHeroes } from "../actions/attack";
 import { Hero } from '../hero';
-import { selectRandomHeroes } from "../utils/math";
+import { getUuid, selectRandomHeroes } from "../utils/math";
 import { Monster, MonsterType } from '.';
+import { MonsterAttackType } from '../stats/attack';
 
 export interface Goblin extends Monster {
     type: MonsterType.Goblin;
 }
 
 export const goblin = (): Monster => ({
+    id: getUuid(),
     type: MonsterType.Goblin,
     stamina: {
         maxHitPoints: 5,
@@ -17,19 +19,20 @@ export const goblin = (): Monster => ({
         low: 1,
         high: 3,
         attackPower: 0,
+        type: MonsterAttackType.STABBED,
     },
 });
 
-export const executeGoblinAttack = (goblin: Goblin, heroes: Hero[]) => {
+// export const executeGoblinAttack = (goblin: Goblin, heroes: Hero[]) => {
 
-    // select up to 5 heroes for the Goblin to attack
-    const selectedHeroes = selectRandomHeroes(heroes, 5);
+//     // select up to 5 heroes for the Goblin to attack
+//     const selectedHeroes = selectRandomHeroes(heroes, 5);
 
-    // 
-    attackHeroes(selectedHeroes, [goblin]);
+//     // 
+//     attackHeroes(selectedHeroes, [goblin]);
 
-    // Rend
-    // const heroesWithRend = chanceToApplyRend({ heroes, dmg: 1, duration: 3, chance: 25 });
+//     // Rend
+//     // const heroesWithRend = chanceToApplyRend({ heroes, dmg: 1, duration: 3, chance: 25 });
 
-    return { monster: goblin, heroes , message: null }
-}
+//     return { monster: goblin, heroes , message: null }
+// }

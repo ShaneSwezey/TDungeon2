@@ -18,7 +18,6 @@ export interface Effect {
     type: EffectType;
     appliedTo: EffectAppliedTo;
     rounds: number;
-    execute: () => void;
 }
 
 export enum BuffType {

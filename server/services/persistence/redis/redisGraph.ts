@@ -1,6 +1,6 @@
 import Redis from 'redisgraph.js';
 import { RedisConfig } from '.';
-import { Hero, HeroType } from '../../services/game/hero';
+import { Hero, HeroType } from '../../game/hero';
 
 export class RedisGraph {
 

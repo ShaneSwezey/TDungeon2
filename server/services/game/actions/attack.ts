@@ -32,28 +32,32 @@ interface ExecutionPayload {
 //     }
 // }
 
-interface ActionEvent {
-    type: string; // change to enum
-    value: number;
-    to: Hero | Monster
-    from: Hero | Monster
-    with?: Weapon;
-    createdAt: Date
-}
+
 
 export const attackHeroes = (heroes: Hero[], monsters: Monster[]) => {
     const actionEvents: ActionEvent[] = [];
+    let iteration = 0;
     monsters.forEach(monster => {
-        heroes.forEach(hero => {
-            const attackValue = getRandomInt(monster.attack.low, monster.attack.high) + monster.attack.attackPower;
-            actionEvents.push({
-                type: "ATTACKED",
-                value: attackValue,
-                to: hero,
-                from: monster,
-                createdAt: new Date(),
-            });
+        iteration++;
+        const aliveHeroes = heroes.filter(hero => hero.stamina.hitPoints > 0);
+        const selectedHero = selectRandom(aliveHeroes, 1)[0];
+        
+        const value = getRandomInt(monster.attack.low, monster.attack.high) + monster.attack.attackPower;
+        const isCrit = false;
+
+        const currentHeroStatus: Hero = { ...selectedHero };
+        currentHeroStatus.stamina.hitPoints -= value;
+
+        actionEvents.push({
+            type: "Physical Attack",
+            value,
+            isCrit,
+            to: currentHeroStatus,
+            from: monster,
+            iteration,
         });
+
+        selectedHero.stamina.hitPoints -= value;
     });
     return actionEvents; 
 }
@@ -61,13 +65,49 @@ export const attackHeroes = (heroes: Hero[], monsters: Monster[]) => {
 // add crit
 export const attackMonsters = (heroes: Hero[], monsters: Monster[])  => {
     const actionEvents: ActionEvent[] = [];
+    let iteration = 0;
     heroes.forEach(hero => {
+        const aliveMonsters = monsters.filter(monster => monster.stamina.hitPoints > 0);
+        const monster = selectRandom(aliveMonsters, 1)[0];
+        iteration++;
         hero.weapons.forEach(weapon => {
             const attackDodged = false;
-            const monster = selectRandom(monsters, 1)[0];
+            const isCrit = false;
             
+            const value = getRandomInt(weapon.damage.low, weapon.damage.high);
+
+            const currentMonsterStatus: Monster = { ...monster };
+            currentMonsterStatus.stamina.hitPoints -= value;
+
+            const actionEvent: ActionEvent = {
+                type: "Physical Attack",
+                value,
+                isCrit,
+                to: currentMonsterStatus,
+                from: {
+                    id: hero.id,
+                    name: hero.name,
+                    type: hero.type,
+                    stamina: hero.stamina,
+                    weapon,
+                    armor: hero.armor,
+                },
+                iteration 
+            }
+            
+            actionEvents.push(actionEvent);
+
+            monster.stamina.hitPoints -= value;
         });
     });
     return actionEvents; 
 }
 
+interface ActionEvent {
+    type: string; // change to enum
+    value: number;
+    isCrit: boolean;
+    to: Hero | Monster
+    from: Object;
+    iteration: number;
+}

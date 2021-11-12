@@ -11,9 +11,6 @@ const blackInk = (): Effect => ({
     type: EffectType.DEBUFF,
     appliedTo: EffectAppliedTo.OPPONENT,
     rounds: 2,
-    execute: () => {
-
-    }
 });
 
 export const poisonEffectFactory = (poisonEffect: string): Effect => {

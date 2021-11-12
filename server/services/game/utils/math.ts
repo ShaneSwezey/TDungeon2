@@ -2,6 +2,7 @@ import { Turn } from "../enum/round";
 import { Hero } from "../hero";
 import { Monster } from "../monster";
 import { Stamina } from "../stats/stamina";
+import { v4 as uuidv4 } from 'uuid';
 
 export const getRandomInt = (min: number, max: number) => {
     min = Math.ceil(min);
@@ -70,3 +71,5 @@ export const probabilityDistributor = (categories: string[], weights: number[]) 
 
     return -999; // Will never execute 
 }
+
+export const getUuid = () => uuidv4();

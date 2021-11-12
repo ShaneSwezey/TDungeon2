@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var redisGraph_1 = require("./redisGraph");
-var hero_1 = require("../../services/game/creation/hero");
-var hero_2 = require("../../services/game/hero");
+var hero_1 = require("../../game/creation/hero");
+var hero_2 = require("../../game/hero");
 var uuid_1 = require("uuid");
 var runRedisTests = function () { return __awaiter(void 0, void 0, void 0, function () {
     var redisGraph, battleId, hero, hero2, error_1;

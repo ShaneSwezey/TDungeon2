@@ -1,6 +1,6 @@
 import { RedisGraph } from './redisGraph';
-import { createNewHero } from '../../services/game/creation/hero';
-import { HeroType } from '../../services/game/hero';
+import { createNewHero } from '../../game/creation/hero';
+import { HeroType } from '../../game/hero';
 import { v4 as uuuid } from 'uuid';
 
 

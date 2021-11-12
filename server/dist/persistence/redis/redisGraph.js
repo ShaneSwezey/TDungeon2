@@ -249,6 +249,26 @@ var RedisGraph = /** @class */ (function () {
             });
         });
     };
+    RedisGraph.prototype.clearEntireGraph = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.battleGraph.query("MATCH (n) DETACH DELETE n")];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_9 = _a.sent();
+                        console.error('[clearEntireGraph]', error_9);
+                        throw error_9;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return RedisGraph;
 }());
 exports.RedisGraph = RedisGraph;

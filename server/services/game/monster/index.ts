@@ -1,5 +1,5 @@
 import { Stamina } from '../stats/stamina';
-import { Attack } from '../stats/attack';
+import { MonsterAttack } from '../stats/attack';
 
 
 export enum MonsterType {
@@ -13,8 +13,9 @@ export enum MonsterType {
 }
 
 export interface Monster {
+    readonly id: string;
     readonly type: MonsterType;
     readonly stamina: Stamina;
-    readonly attack: Attack;
+    readonly attack: MonsterAttack;
 }
 

@@ -5,11 +5,13 @@ import { knifeFactory, KnifeName } from '../gear/weapon/knives';
 import { staffFactory, StaffName } from '../gear/weapon/staffs';
 import { getStartingStamina } from "../stats/stamina";
 import { oneHandedSwordFactory, OneHandedSwordName } from "../gear/weapon/oneHandedSwords";
+import { getUuid } from "../utils/math";
 
 export const createNewHero = (name: string, heroType: HeroType): Hero => {
     switch(heroType) {
         case HeroType.Melee:
             return {
+                id: getUuid(),
                 name,
                 type: HeroType.Melee,
                 stamina: getStartingStamina([leatherChestFactory(LeatherChestName.TATTEREDCHEST)]), 
@@ -19,6 +21,7 @@ export const createNewHero = (name: string, heroType: HeroType): Hero => {
             };
         case HeroType.Ranged:
             return {
+                id: getUuid(),
                 name,
                 type: HeroType.Ranged,
                 stamina: getStartingStamina([leatherChestFactory(LeatherChestName.TATTEREDCHEST)]), 
@@ -28,6 +31,7 @@ export const createNewHero = (name: string, heroType: HeroType): Hero => {
             };
         case HeroType.Caster:
             return {
+                id: getUuid(),
                 name,
                 type: HeroType.Caster,
                 stamina: getStartingStamina([clothChestFactory(ClothChestName.DUSTYROBES)]),
