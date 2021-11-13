@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.knifeFactory = exports.KnifeName = void 0;
 var rarity_1 = require("../rarity");
 var _1 = require(".");
+var poison_1 = require("../../effects/debuff/damage/poison");
 var KnifeName;
 (function (KnifeName) {
     KnifeName["BUTTERKNIFE"] = "Butter Knife";
@@ -29,7 +30,8 @@ var butterKnife = function () { return ({
     damage: {
         low: 1,
         high: 3
-    }
+    },
+    effects: []
 }); };
 var krisBlade = function () { return ({
     name: KnifeName.KRISBLADE,
@@ -38,7 +40,8 @@ var krisBlade = function () { return ({
     damage: {
         low: 2,
         high: 4
-    }
+    },
+    effects: []
 }); };
 var letterOpener = function () { return ({
     name: KnifeName.LETTEROPENER,
@@ -47,5 +50,6 @@ var letterOpener = function () { return ({
     damage: {
         low: 5,
         high: 8
-    }
+    },
+    effects: [poison_1.poisonEffectFactory(poison_1.PoisonEffect.BLACKINK)]
 }); };

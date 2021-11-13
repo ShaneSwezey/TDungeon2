@@ -9,7 +9,7 @@ var generateHeroes = function (numberOfHeroes) {
     var heroes = [];
     for (var i = 0; i < numberOfHeroes; i++) {
         var heroType = selectRandomHeroType();
-        heroes.push(hero_1.createNewHero(faker_1.name.firstName(), heroType));
+        heroes.push(hero_1.heroFactory({ name: faker_1.name.firstName(), type: heroType }));
     }
     return heroes;
 };

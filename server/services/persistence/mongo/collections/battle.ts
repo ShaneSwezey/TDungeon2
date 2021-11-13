@@ -6,6 +6,11 @@ interface Battle {
     updatedAt: String;
 }
 
+interface WinnerArgs {
+    winner: string;
+    alive: Object[];
+}
+
 export class BattleCollection {
 
     private battleCollection: Collection<Battle>;
@@ -39,6 +44,24 @@ export class BattleCollection {
                 createdAt: res.createdAt, 
                 updatedAt: res.updatedAt
             } : null;
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    public async updateBattle(battleId: string, { winner, alive }: WinnerArgs) {
+        try {
+            return await this.battleCollection.updateOne(
+                {
+                    _id: new ObjectId(battleId)
+                },
+                {
+                    $set: {
+                        winner: winner,
+                        alive: alive,
+                    }
+                }
+            );
         } catch(error) {
             throw error;
         }

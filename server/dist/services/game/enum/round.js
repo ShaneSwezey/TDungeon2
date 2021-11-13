@@ -9,7 +9,7 @@ var RoundType;
 })(RoundType = exports.RoundType || (exports.RoundType = {}));
 var Turn;
 (function (Turn) {
-    Turn["HERO"] = "HERO";
-    Turn["HEROINPUT"] = "HEROINPUT";
-    Turn["MONSTER"] = "MONSTER";
+    Turn["HERO"] = "Heroes";
+    Turn["HEROINPUT"] = "Hero Input";
+    Turn["MONSTER"] = "Monsters";
 })(Turn = exports.Turn || (exports.Turn = {}));

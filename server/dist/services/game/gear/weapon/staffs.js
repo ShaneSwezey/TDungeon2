@@ -23,5 +23,6 @@ var walkingStick = function () { return ({
     damage: {
         low: 2,
         high: 3,
-    }
+    },
+    effects: []
 }); };

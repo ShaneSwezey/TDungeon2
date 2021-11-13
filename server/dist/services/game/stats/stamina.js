@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStartingStamina = void 0;
+exports.getStamina = void 0;
 var getHitPointsMax = function (armor) { return armor.map(function (armor) { return armor.hitPoints; }).reduce(function (a, b) { return a + b; }); };
-var getStartingStamina = function (armor) {
+var getStamina = function (armor, currentHitPoints) {
     var maxStamina = getHitPointsMax(armor);
     return {
         maxHitPoints: maxStamina,
-        hitPoints: maxStamina,
+        hitPoints: currentHitPoints ? parseInt(currentHitPoints) : maxStamina
     };
 };
-exports.getStartingStamina = getStartingStamina;
+exports.getStamina = getStamina;

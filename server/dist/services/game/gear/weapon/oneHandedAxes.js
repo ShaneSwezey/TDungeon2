@@ -30,6 +30,7 @@ var rustyAxe = function () { return ({
         low: 2,
         high: 4,
     },
+    effects: []
 }); };
 var hatchet = function () { return ({
     name: OneHandedAxeName.HATCHET,
@@ -39,6 +40,7 @@ var hatchet = function () { return ({
         low: 3,
         high: 6,
     },
+    effects: []
 }); };
 var lumberWicker = function () { return ({
     name: OneHandedAxeName.LUMBERWICKER,
@@ -48,4 +50,5 @@ var lumberWicker = function () { return ({
         low: 6,
         high: 10,
     },
+    effects: []
 }); };

@@ -7,10 +7,10 @@ export interface Stamina {
 
 const getHitPointsMax = (armor: Armor[]) => armor.map(armor => armor.hitPoints).reduce((a, b) => a + b);
 
-export const getStartingStamina = (armor: Armor[]): Stamina => {
+export const getStamina = (armor: Armor[], currentHitPoints?: string): Stamina => {
     const maxStamina = getHitPointsMax(armor);
     return {
         maxHitPoints: maxStamina,
-        hitPoints: maxStamina,
+        hitPoints: currentHitPoints ? parseInt(currentHitPoints) : maxStamina
     }
 }

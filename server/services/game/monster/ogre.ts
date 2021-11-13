@@ -1,29 +1,29 @@
 // import { AbilityTitle } from "../abilities/ability";
 // import { getFrenzy, setFrenzy } from "../buffs/frenzy";
 // import { attackHeroes } from "../actions/attack";
-import { Hero } from "../hero";
-import { getStaminaPercentage, getUuid, selectRandomHeroes } from "../utils/math";
-import { Monster, MonsterType } from ".";
-import { MonsterAttackType } from "../stats/attack";
+// import { Hero } from "../hero";
+// import { getStaminaPercentage, getUuid, selectRandomHeroes } from "../utils/math";
+// import { Monster, MonsterType } from ".";
+// import { MonsterAttackType } from "../stats/attack";
 
-export interface Ogre extends Monster {
-    type: MonsterType.Ogre;
-}
+// export interface Ogre extends Monster {
+//     type: MonsterType.Ogre;
+// }
 
-export const orge = (): Ogre => ({
-    id: getUuid(),
-    type: MonsterType.Ogre,
-    stamina: {
-        maxHitPoints: 20,
-        hitPoints: 20,
-    },
-    attack: {
-        low: 5,
-        high: 10,
-        attackPower: 0,
-        type: MonsterAttackType.PUNCHED,
-    }
-});
+// export const orge = (): Ogre => ({
+//     id: getUuid(),
+//     type: MonsterType.Ogre,
+//     stamina: {
+//         maxHitPoints: 20,
+//         hitPoints: 20,
+//     },
+//     attack: {
+//         low: 5,
+//         high: 10,
+//         attackPower: 0,
+//         type: MonsterAttackType.PUNCHED,
+//     }
+// });
 
 // const ogreRage = (ogre: Ogre) => {
 //     if  (getStaminaPercentage(ogre.stamina) <= 50 && !ogre.buffs.find(buff => buff.title === AbilityTitle.Frenzy)) {

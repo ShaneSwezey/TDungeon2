@@ -3,18 +3,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.monsterFactory = void 0;
 var orc_1 = require("../monster/orc");
 var goblin_1 = require("../monster/goblin");
-var ogre_1 = require("../monster/ogre");
+//import { orge } from '../monster/ogre';
 var monster_1 = require("../monster");
-var monsterFactory = function (monsterType) {
-    switch (monsterType) {
+var monsterFactory = function (monsterStats) {
+    switch (monsterStats.type) {
         case monster_1.MonsterType.Orc:
-            return orc_1.orc();
+            return orc_1.orc(monsterStats);
         case monster_1.MonsterType.Goblin:
-            return goblin_1.goblin();
-        case monster_1.MonsterType.Ogre:
-            return ogre_1.orge();
+            return goblin_1.goblin(monsterStats);
+        // case MonsterType.Ogre:
+        //     return orge();
         default:
-            throw new Error("Monster type " + monsterType + " was not found!");
+            throw new Error("Monster type " + monsterStats.type + " was not found!");
     }
 };
 exports.monsterFactory = monsterFactory;

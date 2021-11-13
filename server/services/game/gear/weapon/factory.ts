@@ -5,14 +5,21 @@ import { oneHandedSwordFactory } from "./oneHandedSwords";
 import { staffFactory } from "./staffs";
 import { Weapon, WeaponType } from ".";
 
+// name:type
 interface WeaponRecord {
     name: string;
     type: string;
 }
 
-export const weaponsFactory = (weaponRecords: WeaponRecord[]): Weapon[] => weaponRecords.map(weaponRecord => weaponSwitch(weaponRecord));
+export const weaponsFactory = (weaponStrings: string[]): Weapon[] => weaponStrings.map(weaponString => weaponSwitch(weaponString));
 
-const weaponSwitch = (weaponRecord: WeaponRecord): Weapon => {
+const weaponSwitch = (weaponString: string): Weapon => {
+    const parsedString = weaponString.split(":");
+    const weaponRecord = {
+        name: parsedString[0],
+        type: parsedString[1]
+    }
+
     switch(weaponRecord.type) {
         // case WeaponType.CROSSBOW:
         //     return;

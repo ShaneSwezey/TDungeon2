@@ -10,10 +10,10 @@ export enum HeroType {
 
 export interface Hero {
     id?: string;
+    stamina: Stamina;
+    gold: number;   
     readonly name: string;
     readonly type: HeroType;
-    readonly stamina: Stamina;
     readonly armor: Armor[];
     readonly weapons: Weapon[];
-    gold: number;   
 }

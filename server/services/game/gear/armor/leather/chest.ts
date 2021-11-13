@@ -37,7 +37,7 @@ const bugInfestedLeatherChest = (): LeatherChest => ({
 
 const tatteredChest = (): LeatherChest => ({
     name: LeatherChestName.TATTEREDCHEST,
-    hitPoints: 2,
+    hitPoints: 4,
     type: ArmorType.LEATHER,
     slot: ArmorSlot.CHEST,
     rarity: ItemRarity.COMMON
@@ -45,7 +45,7 @@ const tatteredChest = (): LeatherChest => ({
 
 const jerking = (): LeatherChest => ({
     name: LeatherChestName.JERKIN,
-    hitPoints: 4,
+    hitPoints: 6,
     type: ArmorType.LEATHER,
     slot: ArmorSlot.CHEST,
     rarity: ItemRarity.COMMON

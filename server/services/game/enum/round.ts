@@ -5,8 +5,8 @@ export enum RoundType {
 }
 
 export enum Turn {
-    HERO = "HERO",
-    HEROINPUT = "HEROINPUT",
-    MONSTER = "MONSTER",
+    HERO = "Heroes",
+    HEROINPUT = "Hero Input",
+    MONSTER = "Monsters",
 }
 

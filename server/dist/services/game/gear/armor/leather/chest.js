@@ -32,14 +32,14 @@ var bugInfestedLeatherChest = function () { return ({
 }); };
 var tatteredChest = function () { return ({
     name: LeatherChestName.TATTEREDCHEST,
-    hitPoints: 2,
+    hitPoints: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON
 }); };
 var jerking = function () { return ({
     name: LeatherChestName.JERKIN,
-    hitPoints: 4,
+    hitPoints: 6,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON

@@ -7,9 +7,14 @@ var oneHandedAxes_1 = require("./oneHandedAxes");
 var oneHandedSwords_1 = require("./oneHandedSwords");
 var staffs_1 = require("./staffs");
 var _1 = require(".");
-var weaponsFactory = function (weaponRecords) { return weaponRecords.map(function (weaponRecord) { return weaponSwitch(weaponRecord); }); };
+var weaponsFactory = function (weaponStrings) { return weaponStrings.map(function (weaponString) { return weaponSwitch(weaponString); }); };
 exports.weaponsFactory = weaponsFactory;
-var weaponSwitch = function (weaponRecord) {
+var weaponSwitch = function (weaponString) {
+    var parsedString = weaponString.split(":");
+    var weaponRecord = {
+        name: parsedString[0],
+        type: parsedString[1]
+    };
     switch (weaponRecord.type) {
         // case WeaponType.CROSSBOW:
         //     return;
@@ -28,6 +33,6 @@ var weaponSwitch = function (weaponRecord) {
         case _1.WeaponType.STAFF:
             return staffs_1.staffFactory(weaponRecord.name);
         default:
-            return { name: "Fist", type: _1.WeaponType.UNARMED, rarity: rarity_1.ItemRarity.COMMON, damage: { low: 1, high: 2 } };
+            return { name: "Fist", type: _1.WeaponType.UNARMED, rarity: rarity_1.ItemRarity.COMMON, damage: { low: 1, high: 2 }, effects: [] };
     }
 };

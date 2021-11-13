@@ -6,9 +6,15 @@ var _1 = require(".");
 var factory_1 = require("./cloth/factory");
 var factory_2 = require("./leather/factory");
 var factory_3 = require("./mail/factory");
-var armorFactory = function (armorRecords) { return armorRecords.map(function (armorRecord) { return armorSwitch(armorRecord); }); };
+var armorFactory = function (armorStrings) { return armorStrings.map(function (armorString) { return armorSwitch(armorString); }); };
 exports.armorFactory = armorFactory;
-var armorSwitch = function (armorRecord) {
+var armorSwitch = function (armorString) {
+    var parsedString = armorString.split(":");
+    var armorRecord = {
+        name: parsedString[0],
+        type: parsedString[1],
+        slot: parsedString[2]
+    };
     switch (armorRecord.type) {
         case _1.ArmorType.CLOTH:
             return factory_1.clothFactory(armorRecord);

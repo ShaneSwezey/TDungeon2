@@ -4,10 +4,11 @@ import { Monster } from "../monster";
 import { Stamina } from "../stats/stamina";
 import { v4 as uuidv4 } from 'uuid';
 
+// inclusive maximum
 export const getRandomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export const getStaminaPercentage = (stamina: Stamina) => {
@@ -15,7 +16,11 @@ export const getStaminaPercentage = (stamina: Stamina) => {
 }
 
 export const getRandomTurn = () => {
-    return Math.random() ? Turn.HEROINPUT : Turn.MONSTER;
+    return getRandomInt(0, 1) ? Turn.HERO : Turn.MONSTER;
+}
+
+export const getNextTurn = (currentTurn: Turn) => {
+    return currentTurn === Turn.MONSTER ? Turn.HERO : Turn.MONSTER;
 }
 
 export const selectRandomHeroes = (heroes: Hero[], numberOfheroes: number) => {
@@ -49,7 +54,7 @@ export function selectRandom<Type>(array: Type[], numberToSelect: number) {
     while (set.size !== numberToSelect) set.add(getRandomInt(0, array.length - 1));
 
     const selectedMembers: Type[] = [];
-    for (let index of set) array.push(array[index]);
+    for (let index of set) selectedMembers.push(array[index]);
 
     return selectedMembers;
 }

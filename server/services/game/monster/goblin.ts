@@ -3,17 +3,18 @@ import { Hero } from '../hero';
 import { getUuid, selectRandomHeroes } from "../utils/math";
 import { Monster, MonsterType } from '.';
 import { MonsterAttackType } from '../stats/attack';
+import { MonsterStats } from '../creation/monster';
 
 export interface Goblin extends Monster {
     type: MonsterType.Goblin;
 }
 
-export const goblin = (): Monster => ({
-    id: getUuid(),
+export const goblin = ({ id, currentHitPoints }: MonsterStats): Monster => ({
+    id: id ? id : getUuid(),
     type: MonsterType.Goblin,
     stamina: {
         maxHitPoints: 5,
-        hitPoints: 5,
+        hitPoints: currentHitPoints ? parseInt(currentHitPoints) : 5,
     },
     attack: {
         low: 1,

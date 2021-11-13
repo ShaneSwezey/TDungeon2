@@ -3,43 +3,58 @@ import { leatherChestFactory, LeatherChestName } from '../gear/armor/leather/che
 import { clothChestFactory, ClothChestName } from '../gear/armor/cloth/clothChest';
 import { knifeFactory, KnifeName } from '../gear/weapon/knives';
 import { staffFactory, StaffName } from '../gear/weapon/staffs';
-import { getStartingStamina } from "../stats/stamina";
+import { getStamina } from "../stats/stamina";
 import { oneHandedSwordFactory, OneHandedSwordName } from "../gear/weapon/oneHandedSwords";
 import { getUuid } from "../utils/math";
+import { armorFactory } from '../gear/armor/factory';
+import { weaponsFactory } from "../gear/weapon/factory";
 
-export const createNewHero = (name: string, heroType: HeroType): Hero => {
-    switch(heroType) {
+export interface HeroStats {
+    type: string;
+    name: string;
+    id?: string;
+    currentHitPoints?: string;
+    armor?: string;
+    weapons?: string;
+}
+
+
+export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }: HeroStats): Hero => {
+    switch(type) {
         case HeroType.Melee:
+            const meleeArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
             return {
-                id: getUuid(),
+                id: id ? id : getUuid(),
                 name,
                 type: HeroType.Melee,
-                stamina: getStartingStamina([leatherChestFactory(LeatherChestName.TATTEREDCHEST)]), 
+                stamina: getStamina(meleeArmor, currentHitPoints),
                 gold: 0,
-                armor: [leatherChestFactory(LeatherChestName.TATTEREDCHEST)],
-                weapons: [oneHandedSwordFactory(OneHandedSwordName.RUSTYSWORD)],
+                weapons: weapons ? weaponsFactory(weapons.split(",")) : [oneHandedSwordFactory(OneHandedSwordName.RUSTYSWORD)],
+                armor: meleeArmor,
             };
         case HeroType.Ranged:
+            const rangedArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
             return {
-                id: getUuid(),
+                id: id ? id :getUuid(),
                 name,
                 type: HeroType.Ranged,
-                stamina: getStartingStamina([leatherChestFactory(LeatherChestName.TATTEREDCHEST)]), 
+                stamina: getStamina(rangedArmor, currentHitPoints), 
                 gold: 0,
-                armor: [leatherChestFactory(LeatherChestName.TATTEREDCHEST)],
-                weapons: [knifeFactory(KnifeName.BUTTERKNIFE)],
+                weapons: weapons ? weaponsFactory(weapons.split(",")) : [knifeFactory(KnifeName.BUTTERKNIFE)],
+                armor: rangedArmor
             };
         case HeroType.Caster:
+            const casterArmor = armor ? armorFactory(armor.split(",")) : [clothChestFactory(ClothChestName.DUSTYROBES)];
             return {
-                id: getUuid(),
+                id: id ? id : getUuid(),
                 name,
                 type: HeroType.Caster,
-                stamina: getStartingStamina([clothChestFactory(ClothChestName.DUSTYROBES)]),
+                stamina: getStamina(casterArmor, currentHitPoints),
                 gold: 0,
-                armor: [clothChestFactory(ClothChestName.DUSTYROBES)],
-                weapons: [staffFactory(StaffName.WALKINGSTICK)],
+                weapons: weapons ? weaponsFactory(weapons.split(",")) : [staffFactory(StaffName.WALKINGSTICK)],
+                armor: casterArmor
             };
         default:
-            throw new Error(`Hero type ${heroType} does not exist!`); 
+            throw new Error(`Hero type: ${type} does not exist!`); 
     }
 }

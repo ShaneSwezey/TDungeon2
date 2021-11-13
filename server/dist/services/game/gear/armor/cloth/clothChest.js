@@ -32,21 +32,21 @@ var bugClothChest = function () { return ({
 }); };
 var dustyRobes = function () { return ({
     name: ClothChestName.DUSTYROBES,
-    hitPoints: 1,
+    hitPoints: 3,
     type: __1.ArmorType.CLOTH,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON
 }); };
 var dirtyTunic = function () { return ({
     name: ClothChestName.DIRTYTUNIC,
-    hitPoints: 2,
+    hitPoints: 4,
     type: __1.ArmorType.CLOTH,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON
 }); };
 var cleanShirt = function () { return ({
     name: ClothChestName.CLEANSHIRT,
-    hitPoints: 4,
+    hitPoints: 5,
     type: __1.ArmorType.CLOTH,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON

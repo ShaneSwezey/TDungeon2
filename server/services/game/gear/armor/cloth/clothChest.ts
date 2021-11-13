@@ -37,7 +37,7 @@ const bugClothChest = (): ClothChest => ({
 
 const dustyRobes = (): ClothChest => ({
     name: ClothChestName.DUSTYROBES,
-    hitPoints: 1,
+    hitPoints: 3,
     type: ArmorType.CLOTH,
     slot: ArmorSlot.CHEST,
     rarity: ItemRarity.COMMON
@@ -45,7 +45,7 @@ const dustyRobes = (): ClothChest => ({
 
 const dirtyTunic = (): ClothChest => ({
     name: ClothChestName.DIRTYTUNIC,
-    hitPoints: 2,
+    hitPoints: 4,
     type: ArmorType.CLOTH,
     slot: ArmorSlot.CHEST,
     rarity: ItemRarity.COMMON
@@ -53,7 +53,7 @@ const dirtyTunic = (): ClothChest => ({
 
 const cleanShirt = (): ClothChest => ({
     name: ClothChestName.CLEANSHIRT,
-    hitPoints: 4,
+    hitPoints: 5,
     type: ArmorType.CLOTH,
     slot: ArmorSlot.CHEST,
     rarity: ItemRarity.COMMON

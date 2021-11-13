@@ -1,4 +1,4 @@
-import { createNewHero } from "../../creation/hero";
+import { heroFactory } from "../../creation/hero";
 import { Hero, HeroType} from "../../hero"
 import { getRandomInt } from "../../utils/math";
 import { name } from 'faker';
@@ -7,7 +7,7 @@ export const generateHeroes = (numberOfHeroes: number) => {
     const heroes: Hero[] = [];
     for (let i = 0; i < numberOfHeroes; i++) {
         const heroType = selectRandomHeroType();
-        heroes.push(createNewHero(name.firstName(), heroType));
+        heroes.push(heroFactory({ name: name.firstName(), type: heroType }));
     }
     return heroes
 }

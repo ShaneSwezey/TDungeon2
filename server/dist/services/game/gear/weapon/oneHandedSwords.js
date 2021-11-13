@@ -23,5 +23,6 @@ var rustySword = function () { return ({
     damage: {
         low: 3,
         high: 5
-    }
+    },
+    effects: []
 }); };

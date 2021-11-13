@@ -29,7 +29,7 @@ export class HeroCollection {
     private heroCollection: Collection<HeroModel>;
 
     constructor(tdungeon: Db) {
-        this.heroCollection = tdungeon.collection<HeroModel>("Battle");
+        this.heroCollection = tdungeon.collection<HeroModel>("Hero");
     }
 
     public async createNewHero(hero: Hero) {
@@ -41,8 +41,25 @@ export class HeroCollection {
                 armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
                 weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
                 createdAt: date,
-                updatedAt: date,
+                updatedAt: new Date().toUTCString(),
             });
+            return true;
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    public async createNewHeroes(heroes: Hero[]) {
+        try {
+            const date = new Date().toUTCString();
+            const res = await this.heroCollection.insertMany(heroes.map(hero => ({
+                name: hero.name,
+                type: hero.type,
+                armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
+                weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
+                createdAt: date,
+                updatedAt: date,
+            })));
             return true;
         } catch(error) {
             throw error;
