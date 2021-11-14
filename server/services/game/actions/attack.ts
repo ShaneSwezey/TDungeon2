@@ -1,3 +1,4 @@
+import { ActionEvent } from '../../persistence/mongo/collections/battleEvent';
 import { Effect, EffectType } from '../effects';
 import { Weapon } from '../gear/weapon';
 import { Hero } from '../hero';
@@ -143,18 +144,18 @@ enum EventType {
     PHSYICALATTACK = "Physical Attack",
 }
 
-export interface ActionEvent {
-    battleId: string;
-    round: number;
-    iteration: number;
-    event: {
-        type: EventType; // change to enum
-        value: number;
-        isCrit: boolean;
-        deathBlow: boolean;
-        to: Object; // add stricter typing later
-        from: Object;   
-    }
-    createdAt: string;
-    updatedAt: string
-}
+// export interface ActionEvent {
+//     battleId: string;
+//     round: number;
+//     iteration: number;
+//     event: {
+//         type: EventType; // change to enum
+//         value: number;
+//         isCrit: boolean;
+//         deathBlow: boolean;
+//         to: Object; // add stricter typing later
+//         from: Object;   
+//     }
+//     createdAt: string;
+//     updatedAt: string
+// }

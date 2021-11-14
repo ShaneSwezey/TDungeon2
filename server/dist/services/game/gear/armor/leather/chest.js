@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.leatherChestFactory = exports.LeatherChestName = void 0;
-var rarity_1 = require("../../rarity");
-var __1 = require("..");
+const rarity_1 = require("../../rarity");
+const __1 = require("..");
 var LeatherChestName;
 (function (LeatherChestName) {
     LeatherChestName["BUGINFESTEDLEAHTERCHEST"] = "Bug Infested Leather Chest";
@@ -10,7 +10,7 @@ var LeatherChestName;
     LeatherChestName["JERKIN"] = "Jerkin";
     LeatherChestName["GOBLINSOLDIERLEATHERJACKET"] = "Goblin Soldier's Leather Jacket";
 })(LeatherChestName = exports.LeatherChestName || (exports.LeatherChestName = {}));
-var leatherChestFactory = function (leatherChestName) {
+const leatherChestFactory = (leatherChestName) => {
     switch (leatherChestName) {
         case LeatherChestName.TATTEREDCHEST:
             return tatteredChest();
@@ -23,31 +23,31 @@ var leatherChestFactory = function (leatherChestName) {
     }
 };
 exports.leatherChestFactory = leatherChestFactory;
-var bugInfestedLeatherChest = function () { return ({
+const bugInfestedLeatherChest = () => ({
     name: LeatherChestName.BUGINFESTEDLEAHTERCHEST,
     hitPoints: 0,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.LEGENDARY
-}); };
-var tatteredChest = function () { return ({
+});
+const tatteredChest = () => ({
     name: LeatherChestName.TATTEREDCHEST,
     hitPoints: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var jerking = function () { return ({
+});
+const jerking = () => ({
     name: LeatherChestName.JERKIN,
     hitPoints: 6,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var goblinSoliderLeatherJacket = function () { return ({
+});
+const goblinSoliderLeatherJacket = () => ({
     name: LeatherChestName.GOBLINSOLDIERLEATHERJACKET,
     hitPoints: 8,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.CHEST,
     rarity: rarity_1.ItemRarity.UNCOMMON
-}); };
+});

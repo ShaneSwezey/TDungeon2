@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.leatherPantsFactory = exports.LeatherPantsName = void 0;
-var rarity_1 = require("../../rarity");
-var __1 = require("..");
+const rarity_1 = require("../../rarity");
+const __1 = require("..");
 var LeatherPantsName;
 (function (LeatherPantsName) {
     LeatherPantsName["BUGINFESTEDLEATHERPANTS"] = "Bug Infested Leather Pants";
@@ -11,7 +11,7 @@ var LeatherPantsName;
     LeatherPantsName["PATCHEDPANTS"] = "Patched Pants";
     LeatherPantsName["MUSHROOMINFECTEDPANTS"] = "Mushroom Infected Pants";
 })(LeatherPantsName = exports.LeatherPantsName || (exports.LeatherPantsName = {}));
-var leatherPantsFactory = function (leatherPantsName) {
+const leatherPantsFactory = (leatherPantsName) => {
     switch (leatherPantsName) {
         case LeatherPantsName.DIRTYPANTS:
             return dirtyPants();
@@ -26,39 +26,39 @@ var leatherPantsFactory = function (leatherPantsName) {
     }
 };
 exports.leatherPantsFactory = leatherPantsFactory;
-var bugInfestedLeatherPants = function () { return ({
+const bugInfestedLeatherPants = () => ({
     name: LeatherPantsName.BUGINFESTEDLEATHERPANTS,
     hitPoints: 0,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.PANTS,
     rarity: rarity_1.ItemRarity.LEGENDARY
-}); };
-var dirtyPants = function () { return ({
+});
+const dirtyPants = () => ({
     name: LeatherPantsName.DIRTYPANTS,
     hitPoints: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.PANTS,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var patchedPants = function () { return ({
+});
+const patchedPants = () => ({
     name: LeatherPantsName.PATCHEDPANTS,
     hitPoints: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.PANTS,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var dancersChaps = function () { return ({
+});
+const dancersChaps = () => ({
     name: LeatherPantsName.DANCERSCHAPS,
     hitPoints: 6,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.PANTS,
     rarity: rarity_1.ItemRarity.UNCOMMON
-}); };
-var mushroomInfectedPants = function () { return ({
+});
+const mushroomInfectedPants = () => ({
     name: LeatherPantsName.BUGINFESTEDLEATHERPANTS,
     hitPoints: 6,
     attackPower: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.PANTS,
     rarity: rarity_1.ItemRarity.RARE
-}); };
+});

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.leatherGloveFactory = exports.LeatherGlovesName = void 0;
-var rarity_1 = require("../../rarity");
-var __1 = require("..");
+const rarity_1 = require("../../rarity");
+const __1 = require("..");
 var LeatherGlovesName;
 (function (LeatherGlovesName) {
     LeatherGlovesName["BUGINFESTEDLEATHERGLOVES"] = "Bug Infested Leather Gloves";
@@ -11,7 +11,7 @@ var LeatherGlovesName;
     LeatherGlovesName["DWARFMININGGLOVES"] = "Dwarf Mining Gloves";
     LeatherGlovesName["THIEFGLOVES"] = "Theif Gloves";
 })(LeatherGlovesName = exports.LeatherGlovesName || (exports.LeatherGlovesName = {}));
-var leatherGloveFactory = function (leatherGloveName) {
+const leatherGloveFactory = (leatherGloveName) => {
     switch (leatherGloveName) {
         case LeatherGlovesName.DUSTYGLOVES:
             return dustyGloves();
@@ -26,39 +26,39 @@ var leatherGloveFactory = function (leatherGloveName) {
     }
 };
 exports.leatherGloveFactory = leatherGloveFactory;
-var bugInfestedLeatherGloves = function () { return ({
+const bugInfestedLeatherGloves = () => ({
     name: LeatherGlovesName.BUGINFESTEDLEATHERGLOVES,
     hitPoints: 0,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.GLOVES,
     rarity: rarity_1.ItemRarity.LEGENDARY
-}); };
-var shreddedGloves = function () { return ({
+});
+const shreddedGloves = () => ({
     name: LeatherGlovesName.SHREDDEDGLOVES,
     hitPoints: 3,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.GLOVES,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var dustyGloves = function () { return ({
+});
+const dustyGloves = () => ({
     name: LeatherGlovesName.DUSTYGLOVES,
     hitPoints: 3,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.GLOVES,
     rarity: rarity_1.ItemRarity.COMMON
-}); };
-var dwarfMingingGloves = function () { return ({
+});
+const dwarfMingingGloves = () => ({
     name: LeatherGlovesName.DWARFMININGGLOVES,
     hitPoints: 5,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.GLOVES,
     rarity: rarity_1.ItemRarity.UNCOMMON
-}); };
-var thiefGloves = function () { return ({
+});
+const thiefGloves = () => ({
     name: LeatherGlovesName.THIEFGLOVES,
     hitPoints: 7,
     attackPower: 5,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.GLOVES,
     rarity: rarity_1.ItemRarity.RARE
-}); };
+});

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.leatherFactory = void 0;
-var __1 = require("..");
-var chest_1 = require("./chest");
-var gloves_1 = require("./gloves");
-var pants_1 = require("./pants");
-var helm_1 = require("./helm");
-var leatherFactory = function (armorRecord) {
+const __1 = require("..");
+const chest_1 = require("./chest");
+const gloves_1 = require("./gloves");
+const pants_1 = require("./pants");
+const helm_1 = require("./helm");
+const leatherFactory = (armorRecord) => {
     switch (armorRecord.slot) {
         case __1.ArmorSlot.CHEST:
             return chest_1.leatherChestFactory(armorRecord.name);

@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.weaponsFactory = void 0;
-var rarity_1 = require("../rarity");
-var knives_1 = require("./knives");
-var oneHandedAxes_1 = require("./oneHandedAxes");
-var oneHandedSwords_1 = require("./oneHandedSwords");
-var staffs_1 = require("./staffs");
-var _1 = require(".");
-var weaponsFactory = function (weaponStrings) { return weaponStrings.map(function (weaponString) { return weaponSwitch(weaponString); }); };
+const rarity_1 = require("../rarity");
+const knives_1 = require("./knives");
+const oneHandedAxes_1 = require("./oneHandedAxes");
+const oneHandedSwords_1 = require("./oneHandedSwords");
+const staffs_1 = require("./staffs");
+const _1 = require(".");
+const weaponsFactory = (weaponStrings) => weaponStrings.map(weaponString => weaponSwitch(weaponString));
 exports.weaponsFactory = weaponsFactory;
-var weaponSwitch = function (weaponString) {
-    var parsedString = weaponString.split(":");
-    var weaponRecord = {
+const weaponSwitch = (weaponString) => {
+    const parsedString = weaponString.split(":");
+    const weaponRecord = {
         name: parsedString[0],
         type: parsedString[1]
     };

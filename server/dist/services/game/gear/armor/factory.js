@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.armorFactory = void 0;
-var rarity_1 = require("../rarity");
-var _1 = require(".");
-var factory_1 = require("./cloth/factory");
-var factory_2 = require("./leather/factory");
-var factory_3 = require("./mail/factory");
-var armorFactory = function (armorStrings) { return armorStrings.map(function (armorString) { return armorSwitch(armorString); }); };
+const rarity_1 = require("../rarity");
+const _1 = require(".");
+const factory_1 = require("./cloth/factory");
+const factory_2 = require("./leather/factory");
+const factory_3 = require("./mail/factory");
+const armorFactory = (armorStrings) => armorStrings.map(armorString => armorSwitch(armorString));
 exports.armorFactory = armorFactory;
-var armorSwitch = function (armorString) {
-    var parsedString = armorString.split(":");
-    var armorRecord = {
+const armorSwitch = (armorString) => {
+    const parsedString = armorString.split(":");
+    const armorRecord = {
         name: parsedString[0],
         type: parsedString[1],
         slot: parsedString[2]

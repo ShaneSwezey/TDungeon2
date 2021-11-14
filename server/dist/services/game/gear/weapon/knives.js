@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.knifeFactory = exports.KnifeName = void 0;
-var rarity_1 = require("../rarity");
-var _1 = require(".");
-var poison_1 = require("../../effects/debuff/damage/poison");
+const rarity_1 = require("../rarity");
+const _1 = require(".");
+const poison_1 = require("../../effects/debuff/damage/poison");
 var KnifeName;
 (function (KnifeName) {
     KnifeName["BUTTERKNIFE"] = "Butter Knife";
     KnifeName["KRISBLADE"] = "Kris Blade";
     KnifeName["LETTEROPENER"] = "Letter Opener";
 })(KnifeName = exports.KnifeName || (exports.KnifeName = {}));
-var knifeFactory = function (knifeName) {
+const knifeFactory = (knifeName) => {
     switch (knifeName) {
         case KnifeName.BUTTERKNIFE:
             return butterKnife();
@@ -19,11 +19,11 @@ var knifeFactory = function (knifeName) {
         case KnifeName.LETTEROPENER:
             return letterOpener();
         default:
-            throw new Error("Knife: " + knifeName + " was not found!");
+            throw new Error(`Knife: ${knifeName} was not found!`);
     }
 };
 exports.knifeFactory = knifeFactory;
-var butterKnife = function () { return ({
+const butterKnife = () => ({
     name: KnifeName.BUTTERKNIFE,
     type: _1.WeaponType.KNIFE,
     rarity: rarity_1.ItemRarity.COMMON,
@@ -32,8 +32,8 @@ var butterKnife = function () { return ({
         high: 3
     },
     effects: []
-}); };
-var krisBlade = function () { return ({
+});
+const krisBlade = () => ({
     name: KnifeName.KRISBLADE,
     type: _1.WeaponType.KNIFE,
     rarity: rarity_1.ItemRarity.COMMON,
@@ -42,8 +42,8 @@ var krisBlade = function () { return ({
         high: 4
     },
     effects: []
-}); };
-var letterOpener = function () { return ({
+});
+const letterOpener = () => ({
     name: KnifeName.LETTEROPENER,
     type: _1.WeaponType.KNIFE,
     rarity: rarity_1.ItemRarity.UNCOMMON,
@@ -52,4 +52,4 @@ var letterOpener = function () { return ({
         high: 8
     },
     effects: [poison_1.poisonEffectFactory(poison_1.PoisonEffect.BLACKINK)]
-}); };
+});

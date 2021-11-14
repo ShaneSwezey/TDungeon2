@@ -84,4 +84,12 @@ export class HeroCollection {
         }
     }
 
+    public async getAllHeroes() {
+        try {
+            return await this.heroCollection.find().toArray();
+        } catch(error) {
+            throw error;
+        }
+    }
+
 }

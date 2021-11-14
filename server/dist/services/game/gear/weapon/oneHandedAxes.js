@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.oneHandedAxeFactory = exports.OneHandedAxeName = void 0;
-var rarity_1 = require("../rarity");
-var _1 = require(".");
+const rarity_1 = require("../rarity");
+const _1 = require(".");
 var OneHandedAxeName;
 (function (OneHandedAxeName) {
     OneHandedAxeName["RUSTYAXE"] = "Rusty Axe";
     OneHandedAxeName["HATCHET"] = "Hatchet";
     OneHandedAxeName["LUMBERWICKER"] = "Lumber Wicker";
 })(OneHandedAxeName = exports.OneHandedAxeName || (exports.OneHandedAxeName = {}));
-var oneHandedAxeFactory = function (oneHandedAxeName) {
+const oneHandedAxeFactory = (oneHandedAxeName) => {
     switch (oneHandedAxeName) {
         case OneHandedAxeName.RUSTYAXE:
             return rustyAxe();
@@ -18,11 +18,11 @@ var oneHandedAxeFactory = function (oneHandedAxeName) {
         case OneHandedAxeName.LUMBERWICKER:
             return lumberWicker();
         default:
-            throw new Error("One handed axe: " + oneHandedAxeName + " was not found");
+            throw new Error(`One handed axe: ${oneHandedAxeName} was not found`);
     }
 };
 exports.oneHandedAxeFactory = oneHandedAxeFactory;
-var rustyAxe = function () { return ({
+const rustyAxe = () => ({
     name: OneHandedAxeName.RUSTYAXE,
     type: _1.WeaponType.ONEHANDEDAXE,
     rarity: rarity_1.ItemRarity.COMMON,
@@ -31,8 +31,8 @@ var rustyAxe = function () { return ({
         high: 4,
     },
     effects: []
-}); };
-var hatchet = function () { return ({
+});
+const hatchet = () => ({
     name: OneHandedAxeName.HATCHET,
     type: _1.WeaponType.ONEHANDEDAXE,
     rarity: rarity_1.ItemRarity.COMMON,
@@ -41,8 +41,8 @@ var hatchet = function () { return ({
         high: 6,
     },
     effects: []
-}); };
-var lumberWicker = function () { return ({
+});
+const lumberWicker = () => ({
     name: OneHandedAxeName.LUMBERWICKER,
     type: _1.WeaponType.ONEHANDEDAXE,
     rarity: rarity_1.ItemRarity.UNCOMMON,
@@ -51,4 +51,4 @@ var lumberWicker = function () { return ({
         high: 10,
     },
     effects: []
-}); };
+});

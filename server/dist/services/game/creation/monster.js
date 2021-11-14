@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.monsterFactory = void 0;
-var orc_1 = require("../monster/orc");
-var goblin_1 = require("../monster/goblin");
+const orc_1 = require("../monster/orc");
+const goblin_1 = require("../monster/goblin");
 //import { orge } from '../monster/ogre';
-var monster_1 = require("../monster");
-var monsterFactory = function (monsterStats) {
+const monster_1 = require("../monster");
+const monsterFactory = (monsterStats) => {
     switch (monsterStats.type) {
         case monster_1.MonsterType.Orc:
             return orc_1.orc(monsterStats);
@@ -14,7 +14,7 @@ var monsterFactory = function (monsterStats) {
         // case MonsterType.Ogre:
         //     return orge();
         default:
-            throw new Error("Monster type " + monsterStats.type + " was not found!");
+            throw new Error(`Monster type ${monsterStats.type} was not found!`);
     }
 };
 exports.monsterFactory = monsterFactory;

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clothFactory = void 0;
-var __1 = require("..");
-var clothChest_1 = require("./clothChest");
-var clothFactory = function (armorRecord) {
+const __1 = require("..");
+const clothChest_1 = require("./clothChest");
+const clothFactory = (armorRecord) => {
     switch (armorRecord.slot) {
         case __1.ArmorSlot.CHEST:
             return clothChest_1.clothChestFactory(armorRecord.name);

@@ -1,4 +1,3 @@
-"use strict";
 // import { expect } from 'chai';
 // import { createNewHero } from '../../../creation/hero';
 // import { HeroType } from '../../../hero';

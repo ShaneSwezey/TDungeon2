@@ -66,4 +66,12 @@ export class BattleCollection {
             throw error;
         }
     }
+
+    public async getAllBattles() {
+        try {
+            return await this.battleCollection.find().toArray();
+        } catch(error) {
+            throw error;
+        }
+    }
 }

@@ -1,4 +1,3 @@
-"use strict";
 // import { AbilityTitle } from "../abilities/ability";
 // import { getFrenzy, setFrenzy } from "../buffs/frenzy";
 // import { attackHeroes } from "../actions/attack";

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mailHelmFactory = exports.MailHelmName = void 0;
-var rarity_1 = require("../../rarity");
-var __1 = require("..");
+const rarity_1 = require("../../rarity");
+const __1 = require("..");
 var MailHelmName;
 (function (MailHelmName) {
     MailHelmName["BUGINFESTEDMAILHELM"] = "Bug Infested Mail Helm";
@@ -10,7 +10,7 @@ var MailHelmName;
     MailHelmName["SKULLCAP"] = "Skullcap";
     MailHelmName["GLISTENINGCOIF"] = "Glistening Coif";
 })(MailHelmName = exports.MailHelmName || (exports.MailHelmName = {}));
-var mailHelmFactory = function (mailHelmName) {
+const mailHelmFactory = (mailHelmName) => {
     switch (mailHelmName) {
         case MailHelmName.BROKENCOPPERHELM:
             return brokenCopperHelm();
@@ -23,28 +23,28 @@ var mailHelmFactory = function (mailHelmName) {
     }
 };
 exports.mailHelmFactory = mailHelmFactory;
-var bugInfestedMailHelm = function () { return ({
+const bugInfestedMailHelm = () => ({
     name: MailHelmName.BUGINFESTEDMAILHELM,
     type: __1.ArmorType.MAIL,
     slot: __1.ArmorSlot.HELM,
     hitPoints: 0,
     rarity: rarity_1.ItemRarity.LEGENDARY,
-}); };
-var brokenCopperHelm = function () { return ({
+});
+const brokenCopperHelm = () => ({
     name: MailHelmName.BROKENCOPPERHELM,
     type: __1.ArmorType.MAIL,
     slot: __1.ArmorSlot.HELM,
     hitPoints: 4,
     rarity: rarity_1.ItemRarity.COMMON,
-}); };
-var skullCap = function () { return ({
+});
+const skullCap = () => ({
     name: MailHelmName.SKULLCAP,
     type: __1.ArmorType.MAIL,
     slot: __1.ArmorSlot.HELM,
     hitPoints: 7,
     rarity: rarity_1.ItemRarity.UNCOMMON,
-}); };
-var glisteningCoif = function () { return ({
+});
+const glisteningCoif = () => ({
     name: MailHelmName.GLISTENINGCOIF,
     type: __1.ArmorType.MAIL,
     slot: __1.ArmorSlot.HELM,
@@ -52,4 +52,4 @@ var glisteningCoif = function () { return ({
     attackPower: 10,
     rarity: rarity_1.ItemRarity.RARE,
     description: "Gleams of gold..."
-}); };
+});
