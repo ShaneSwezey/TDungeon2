@@ -2,8 +2,6 @@ import { Ctx, Query, Resolver } from "type-graphql";
 import { Context } from "../../interface/context";
 import { BattleType } from "../types/battle";
 
-
-
 @Resolver()
 export class BattleResolver {
 

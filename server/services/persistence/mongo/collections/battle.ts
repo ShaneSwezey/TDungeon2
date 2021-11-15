@@ -2,8 +2,9 @@ import { Db, Collection, ObjectId } from 'mongodb';
 
 interface Battle {
     _id: ObjectId;
-    createdAt: String;
-    updatedAt: String;
+    winner?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 interface WinnerArgs {

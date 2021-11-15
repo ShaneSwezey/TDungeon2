@@ -4,4 +4,10 @@ import { Field, ID, ObjectType } from "type-graphql";
 export class BattleType {
     @Field(() => ID)
     _id: string; 
+
+    @Field({ nullable: true })
+    winner?: string;
+
+    @Field()
+    createdAt: string;
 }   
