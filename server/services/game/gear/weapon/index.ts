@@ -21,7 +21,10 @@ export interface WeaponDamage {
 export interface Weapon {
     readonly name: string
     readonly damage: WeaponDamage;
+    readonly critChance: number;
     readonly type: WeaponType;
+    readonly cleave: Cleave;
+    readonly flurry: Flurry;
     readonly rarity: ItemRarity;
     readonly effects: Effect[];
     readonly description?: string; 
@@ -32,4 +35,20 @@ export interface WeaponAttack extends Weapon {
         value: number;
         isCrit: boolean
     };
+}
+
+export interface Cleave {
+    chance: number;
+    num?: {
+        low: number;
+        high: number;
+    }
+}
+
+export interface Flurry {
+    chance: number;
+    num?: {
+        low: number;
+        high: number;
+    }
 }

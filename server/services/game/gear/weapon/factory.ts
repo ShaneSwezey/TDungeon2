@@ -38,6 +38,15 @@ const weaponSwitch = (weaponString: string): Weapon => {
         case WeaponType.STAFF:
             return staffFactory(weaponRecord.name);
         default:
-            return { name: "Fist", type: WeaponType.UNARMED, rarity: ItemRarity.COMMON, damage: { low: 1, high: 2 }, effects: [] };
+            return { 
+                name: "Fist", 
+                type: WeaponType.UNARMED, 
+                rarity: ItemRarity.COMMON,
+                critChance: 0,
+                cleave: { chance: 0},
+                flurry: { chance: 0}, 
+                damage: { low: 1, high: 2 }, 
+                effects: [], 
+            };
     }
 }

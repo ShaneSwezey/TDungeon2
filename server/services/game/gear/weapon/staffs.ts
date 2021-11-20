@@ -26,5 +26,8 @@ const walkingStick = (): Staff => ({
         low: 2,
         high: 3,
     },
-    effects: []
+    effects: [],
+    critChance: 5,
+    cleave: { chance: 0 },
+    flurry: { chance: 0 },
 });

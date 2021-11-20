@@ -36,12 +36,12 @@ const executeBattle = async () => {
         await RedisInstance.setTurn(turn);
 
         // create heroes 
-        const heroes = createHeroes(1, 3);
+        const heroes = createHeroes(4, 5);
 
         await HeroCol.createNewHeroes(heroes);
 
         // create monsters
-        const monsters = createMonsters(1, 3);
+        const monsters = createMonsters(3, 6);
         console.log("startingHeroes:", heroes);
         console.log("startingMonsters:", monsters);
 

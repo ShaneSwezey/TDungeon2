@@ -34,7 +34,10 @@ const butterKnife = (): Knife => ({
         low: 1,
         high: 3
     },
-    effects: []
+    effects: [],
+    critChance: 5,
+    cleave: { chance: 0},
+    flurry: { chance: 0}, 
 });
 
 const krisBlade = (): Knife => ({
@@ -45,7 +48,10 @@ const krisBlade = (): Knife => ({
         low: 2,
         high: 4
     },
-    effects: []
+    effects: [],
+    critChance: 6,
+    cleave: { chance: 0},
+    flurry: { chance: 0}, 
 });
 
 const letterOpener = (): Knife => ({
@@ -56,5 +62,8 @@ const letterOpener = (): Knife => ({
         low: 5,
         high: 8
     },
+    critChance: 10,
+    cleave: { chance: 0},
+    flurry: { chance: 0}, 
     effects: [poisonEffectFactory(PoisonEffect.BLACKINK)]
 })

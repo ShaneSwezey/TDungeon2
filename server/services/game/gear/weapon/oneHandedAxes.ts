@@ -33,7 +33,10 @@ const rustyAxe = (): OneHandedAxe => ({
         low: 2,
         high: 4,
     },
-    effects: []
+    effects: [],
+    critChance: 5,
+    cleave: { chance: 0},
+    flurry: { chance: 0}, 
 });
 
 const hatchet = (): OneHandedAxe => ({
@@ -44,7 +47,10 @@ const hatchet = (): OneHandedAxe => ({
         low: 3,
         high: 6,
     },
-    effects: []
+    effects: [],
+    critChance: 7,
+    cleave: { chance: 0},
+    flurry: { chance: 0}, 
 });
 
 const lumberWicker = (): OneHandedAxe => ({
@@ -55,5 +61,8 @@ const lumberWicker = (): OneHandedAxe => ({
         low: 6,
         high: 10,
     },
-    effects: []
+    effects: [],
+    critChance: 10,
+    cleave: { chance: 20, num: { low: 2, high: 3 } },
+    flurry: { chance: 0}, 
 });

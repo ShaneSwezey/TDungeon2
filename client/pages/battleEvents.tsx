@@ -58,9 +58,19 @@ const Attack: NextPage<AttackProps> = ({ event }: AttackProps) => {
     if (isToTypeHero) {
         return <>
             <Center ml={2}>
-                <Text color="#D0021B" fontWeight="bolder" fontSize={20}>-{event.value}</Text>
+                <Text color="#D0021B" fontWeight="bolder" fontSize={event.isCrit ? 40 : 20}>-{event.value}</Text>
             </Center>
             <Spacer />
+            <Stack direction="column">
+            {
+                event.type === "Flurry" &&
+                <Text color="white" fontWeight="bold" backgroundColor="green.300" pl={1} pr={1} rounded={5} h={6}>Flurry</Text>
+            }
+            {
+                event.isCrit &&
+                <Text color="white" fontWeight="bold" backgroundColor="green.300" pl={1} pr={1} rounded={5} h={6} w={37}>Crit</Text>
+            }
+            </Stack>
             <Image src={`/${event.from.type}-attack.svg`} alt="Vercel Logo" width={60} height={100} />
         </>
     } else {
@@ -72,9 +82,19 @@ const Attack: NextPage<AttackProps> = ({ event }: AttackProps) => {
                 width={60} 
                 height={100}
             />
+            <Stack direction="column">
+            {
+                event.type === "Flurry" &&
+                <Text color="white" fontWeight="bold" backgroundColor="blue.300" pl={1} pr={1} rounded={5} h={6}>Flurry</Text>
+            }
+            {
+                event.isCrit &&
+                <Text color="white" fontWeight="bold" backgroundColor="blue.300" pl={1} pr={1} rounded={5} h={6} w={37}>Crit</Text>
+            }
+            </Stack>
             <Spacer />
             <Center mr={2}>
-                <Text color="#D0021B" fontWeight="bolder" fontSize={20}>-{event.value}</Text>
+                <Text color="#D0021B" fontWeight="bolder" fontSize={event.isCrit ? 40 : 20}>-{event.value}</Text>
             </Center>
         </>
     }

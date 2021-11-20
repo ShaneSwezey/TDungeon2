@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.attackMonsters = exports.attackHeroes = void 0;
+exports.attackMonsters = exports.attackHeroes = exports.isDeathBlow = exports.executeHeroesAttack = exports.executeMonstersAttack = void 0;
+const monster_1 = require("../monster");
+const goblin_1 = require("../monster/goblin");
+const orc_1 = require("../monster/orc");
 const math_1 = require("../utils/math");
 // export const monsterTurn = (heroes: Hero[], monsters: Monster[]): ExecutionPayload => {
 //     const messages: string[] = [];
@@ -10,21 +13,44 @@ const math_1 = require("../utils/math");
 //     });
 //     return { heroes, monsters, messages };
 // }
-// const monsterExecutionSwitch = (monster: Monster, heroes: Hero[]) => {
-//     switch(monster.type) {
-//         case MonsterType.Ogre:
-//             return executeOgreAttack(monster as Ogre, heroes);
-//         case MonsterType.Goblin:
-//             return executeGoblinAttack(monster as Goblin, heroes);
-//         case MonsterType.Spiderling:
-//             return executeSpiderlingAttack(monster as SpiderLing, heroes);
-//         default:
-//             throw new Error(`${monster.type} does not exist`);
-//     }
-// }
+const monsterExecutionSwitch = (monster, heroes) => {
+    switch (monster.type) {
+        case monster_1.MonsterType.Orc:
+            return orc_1.ExecuteOrcAttack(monster, heroes);
+        case monster_1.MonsterType.Goblin:
+            return goblin_1.executeGoblinAttack(monster, heroes);
+        // case MonsterType.Spiderling:
+        //     return executeSpiderlingAttack(monster as SpiderLing, heroes);
+        default:
+            throw new Error(`${monster.type} does not exist`);
+    }
+};
+const executeMonstersAttack = (heroes, monsters, battleId, round) => {
+    const actionEvents = [];
+    let iteration = 0;
+    monsters.forEach(monster => {
+        const events = monsterExecutionSwitch(monster, heroes);
+        events.forEach(event => actionEvents.push({ battleId, round, iteration, event, createdAt: new Date().toUTCString(), updatedAt: new Date().toUTCString() }));
+        iteration++;
+    });
+    return actionEvents;
+};
+exports.executeMonstersAttack = executeMonstersAttack;
+const executeHeroesAttack = (heroes, monsters, battleId, round) => {
+    const actionEvents = [];
+    let iteration = 0;
+    heroes.forEach(hero => {
+        const events = hero.attack(monsters);
+        events.forEach(event => actionEvents.push({ battleId, round, iteration, event, createdAt: new Date().toUTCString(), updatedAt: new Date().toUTCString() }));
+        iteration++;
+    });
+    return actionEvents;
+};
+exports.executeHeroesAttack = executeHeroesAttack;
 const isDeathBlow = (stamina) => {
     return stamina.hitPoints <= 0;
 };
+exports.isDeathBlow = isDeathBlow;
 const attackHeroes = (heroes, monsters, battleId, round) => {
     const actionEvents = [];
     let iteration = 0;
@@ -51,7 +77,7 @@ const attackHeroes = (heroes, monsters, battleId, round) => {
                     type: EventType.PHSYICALATTACK,
                     value,
                     isCrit,
-                    deathBlow: isDeathBlow(currentHeroStatus.stamina),
+                    deathBlow: exports.isDeathBlow(currentHeroStatus.stamina),
                     to: currentHeroStatus,
                     from: monster,
                 },
@@ -74,41 +100,55 @@ const attackMonsters = (heroes, monsters, battleId, round) => {
             const monster = math_1.selectRandom(aliveMonsters, 1)[0];
             iteration++;
             hero.weapons.forEach(weapon => {
-                const attackDodged = false;
-                const isCrit = false;
-                const value = math_1.getRandomInt(weapon.damage.low, weapon.damage.high);
-                const currentMonsterStatus = {
-                    ...monster,
-                    stamina: {
-                        hitPoints: monster.stamina.hitPoints,
-                        maxHitPoints: monster.stamina.maxHitPoints,
+                let numOfAttacks = 1;
+                let attackType = "Physical Attack";
+                if (hero.type === "Ranged") {
+                    if (math_1.getRandomInt(1, 100) <= 20) {
+                        numOfAttacks = math_1.getRandomInt(2, 3);
+                        attackType = "Flurry";
                     }
-                };
-                currentMonsterStatus.stamina.hitPoints -= value;
-                const actionEvent = {
-                    battleId,
-                    round,
-                    iteration,
-                    event: {
-                        type: EventType.PHSYICALATTACK,
-                        value,
-                        isCrit,
-                        deathBlow: isDeathBlow(currentMonsterStatus.stamina),
-                        to: currentMonsterStatus,
-                        from: {
-                            id: hero.id,
-                            name: hero.name,
-                            type: hero.type,
-                            stamina: hero.stamina,
-                            weapon,
-                            armor: hero.armor,
+                }
+                for (let i = 0; i < numOfAttacks; i++) {
+                    const attackDodged = false;
+                    let isCrit = false;
+                    let value = math_1.getRandomInt(weapon.damage.low, weapon.damage.high);
+                    if (math_1.getRandomInt(1, 100) <= 10) {
+                        isCrit = true;
+                        value *= 2;
+                    }
+                    const currentMonsterStatus = {
+                        ...monster,
+                        stamina: {
+                            hitPoints: monster.stamina.hitPoints,
+                            maxHitPoints: monster.stamina.maxHitPoints,
+                        }
+                    };
+                    currentMonsterStatus.stamina.hitPoints -= value;
+                    const actionEvent = {
+                        battleId,
+                        round,
+                        iteration,
+                        event: {
+                            type: attackType,
+                            value,
+                            isCrit,
+                            deathBlow: exports.isDeathBlow(currentMonsterStatus.stamina),
+                            to: currentMonsterStatus,
+                            from: {
+                                id: hero.id,
+                                name: hero.name,
+                                type: hero.type,
+                                stamina: hero.stamina,
+                                weapon,
+                                armor: hero.armor,
+                            },
                         },
-                    },
-                    createdAt: new Date().toUTCString(),
-                    updatedAt: new Date().toUTCString(),
-                };
-                actionEvents.push(actionEvent);
-                monster.stamina.hitPoints -= value;
+                        createdAt: new Date().toUTCString(),
+                        updatedAt: new Date().toUTCString(),
+                    };
+                    actionEvents.push(actionEvent);
+                    monster.stamina.hitPoints -= value;
+                }
             });
         }
     });
@@ -118,6 +158,7 @@ exports.attackMonsters = attackMonsters;
 var EventType;
 (function (EventType) {
     EventType["PHSYICALATTACK"] = "Physical Attack";
+    EventType["FLURRY"] = "Flurry";
 })(EventType || (EventType = {}));
 // export interface ActionEvent {
 //     battleId: string;

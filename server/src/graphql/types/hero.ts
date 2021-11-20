@@ -6,7 +6,7 @@ import { StaminaType } from "./stamina";
 @ObjectType("Hero")
 export class HeroType {
 
-    @Field(() => ID, { nullable: true })
+    @Field(() => ID)
     id?: string;
 
     @Field(() => Int)

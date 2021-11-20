@@ -1,5 +1,5 @@
 import { heroFactory } from "../../services/game/creation/hero";
-import { Hero, HeroType } from "../../services/game/hero";
+import { IHero, HeroType } from "../../services/game/hero";
 import { getRandomInt } from "../../services/game/utils/math";
 import { name } from 'faker';
 import { Monster, MonsterType } from "../../services/game/monster";
@@ -14,7 +14,7 @@ const getRandomType = <T>(types: T[]) => {
 
 export const createHeroes = (floor: number, ceiling: number) => {
     const numOfHeroes = getRandomInt(floor, ceiling);
-    const heroes: Hero[] = [];
+    const heroes: IHero[] = [];
     const heroTypes = Object.values(HeroType);
     for (let i = 0; i < numOfHeroes; i++) {
         const heroType = getRandomType(heroTypes);

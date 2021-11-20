@@ -6,4 +6,5 @@ var MonsterAttackType;
     MonsterAttackType["SLASH"] = "Slash";
     MonsterAttackType["STABBED"] = "Stabbed";
     MonsterAttackType["PUNCHED"] = "Punched";
+    MonsterAttackType["SHANKED"] = "SHANKED";
 })(MonsterAttackType = exports.MonsterAttackType || (exports.MonsterAttackType = {}));

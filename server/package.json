@@ -6,7 +6,8 @@
   "scripts": {
     "testGame": "mocha -r ts-node/register services/game/test/unit/**/*.ts",
     "testRedis": "node ./dist/persistence/redis/test.js",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "testBattle": "node ./dist/test/index.js"
   },
   "author": "",
   "license": "ISC",

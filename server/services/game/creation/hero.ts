@@ -1,4 +1,4 @@
-import { Hero, HeroType } from "../hero";
+import { Hero, IHero, HeroType } from "../hero/";
 import { leatherChestFactory, LeatherChestName } from '../gear/armor/leather/chest';
 import { clothChestFactory, ClothChestName } from '../gear/armor/cloth/clothChest';
 import { knifeFactory, KnifeName } from '../gear/weapon/knives';
@@ -19,11 +19,11 @@ export interface HeroStats {
 }
 
 
-export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }: HeroStats): Hero => {
+export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }: HeroStats): IHero => {
     switch(type) {
         case HeroType.Melee:
             const meleeArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
-            return {
+            return new Hero({
                 id: id ? id : getUuid(),
                 name,
                 type: HeroType.Melee,
@@ -31,10 +31,10 @@ export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }
                 gold: 0,
                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [oneHandedSwordFactory(OneHandedSwordName.RUSTYSWORD)],
                 armor: meleeArmor,
-            };
+            });
         case HeroType.Ranged:
             const rangedArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
-            return {
+            return new Hero({
                 id: id ? id :getUuid(),
                 name,
                 type: HeroType.Ranged,
@@ -42,10 +42,10 @@ export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }
                 gold: 0,
                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [knifeFactory(KnifeName.BUTTERKNIFE)],
                 armor: rangedArmor
-            };
+            });
         case HeroType.Caster:
             const casterArmor = armor ? armorFactory(armor.split(",")) : [clothChestFactory(ClothChestName.DUSTYROBES)];
-            return {
+            return new Hero({
                 id: id ? id : getUuid(),
                 name,
                 type: HeroType.Caster,
@@ -53,7 +53,7 @@ export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }
                 gold: 0,
                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [staffFactory(StaffName.WALKINGSTICK)],
                 armor: casterArmor
-            };
+            });
         default:
             throw new Error(`Hero type: ${type} does not exist!`); 
     }

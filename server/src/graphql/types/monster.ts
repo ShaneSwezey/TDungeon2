@@ -6,7 +6,7 @@ import { StaminaType } from "./stamina";
 @ObjectType("Monster")
 export class MonsterType {
 
-    @Field(() => ID, { nullable: true })
+    @Field(() => ID)
     id?: string;
 
     @Field(() => StaminaType, { nullable: false })

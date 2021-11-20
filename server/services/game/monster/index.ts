@@ -5,6 +5,7 @@ export enum MonsterType {
     //PigMan = "Pig Man",
     Orc = "Orc",
     Goblin = "Goblin",
+    GHOUL = "Ghoul",
     //Spiderling = "Spiderling",
     //GiantSpider = "Giant Spider",
     //SpiderQueen = "Spider Queen",

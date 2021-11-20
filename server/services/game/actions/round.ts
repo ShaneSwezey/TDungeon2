@@ -2,7 +2,7 @@ import { ActionEvent } from "../../persistence/mongo/collections/battleEvent";
 import { Turn } from "../enum/round";
 import { Hero } from "../hero";
 import { Monster } from "../monster";
-import { attackHeroes, attackMonsters } from "./attack";
+import { attackHeroes, attackMonsters, executeHeroesAttack, executeMonstersAttack } from "./attack";
 
 
 export interface RoundArgs {
@@ -30,11 +30,11 @@ export const executeRound = ({ battleId, turn, round, heroes, monsters }: RoundA
     let nextRound = round + 1;
 
     // execute attack turn
-    let actionEvents: ActionEvent[] = [];
+    let actionEvents: ActionEvent[];
     if (turn === Turn.HERO) {
-        actionEvents = attackMonsters(heroes, monsters, battleId, round);
+        actionEvents = executeHeroesAttack(heroes, monsters, battleId, round);
     } else {
-        actionEvents = attackHeroes(heroes, monsters, battleId, round);
+        actionEvents = executeMonstersAttack(heroes, monsters, battleId, round);
     }
     
     const deadHeroes: Hero[] = [];

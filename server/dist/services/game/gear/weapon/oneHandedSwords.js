@@ -24,5 +24,8 @@ const rustySword = () => ({
         low: 3,
         high: 5
     },
-    effects: []
+    effects: [],
+    critChance: 10,
+    cleave: { chance: 0 },
+    flurry: { chance: 0 },
 });

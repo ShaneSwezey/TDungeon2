@@ -1,7 +1,7 @@
 import { Db, Collection, ObjectId } from 'mongodb'; 
 import { Armor } from '../../../game/gear/armor';
 import { Weapon } from '../../../game/gear/weapon';
-import { Hero } from '../../../game/hero';
+import { IHero } from '../../../game/hero';
 import { Monster } from '../../../game/monster';
 import { Stamina } from '../../../game/stats/stamina';
 
@@ -25,12 +25,12 @@ interface BattleEvent {
     updatedAt: string;
 }
 
-interface Event {
+export interface Event {
     type: string;
     value: number;
     isCrit: boolean;
     deathBlow: boolean;
-    to: Monster | Hero;
+    to: Monster | IHero;
     from: Monster | HeroAttack;
 }
 

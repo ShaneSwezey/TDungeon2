@@ -19,6 +19,7 @@ interface QueryData {
 
 const Hero_Fragment = gql`
   fragment HeroFragment on Hero {
+    id
     name
     type
     stamina {
@@ -36,6 +37,7 @@ const Hero_Fragment = gql`
 
 const Hero_Attack_Fragment = gql`
   fragment HeroAttackFragment on HeroAttackType {
+    id
     name
     type
     stamina {
@@ -80,6 +82,7 @@ const Battle_Events_Query = gql`
   ${Hero_Attack_Fragment}
   query BattleEvents($battleId: String!) {
     battleEvents(battleId: $battleId) {
+      _id
       battleId
       round
       iteration

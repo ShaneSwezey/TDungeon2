@@ -1,13 +1,15 @@
 import { ActionEvent } from '../../persistence/mongo/collections/battleEvent';
 import { Effect, EffectType } from '../effects';
 import { Weapon } from '../gear/weapon';
-import { Hero } from '../hero';
+import { IHero } from '../hero';
 import { Monster, MonsterType } from '../monster';
+import { executeGoblinAttack, Goblin } from '../monster/goblin';
+import { ExecuteOrcAttack, Orc } from '../monster/orc';
 import { Stamina } from '../stats/stamina';
 import { getRandomInt, getUuid, selectRandom } from '../utils/math';
 
 interface ExecutionPayload {
-    heroes: Hero[],
+    heroes: IHero[],
     monsters: Monster[],
     messages: string[]
 }
@@ -21,26 +23,48 @@ interface ExecutionPayload {
 //     return { heroes, monsters, messages };
 // }
 
-// const monsterExecutionSwitch = (monster: Monster, heroes: Hero[]) => {
-//     switch(monster.type) {
-//         case MonsterType.Ogre:
-//             return executeOgreAttack(monster as Ogre, heroes);
-//         case MonsterType.Goblin:
-//             return executeGoblinAttack(monster as Goblin, heroes);
-//         case MonsterType.Spiderling:
-//             return executeSpiderlingAttack(monster as SpiderLing, heroes);
-//         default:
-//             throw new Error(`${monster.type} does not exist`);
-//     }
-// }
+const monsterExecutionSwitch = (monster: Monster, heroes: IHero[]) => {
+    switch(monster.type) {
+        case MonsterType.Orc:
+            return ExecuteOrcAttack(monster as Orc, heroes);
+        case MonsterType.Goblin:
+            return executeGoblinAttack(monster as Goblin, heroes);
+        // case MonsterType.Spiderling:
+        //     return executeSpiderlingAttack(monster as SpiderLing, heroes);
+        default:
+            throw new Error(`${monster.type} does not exist`);
+    }
+}
+
+export const executeMonstersAttack = (heroes: IHero[], monsters: Monster[], battleId: string, round: number) => {
+    const actionEvents: ActionEvent[] = [];
+    let iteration = 0;
+    monsters.forEach(monster => {
+        const events = monsterExecutionSwitch(monster, heroes);
+        events.forEach(event => actionEvents.push({ battleId, round, iteration, event, createdAt: new Date().toUTCString(), updatedAt: new Date().toUTCString() }));
+        iteration++;
+    });
+    return actionEvents;
+};
 
 
-const isDeathBlow = (stamina: Stamina): boolean => {
+export const executeHeroesAttack = (heroes: IHero[], monsters: Monster[], battleId: string, round: number) => {
+    const actionEvents: ActionEvent[] = [];
+    let iteration = 0;
+    heroes.forEach(hero => {
+        const events = hero.attack(monsters);
+        events.forEach(event => actionEvents.push({ battleId, round, iteration, event, createdAt: new Date().toUTCString(), updatedAt: new Date().toUTCString() }));
+        iteration++;
+    });
+    return actionEvents;
+};
+
+export const isDeathBlow = (stamina: Stamina): boolean => {
     return stamina.hitPoints <= 0;
 }
 
 
-export const attackHeroes = (heroes: Hero[], monsters: Monster[], battleId: string, round: number) => {
+export const attackHeroes = (heroes: IHero[], monsters: Monster[], battleId: string, round: number) => {
     const actionEvents: ActionEvent[] = [];
     let iteration = 0;
     monsters.forEach(monster => {
@@ -52,7 +76,7 @@ export const attackHeroes = (heroes: Hero[], monsters: Monster[], battleId: stri
             const value = getRandomInt(monster.attack.low, monster.attack.high) + monster.attack.attackPower;
             const isCrit = false;
 
-            const currentHeroStatus: Hero = {
+            const currentHeroStatus: IHero = {
                 ...selectedHero,
                 stamina: {
                     hitPoints: selectedHero.stamina.hitPoints,
@@ -84,7 +108,7 @@ export const attackHeroes = (heroes: Hero[], monsters: Monster[], battleId: stri
 }
 
 // add crit
-export const attackMonsters = (heroes: Hero[], monsters: Monster[], battleId: string, round: number)  => {
+export const attackMonsters = (heroes: IHero[], monsters: Monster[], battleId: string, round: number)  => {
     const actionEvents: ActionEvent[] = [];
     let iteration = 0;
     heroes.forEach(hero => {
@@ -93,47 +117,64 @@ export const attackMonsters = (heroes: Hero[], monsters: Monster[], battleId: st
             const monster = selectRandom(aliveMonsters, 1)[0];
             iteration++;
             hero.weapons.forEach(weapon => {
-                const attackDodged = false;
-                const isCrit = false;
-                
-                const value = getRandomInt(weapon.damage.low, weapon.damage.high);
+                let numOfAttacks = 1;
+                let attackType = "Physical Attack";
 
-                const currentMonsterStatus: Monster = {
-                    ...monster,
-                    stamina: {
-                        hitPoints: monster.stamina.hitPoints,
-                        maxHitPoints: monster.stamina.maxHitPoints,
+                if (hero.type === "Ranged") {
+                    if (getRandomInt(1,100) <= 20) {
+                        numOfAttacks = getRandomInt(2,3);
+                        attackType = "Flurry";
                     }
                 }
-                currentMonsterStatus.stamina.hitPoints -= value;
 
-                const actionEvent: ActionEvent = {
-                    battleId,
-                    round,
-                    iteration,
-                    event: {
-                        type: EventType.PHSYICALATTACK,
-                        value,
-                        isCrit,
-                        deathBlow: isDeathBlow(currentMonsterStatus.stamina),
-                        to: currentMonsterStatus,
-                        from: {
-                            id: hero.id,
-                            name: hero.name,
-                            type: hero.type,
-                            stamina: hero.stamina,
-                            weapon,
-                            armor: hero.armor,
+                for (let i = 0; i < numOfAttacks; i++) {
+                    const attackDodged = false;
+                    let isCrit = false;
+                    
+                    let value = getRandomInt(weapon.damage.low, weapon.damage.high);
+
+                    if (getRandomInt(1,100) <= 10) {
+                        isCrit = true;
+                        value *= 2;
+                    }
+
+                    const currentMonsterStatus: Monster = {
+                        ...monster,
+                        stamina: {
+                            hitPoints: monster.stamina.hitPoints,
+                            maxHitPoints: monster.stamina.maxHitPoints,
+                        }
+                    }
+                    currentMonsterStatus.stamina.hitPoints -= value;
+
+                    const actionEvent: ActionEvent = {
+                        battleId,
+                        round,
+                        iteration,
+                        event: {
+                            type: attackType,
+                            value,
+                            isCrit,
+                            deathBlow: isDeathBlow(currentMonsterStatus.stamina),
+                            to: currentMonsterStatus,
+                            from: {
+                                id: hero.id,
+                                name: hero.name,
+                                type: hero.type,
+                                stamina: hero.stamina,
+                                weapon,
+                                armor: hero.armor,
+                            },
+                            
                         },
-                        
-                    },
-                    createdAt: new Date().toUTCString(),
-                    updatedAt: new Date().toUTCString(), 
-                }
-                
-                actionEvents.push(actionEvent);
+                        createdAt: new Date().toUTCString(),
+                        updatedAt: new Date().toUTCString(), 
+                    }
+                    
+                    actionEvents.push(actionEvent);
 
-                monster.stamina.hitPoints -= value;
+                    monster.stamina.hitPoints -= value;
+                }
             });
         }
     });
@@ -142,6 +183,7 @@ export const attackMonsters = (heroes: Hero[], monsters: Monster[], battleId: st
 
 enum EventType {
     PHSYICALATTACK = "Physical Attack",
+    FLURRY = "Flurry"
 }
 
 // export interface ActionEvent {

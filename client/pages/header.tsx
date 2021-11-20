@@ -17,7 +17,7 @@ const Header: NextPage = () => {
                 mt={4}
                 ml={7}
             >
-                <Heading>TDungeon Beta v#0.0</Heading>
+                <Heading>TDungeon ProtoType v#0.0</Heading>
             </Center>
             <Spacer />
             <Center 
