@@ -1,7 +1,7 @@
 import { ObjectId, Collection, Db } from 'mongodb';
-import { ArmorSlot, ArmorType } from '../../../game/gear/armor';
-import { WeaponType } from '../../../game/gear/weapon';
-import { Hero, HeroType } from '../../../game/hero';
+import { ArmorSlot, ArmorType } from '../../game/gear/armor';
+import { WeaponType } from '../../game/gear/weapon';
+import { Hero, HeroType } from '../../game/hero';
 
 interface Armor {
     name: string;
@@ -75,9 +75,10 @@ export class HeroCollection {
         }
     }
 
-    public async findHeroByAttr(name: string, type: HeroType) {
+    public async findHeroByAttr(name: string, type?: HeroType) {
         try {
-            const res = await this.heroCollection.findOne({ name, type });
+
+            const res = await this.heroCollection.findOne({ name });
             return res;
         } catch(error) {
             throw error;

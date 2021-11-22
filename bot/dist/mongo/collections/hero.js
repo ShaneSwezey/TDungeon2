@@ -1,38 +1,12 @@
-import { ObjectId, Collection, Db } from 'mongodb';
-import { ArmorSlot, ArmorType } from '../../../game/gear/armor';
-import { WeaponType } from '../../../game/gear/weapon';
-import { Hero, HeroType } from '../../../game/hero';
-
-interface Armor {
-    name: string;
-    type: ArmorType;
-    slot: ArmorSlot;
-}
-
-interface Weapon {
-    name: string;
-    type: WeaponType;
-}
-
-interface HeroModel {
-    _id: ObjectId;
-    name: string;
-    type: HeroType;
-    armor: Armor[];
-    weapons: Weapon[];
-    createdAt: string;
-    updatedAt: string;
-}
-
-export class HeroCollection {
-    
-    private heroCollection: Collection<HeroModel>;
-
-    constructor(tdungeon: Db) {
-        this.heroCollection = tdungeon.collection<HeroModel>("Hero");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HeroCollection = void 0;
+const mongodb_1 = require("mongodb");
+class HeroCollection {
+    constructor(tdungeon) {
+        this.heroCollection = tdungeon.collection("Hero");
     }
-
-    public async createNewHero(hero: Hero) {
+    async createNewHero(hero) {
         try {
             const date = new Date().toUTCString();
             const res = await this.heroCollection.insertOne({
@@ -44,12 +18,12 @@ export class HeroCollection {
                 updatedAt: date,
             });
             return true;
-        } catch(error) {
+        }
+        catch (error) {
             throw error;
         }
     }
-
-    public async createNewHeroes(heroes: Hero[]) {
+    async createNewHeroes(heroes) {
         try {
             const date = new Date().toUTCString();
             const res = await this.heroCollection.insertMany(heroes.map(hero => ({
@@ -61,35 +35,36 @@ export class HeroCollection {
                 updatedAt: date,
             })));
             return true;
-        } catch(error) {
+        }
+        catch (error) {
             throw error;
         }
     }
-
-    public async findHeroById(id: string) {
+    async findHeroById(id) {
         try {
-            const res = await this.heroCollection.findOne({ _id: new ObjectId(id) });
+            const res = await this.heroCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
             return res;
-        } catch(error) {
+        }
+        catch (error) {
             throw error;
         }
     }
-
-    public async findHeroByAttr(name: string, type: HeroType) {
+    async findHeroByAttr(name, type) {
         try {
-            const res = await this.heroCollection.findOne({ name, type });
+            const res = await this.heroCollection.findOne({ name });
             return res;
-        } catch(error) {
+        }
+        catch (error) {
             throw error;
         }
     }
-
-    public async getAllHeroes() {
+    async getAllHeroes() {
         try {
             return await this.heroCollection.find().toArray();
-        } catch(error) {
+        }
+        catch (error) {
             throw error;
         }
     }
-
 }
+exports.HeroCollection = HeroCollection;
