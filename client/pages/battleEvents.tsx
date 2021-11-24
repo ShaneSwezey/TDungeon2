@@ -1,5 +1,5 @@
 import { Container, Flex, Heading, VStack, Spacer, Text, Center, Box, Stack, Badge } from "@chakra-ui/layout";
-import { ArrowUpIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { ChevronUpIcon } from '@chakra-ui/icons';
 import { useColorModeValue } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { BattleEvent, Event, Hero, HeroAttack, Monster, Weapon } from "../interfaces";
@@ -15,6 +15,8 @@ const determineBorderColor = (type: string) => {
             return "green.400";
         case "Goblin":
             return "green.400";
+        case "Ghoul":
+            return "green.400";
         default:
             return "blue.300";
     }
@@ -25,7 +27,7 @@ interface RowProps {
 }
 
 const isTypeHero = (type: string) => ["Melee", "Ranged", "Caster"].includes(type);
-const isTypeMonster = (type: string) => ["Goblin", "Orc"].includes(type);
+const isTypeMonster = (type: string) => ["Goblin", "Orc", "Ghoul"].includes(type);
 
  const getHeroImage = (battleEvent: BattleEvent) => {
     const { event } = battleEvent;

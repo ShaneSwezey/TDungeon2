@@ -1,5 +1,6 @@
 import { ResponseType } from "../enums/responseType";
 import { heroFactory } from "../game/creation/hero";
+import { createMonsters } from "../game/utils/creation";
 import { TDungeonDB } from "../mongo/collections/index";
 import { RedisInstance } from "../redis";
 
@@ -27,6 +28,9 @@ export const joinBattle = async (userName: string) => {
 
         await RedisInstance.setAliveHero(hero);
         await RedisInstance.setHero(hero); 
+
+        const monsters = createMonsters(1, 1);
+        await RedisInstance.setAliveMonsters(monsters); // fix
 
         return { type: ResponseType.MESSAGE, text: `${userName} has joined the raid!` };
     } catch(error) {

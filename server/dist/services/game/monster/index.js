@@ -6,6 +6,7 @@ var MonsterType;
     //PigMan = "Pig Man",
     MonsterType["Orc"] = "Orc";
     MonsterType["Goblin"] = "Goblin";
+    MonsterType["GHOUL"] = "Ghoul";
     //Spiderling = "Spiderling",
     //GiantSpider = "Giant Spider",
     //SpiderQueen = "Spider Queen",

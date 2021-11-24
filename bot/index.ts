@@ -1,5 +1,7 @@
 import { twitchClient } from './services/client';
 import { TDungeonDB } from './mongo/collections/index';
+import { HeroInputWorker, NewBattleWorker, RoundWorker } from './bull/worker';
+import { QueueScheduler } from 'bullmq';
 
 const CHANNEL_NAME = "slipperytoads";
 
@@ -10,6 +12,18 @@ const bootstrap = async () => {
             await twitchClient.connect();
             await twitchClient.join(CHANNEL_NAME);
             await twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
+            
+            const roundQueueScheduler = new QueueScheduler("round");
+            const heroInputQueueScheduler = new QueueScheduler("heroInput");
+            console.log(`Started workers: ${roundQueueScheduler.name}`);
+            console.log(`Started workers: ${heroInputQueueScheduler.name}`);
+
+            NewBattleWorker.on("completed", (job) => console.log(`Job #${job.id} -`, job.data));
+            NewBattleWorker.on("failed", (job, err) => console.error(`Job #${job.id} - Error:`, err));
+            RoundWorker.on("completed", (job) => console.log(`Job #${job.id} -`, job.data));
+            RoundWorker.on("failed", (job, err) => console.error(`Job #${job.id} - Error:`, err));
+            HeroInputWorker.on("completed", (job) => console.log(`Job #${job.id} -`, job.data));
+            HeroInputWorker.on("failed", (job, err) => console.error(`Job #${job.id} - Error:`, err));
         } else {
             throw Error('Problem connecting to Db');
         }

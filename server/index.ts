@@ -9,11 +9,10 @@ import { MongoClient } from "mongodb";
 import { BattleCollection } from "./services/persistence/mongo/collections/battle";
 import { HeroCollection } from "./services/persistence/mongo/collections/hero";
 import { BattleEventCollection } from "./services/persistence/mongo/collections/battleEvent";
+import { RedisInstance } from "./services/persistence/redis/instance";
 
 const expressPlayground = require("graphql-playground-middleware-express").default;
 const PORT = process.env.PORT || 8000;
-
-const redis = new Redis();
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 const db = client.db('tdungeon');
@@ -29,6 +28,8 @@ const bootstrap = async () => {
 
         await client.connect();
 
+        const redisInstance = new RedisInstance()
+
         const schema = await buildSchema({
             resolvers,
             dateScalarMode: "isoDate",
@@ -43,7 +44,7 @@ const bootstrap = async () => {
             schema,
             graphiql: false,
             context: {
-                redis,
+                redis: redisInstance,
                 req: request,
                 battleCol: BattleCol,
                 heroCol: HeroCol,

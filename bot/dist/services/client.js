@@ -12,7 +12,7 @@ var Commands;
 (function (Commands) {
     Commands["HEROTYPES"] = "!heroTypes";
     Commands["HEROCREATE"] = "!heroCreate";
-    Commands["RAIDJOIN"] = "!raidJoin";
+    Commands["BATTLEJOIN"] = "!battleJoin";
     Commands["ATTACK"] = "Attack";
 })(Commands || (Commands = {}));
 const parseMessage = (msg) => {
@@ -30,7 +30,7 @@ const enactCommand = async (privmsgMessage) => {
             return hero_1.getHeroTypes();
         case Commands.HEROCREATE:
             return await hero_1.createHero(privmsgMessage.messageText, privmsgMessage.senderUsername);
-        case Commands.RAIDJOIN:
+        case Commands.BATTLEJOIN:
             return await battle_1.joinBattle(privmsgMessage.senderUsername);
         case Commands.ATTACK:
             return await hero_1.setHeroAttackAction(privmsgMessage.senderUsername);
@@ -38,18 +38,18 @@ const enactCommand = async (privmsgMessage) => {
             return { type: responseType_1.ResponseType.IGNORE, text: "Command not found!" };
     }
 };
-// const responseFilter = async (response: Response, client: ChatClient, user: string) => {
-//     switch(response.type) {
-//         case ResponseType.MESSAGE:
-//             await client.say(CHANNEL_NAME, response.text);
-//             break;
-//         case ResponseType.WHISPER:
-//             await client.whisper(user, response.text);
-//             break;
-//         default:
-//             return;
-//     }
-// }
+const responseFilter = async (response, client, user) => {
+    switch (response.type) {
+        case responseType_1.ResponseType.MESSAGE:
+            await client.say(CHANNEL_NAME, response.text);
+            break;
+        case responseType_1.ResponseType.WHISPER:
+            await client.whisper(user, response.text);
+            break;
+        default:
+            return;
+    }
+};
 const twitchClient = new dank_twitch_irc_1.ChatClient({
     username: BOTNAME,
     password: token,
@@ -57,6 +57,6 @@ const twitchClient = new dank_twitch_irc_1.ChatClient({
 exports.twitchClient = twitchClient;
 twitchClient.on("PRIVMSG", async (privMessage) => {
     const response = await enactCommand(privMessage);
-    //await responseFilter(response, twitchClient, "slipperytoads");
+    await responseFilter(response, twitchClient, "slipperytoads");
 });
 twitchClient.on("connecting", () => console.log(`Connecting to ${CHANNEL_NAME}...`));

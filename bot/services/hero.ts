@@ -39,7 +39,7 @@ export const setHeroAttackAction = async (userName: string) => {
 
         await RedisInstance.setAttackingHero(hero);
 
-        return { type: ResponseType.IGNORE, text: `${redisHero.name} attack set!` };
+        return { type: ResponseType.MESSAGE, text: `${redisHero.name} attack set!` };
     } catch(error) {
         console.error('[setHeroAttackAction]', error);
         throw error;

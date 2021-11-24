@@ -35,7 +35,7 @@ const setHeroAttackAction = async (userName) => {
             return { type: responseType_1.ResponseType.IGNORE, text: "Hero not found!" };
         const hero = hero_1.heroFactory(redisHero); // fix
         await redis_1.RedisInstance.setAttackingHero(hero);
-        return { type: responseType_1.ResponseType.IGNORE, text: `${redisHero.name} attack set!` };
+        return { type: responseType_1.ResponseType.MESSAGE, text: `${redisHero.name} attack set!` };
     }
     catch (error) {
         console.error('[setHeroAttackAction]', error);

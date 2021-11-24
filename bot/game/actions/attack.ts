@@ -2,6 +2,7 @@ import { ActionEvent } from "../../mongo/collections/battleEvent";
 
 import { IHero } from '../hero';
 import { Monster, MonsterType } from '../monster';
+import { executeGhoulAttack, Ghoul } from "../monster/ghoul";
 import { executeGoblinAttack, Goblin } from '../monster/goblin';
 import { ExecuteOrcAttack, Orc } from '../monster/orc';
 import { Stamina } from '../stats/stamina';
@@ -28,8 +29,8 @@ const monsterExecutionSwitch = (monster: Monster, heroes: IHero[]) => {
             return ExecuteOrcAttack(monster as Orc, heroes);
         case MonsterType.Goblin:
             return executeGoblinAttack(monster as Goblin, heroes);
-        // case MonsterType.Spiderling:
-        //     return executeSpiderlingAttack(monster as SpiderLing, heroes);
+        case MonsterType.GHOUL:
+            return executeGhoulAttack(monster as Ghoul, heroes);
         default:
             throw new Error(`${monster.type} does not exist`);
     }

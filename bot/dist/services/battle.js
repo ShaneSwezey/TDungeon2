@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.joinBattle = void 0;
 const responseType_1 = require("../enums/responseType");
 const hero_1 = require("../game/creation/hero");
+const creation_1 = require("../game/utils/creation");
 const index_1 = require("../mongo/collections/index");
 const redis_1 = require("../redis");
 const joinBattle = async (userName) => {
@@ -24,6 +25,8 @@ const joinBattle = async (userName) => {
         });
         await redis_1.RedisInstance.setAliveHero(hero);
         await redis_1.RedisInstance.setHero(hero);
+        const monsters = creation_1.createMonsters(1, 1);
+        await redis_1.RedisInstance.setAliveMonsters(monsters); // fix
         return { type: responseType_1.ResponseType.MESSAGE, text: `${userName} has joined the raid!` };
     }
     catch (error) {
