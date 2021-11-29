@@ -11,10 +11,11 @@ const oneHandedSwords_1 = require("../gear/weapon/oneHandedSwords");
 const math_1 = require("../utils/math");
 const factory_1 = require("../gear/armor/factory");
 const factory_2 = require("../gear/weapon/factory");
+const chest_2 = require("../gear/armor/mail/chest");
 const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }) => {
     switch (type) {
         case hero_1.HeroType.Melee:
-            const meleeArmor = armor ? factory_1.armorFactory(armor.split(",")) : [chest_1.leatherChestFactory(chest_1.LeatherChestName.TATTEREDCHEST)];
+            const meleeArmor = armor ? factory_1.armorFactory(armor.split(",")) : [chest_2.mailChestFactory(chest_2.MailChestName.RUSTYCHAINCHEST)];
             return new hero_1.Hero({
                 id: id ? id : math_1.getUuid(),
                 name,
@@ -51,60 +52,3 @@ const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }) => {
     }
 };
 exports.heroFactory = heroFactory;
-// interface ArmorMongoRecord {
-//     name: string;
-//     type: ArmorType;
-//     slot: ArmorSlot;
-// }
-// interface WeaponMongoRecord {
-//     name: string;
-//     type: WeaponType;
-// }
-// interface HeroModel {
-//     _id: ObjectId;
-//     name: string;
-//     type: HeroType;
-//     armor: ArmorMongoRecord[];
-//     weapons: WeaponMongoRecord[];
-//     createdAt: string;
-//     updatedAt: string;
-// }
-// export const heroMongoFactory = ({ type, id, name, currentHitPoints, armor, weapons }: RedisHeroStats): IHero => {
-//     switch(type) {
-//         case HeroType.Melee:
-//             const meleeArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
-//             return new Hero({
-//                 id: id ? id : getUuid(),
-//                 name,
-//                 type: HeroType.Melee,
-//                 stamina: getStamina(meleeArmor, currentHitPoints),
-//                 gold: 0,
-//                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [oneHandedSwordFactory(OneHandedSwordName.RUSTYSWORD)],
-//                 armor: meleeArmor,
-//             });
-//         case HeroType.Ranged:
-//             const rangedArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
-//             return new Hero({
-//                 id: id ? id :getUuid(),
-//                 name,
-//                 type: HeroType.Ranged,
-//                 stamina: getStamina(rangedArmor, currentHitPoints), 
-//                 gold: 0,
-//                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [knifeFactory(KnifeName.BUTTERKNIFE)],
-//                 armor: rangedArmor
-//             });
-//         case HeroType.Caster:
-//             const casterArmor = armor ? armorFactory(armor.split(",")) : [clothChestFactory(ClothChestName.DUSTYROBES)];
-//             return new Hero({
-//                 id: id ? id : getUuid(),
-//                 name,
-//                 type: HeroType.Caster,
-//                 stamina: getStamina(casterArmor, currentHitPoints),
-//                 gold: 0,
-//                 weapons: weapons ? weaponsFactory(weapons.split(",")) : [staffFactory(StaffName.WALKINGSTICK)],
-//                 armor: casterArmor
-//             });
-//         default:
-//             throw new Error(`Hero type: ${type} does not exist!`); 
-//     }
-// }

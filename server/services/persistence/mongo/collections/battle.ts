@@ -70,7 +70,7 @@ export class BattleCollection {
 
     public async getAllBattles() {
         try {
-            return await this.battleCollection.find().toArray();
+            return await this.battleCollection.find().sort({ _id: -1 }).limit(5).toArray();
         } catch(error) {
             throw error;
         }

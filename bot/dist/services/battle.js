@@ -24,6 +24,7 @@ const joinBattle = async (userName) => {
             weapons: heroRecord.weapons.map(({ name, type }) => `${name}:${type}`).toString(),
         });
         await redis_1.RedisInstance.setAliveHero(hero);
+        await redis_1.RedisInstance.setHeroBattleParticipation(hero);
         await redis_1.RedisInstance.setHero(hero);
         const monsters = creation_1.createMonsters(1, 1);
         await redis_1.RedisInstance.setAliveMonsters(monsters); // fix

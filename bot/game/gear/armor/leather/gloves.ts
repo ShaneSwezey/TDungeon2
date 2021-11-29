@@ -65,7 +65,7 @@ const dwarfMingingGloves = (): LeatherGloves => ({
 const thiefGloves = (): LeatherGloves => ({
     name: LeatherGlovesName.THIEFGLOVES,
     hitPoints: 7,
-    attackPower: 5,  
+    attackPower: 2,  
     type: ArmorType.LEATHER,
     slot: ArmorSlot.GLOVES,
     rarity: ItemRarity.RARE

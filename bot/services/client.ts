@@ -12,7 +12,7 @@ enum Commands {
     HEROTYPES = "!heroTypes",
     HEROCREATE = "!heroCreate",
     BATTLEJOIN = "!battleJoin",
-    ATTACK ="Attack"
+    ATTACK ="!Attack"
 }
 
 const parseMessage = (msg: string) => {

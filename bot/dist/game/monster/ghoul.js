@@ -9,12 +9,12 @@ const ghoul = ({ id, currentHitPoints }) => ({
     id: id ? id : math_1.getUuid(),
     type: _1.MonsterType.GHOUL,
     stamina: {
-        maxHitPoints: 5,
-        hitPoints: currentHitPoints ? parseInt(currentHitPoints) : 5,
+        maxHitPoints: 3,
+        hitPoints: currentHitPoints ? parseInt(currentHitPoints) : 3,
     },
     attack: {
         low: 1,
-        high: 3,
+        high: 2,
         attackPower: 0,
         type: attack_1.MonsterAttackType.SCRATCH,
     },
@@ -32,7 +32,7 @@ const ghoulAttack = (ghoul, hero) => {
     for (let i = 0; i < 1; i++) {
         let value = math_1.getRandomInt(ghoul.attack.low, ghoul.attack.high) + ghoul.attack.attackPower;
         let isCrit = false;
-        if (math_1.getRandomInt(1, 100) <= 10) {
+        if (math_1.getRandomInt(1, 100) <= 5) {
             isCrit = true;
             value *= 2;
         }

@@ -4,6 +4,8 @@ import { oneHandedAxeFactory } from "./oneHandedAxes";
 import { oneHandedSwordFactory } from "./oneHandedSwords";
 import { staffFactory } from "./staffs";
 import { Weapon, WeaponType } from ".";
+import { doubleHandedAxeFactory } from "./doubleHandedAxes";
+import { doubleHandedSwordFactory } from "./doubleHandedSword";
 
 // name:type
 interface WeaponRecord {
@@ -23,10 +25,10 @@ const weaponSwitch = (weaponString: string): Weapon => {
     switch(weaponRecord.type) {
         // case WeaponType.CROSSBOW:
         //     return;
-        // case WeaponType.DOUBLEHANDEDAXE:
-        //     return;
-        // case WeaponType.DOUBLEHANDEDSWORD:
-        //     return;
+        case WeaponType.DOUBLEHANDEDAXE:
+            return doubleHandedAxeFactory(weaponRecord.name);
+        case WeaponType.DOUBLEHANDEDSWORD:
+            return doubleHandedSwordFactory(weaponRecord.name);
         case WeaponType.KNIFE:
             return knifeFactory(weaponRecord.name);
         // case WeaponType.LONGBOW:

@@ -94,7 +94,7 @@ export class RedisInstance {
 
     public static async setHeroBattleParticipation(hero: Hero) {
         try {
-            return await this.redis.sadd(this.battleParticipants, `${hero.name}:${hero.type}`);
+            return await this.redis.sadd(this.battleParticipants, `${hero.name}`);
         } catch(error) {
             throw error;
         }
@@ -110,7 +110,7 @@ export class RedisInstance {
 
     public static async setAliveHero(hero: Hero) {
         try {
-            return await this.redis.sadd(this.battleHeroAlive, `${hero.name}:${hero.type}`);
+            return await this.redis.sadd(this.battleHeroAlive, `${hero.name}`);
         } catch(error) {
             throw error;
         }
@@ -118,7 +118,7 @@ export class RedisInstance {
 
     public static async setAliveHeroes(heroes: Hero[]) {
         try {
-            return await this.redis.sadd(this.battleHeroAlive, heroes.map(({ name, type }) => `${name}:${type}`))
+            return await this.redis.sadd(this.battleHeroAlive, heroes.map(({ name }) => `${name}`))
         } catch(error) {
             throw error;
         }
@@ -132,9 +132,17 @@ export class RedisInstance {
         }
     }
 
+    public static async delAliveHero(heroName: string) {
+        try {
+            return await this.redis.srem(this.battleHeroAlive, heroName);
+        } catch(error) {
+            throw error;
+        }
+    }
+
     public static async setAttackingHero(hero: Hero) {
         try {
-            return await this.redis.sadd(this.battleHeroAttack, `${hero.name}:${hero.type}`);
+            return await this.redis.sadd(this.battleHeroAttack, `${hero.name}`);
         } catch(error) {
             throw error;
         }
@@ -148,6 +156,14 @@ export class RedisInstance {
         }
     }
 
+    public static async clearAttackingHeroes() {
+        try {
+            return await this.redis.del(this.battleHeroAttack);
+        } catch(error) {
+            throw error;
+        }
+    }
+
     public static async setHero(hero: Hero) {
         try {
             const heroMap = new Map<string, string>();
@@ -156,7 +172,7 @@ export class RedisInstance {
             heroMap.set("currentHitPoints", `${hero.stamina.hitPoints}`);
             heroMap.set("armor", this.getArmorString(hero.armor));
             heroMap.set("weapons", this.getWeaponString(hero.weapons));
-            return await this.redis.hmset(`${this.heroPrefix}:${hero.name}`, heroMap);
+            return await this.redis.hmset(`battle:${hero.name}`, heroMap);
         } catch(error) {
             throw error;
         }
@@ -164,7 +180,7 @@ export class RedisInstance {
 
     public static async updateHeroStat(hero: Hero) {
         try {
-            return await this.redis.hmset(`${this.heroPrefix}:${hero.name}`, 'currentHitPoints', `${hero.stamina.hitPoints}`);
+            return await this.redis.hmset(`battle:${hero.name}`, 'currentHitPoints', `${hero.stamina.hitPoints}`);
         } catch(error) {
             throw error;
         }
@@ -172,7 +188,7 @@ export class RedisInstance {
     
     public static async getHero(heroName: string) {
         try {
-            return await this.redis.hgetall(`${this.heroPrefix}:${heroName}`);
+            return await this.redis.hgetall(`battle:${heroName}`);
         } catch(error) {
             throw error;
         }
@@ -181,8 +197,15 @@ export class RedisInstance {
     public static async setAliveMonsters(monsters: Monster[]) {
         try {
             const monsterList = monsters.map(({ id, type, stamina }) => `${id}:${type}:${stamina.hitPoints}`)
-            await this.redis.del(this.battleMonsterAlive)
             return await this.redis.rpush(this.battleMonsterAlive, monsterList);
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    public static async delAliveMontsers() {
+        try {
+            await this.redis.del(this.battleMonsterAlive);
         } catch(error) {
             throw error;
         }
@@ -196,6 +219,33 @@ export class RedisInstance {
         }
     }
 
+    public static async clearBattle() {
+        try {
+            return await this.redis.multi()
+                .del(this.battleId)
+                .del(this.battleStatus)
+                .del(this.battleTurn)
+                .del(this.battleParticipants)
+                .del(this.battleHeroAlive)
+                .del(this.battleHeroAttack) 
+                .del(this.battleMonsterAlive) 
+                .del(this.battleRound)
+                .exec();
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    public static async clearHeroes(heroNames: string[]) {
+        try {
+            return await Promise.all(heroNames.map(async heroName => {
+                return await this.redis.del(`battle:${heroName}`);
+            }));
+        } catch(error) {
+            throw error;
+        }
+    }
+
     public static disconnect() {
         try {
             return this.redis.disconnect();
@@ -203,28 +253,6 @@ export class RedisInstance {
             throw e;
         }
     }
-
-    // Armor: name!type!slot
-    // look into string builder if javascript has one
-    // private static getArmorString(armorList: Armor[]) {
-    //     let armStr = "";
-    //     armorList.forEach((armor, i) => {
-    //         if (armorList.length - 1  === i) armStr + `${armor.name}!${armor.type}!${armor.slot}`
-    //         else armStr + `${armor.name}!${armor.type}!${armor.slot}:`;
-    //     });
-    //     return armStr;
-    // }
-
-    // // Weapon: name!type
-    // // look into string builder if javascript has one
-    // private static getWeaponString(weapons: Weapon[]) {
-    //     let weaponsStr = "";
-    //     weapons.forEach((weapon, i) => {
-    //         if (weapons.length - 1 === i) weaponsStr + `${weapon.name}!${weapon.type}`;
-    //         else weaponsStr + `${weapon.name}!${weapon.type}:`;
-    //     });
-    //     return weaponsStr;
-    // }
 
     // Armor: name:type:slot
     private static getArmorString(armor: Armor[]) {

@@ -35,7 +35,6 @@ exports.HeroInputWorker = new bullmq_1.Worker("heroInput", async (job) => {
 });
 exports.RoundWorker = new bullmq_1.Worker("round", async (job) => {
     const { battleId, round } = job.data;
-    console.log(`Starting round: ${battleId}`);
     const currentTurn = await redis_1.RedisInstance.getTurn();
     // get Aliveheroes
     let aliveHeroes;
@@ -46,10 +45,9 @@ exports.RoundWorker = new bullmq_1.Worker("round", async (job) => {
         aliveHeroes = await redis_1.RedisInstance.getAliveHeroes();
     }
     if (!aliveHeroes.length)
-        return;
-    const aliveHeroNames = aliveHeroes.map(heroString => heroString.split(":")[0]);
+        return false;
     const redisHeroRecords = [];
-    await Promise.all(aliveHeroNames.map(async (heroName) => {
+    await Promise.all(aliveHeroes.map(async (heroName) => {
         const redisHeroRecord = await redis_1.RedisInstance.getHero(heroName);
         redisHeroRecords.push(redisHeroRecord);
     }));
@@ -68,22 +66,33 @@ exports.RoundWorker = new bullmq_1.Worker("round", async (job) => {
         monsters: builtMonsters,
     });
     await index_1.TDungeonDB.BattleEventCollection.createNewBattleEvents(results.actionEvents);
-    if (results.aliveHeroes.length) {
-        await Promise.all(results.aliveHeroes.map(async (hero) => {
-            return await redis_1.RedisInstance.updateHeroStat(hero);
+    await Promise.all([...results.aliveHeroes, ...results.deadHeroes].map(async (hero) => {
+        return await redis_1.RedisInstance.updateHeroStat(hero);
+    }));
+    if (results.aliveMonsters.length) {
+        await redis_1.RedisInstance.delAliveMontsers();
+        await redis_1.RedisInstance.setAliveMonsters(results.aliveMonsters);
+    }
+    if (results.deadHeroes.length) {
+        await Promise.all(results.deadHeroes.map(async (hero) => {
+            return await redis_1.RedisInstance.delAliveHero(hero.name);
         }));
     }
-    if (results.aliveMonsters.length)
-        await redis_1.RedisInstance.setAliveMonsters(results.aliveMonsters);
     // @ts-ignore
     const nextTurn = math_1.getNextTurn(currentTurn);
     await redis_1.RedisInstance.setTurn(nextTurn);
     const Nextround = results.nextRound;
     await redis_1.RedisInstance.setRound(results.nextRound);
+    if (currentTurn === round_2.Turn.HERO)
+        await redis_1.RedisInstance.clearAttackingHeroes();
     if (results.isBattleOver === true) {
         const winner = results.winner;
         const alive = results.aliveHeroes.length ? results.aliveHeroes : results.aliveMonsters;
+        await client_1.twitchClient.say("slipperytoads", `${winner} won the battle!`);
         await index_1.TDungeonDB.BattleCollection.updateBattle(battleId, { winner, alive });
+        const heroParticipants = await redis_1.RedisInstance.getHeroBattleParticipants();
+        await redis_1.RedisInstance.clearHeroes(heroParticipants);
+        await redis_1.RedisInstance.clearBattle();
     }
     else {
         if (nextTurn === round_2.Turn.HERO)

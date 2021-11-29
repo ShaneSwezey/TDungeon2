@@ -32,7 +32,9 @@ const setHeroAttackAction = async (userName) => {
             return { type: responseType_1.ResponseType.IGNORE, text: "Battle not in session!" };
         const redisHero = await redis_1.RedisInstance.getHero(userName);
         if (!redisHero)
-            return { type: responseType_1.ResponseType.IGNORE, text: "Hero not found!" };
+            return { type: responseType_1.ResponseType.MESSAGE, text: "Hero not found!" };
+        if (parseInt(redisHero.currentHitPoints) <= 0)
+            return { type: responseType_1.ResponseType.MESSAGE, text: `${userName} is dead!` };
         const hero = hero_1.heroFactory(redisHero); // fix
         await redis_1.RedisInstance.setAttackingHero(hero);
         return { type: responseType_1.ResponseType.MESSAGE, text: `${redisHero.name} attack set!` };

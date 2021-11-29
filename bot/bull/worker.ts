@@ -39,7 +39,6 @@ export const HeroInputWorker = new Worker("heroInput", async (job: Job) => {
 
 export const RoundWorker = new Worker("round", async (job: Job) => {
     const { battleId, round } = job.data;
-    console.log(`Starting round: ${battleId}`)
 
     const currentTurn = await RedisInstance.getTurn();
 
@@ -51,12 +50,10 @@ export const RoundWorker = new Worker("round", async (job: Job) => {
         aliveHeroes = await RedisInstance.getAliveHeroes();
     }
 
-    if (!aliveHeroes.length) return;
-
-    const aliveHeroNames = aliveHeroes.map(heroString => heroString.split(":")[0]);
+    if (!aliveHeroes.length) return false;
 
     const redisHeroRecords: Record<string, string>[] = [];
-    await Promise.all(aliveHeroNames.map(async heroName => {
+    await Promise.all(aliveHeroes.map(async heroName => {
         const redisHeroRecord = await RedisInstance.getHero(heroName);
         redisHeroRecords.push(redisHeroRecord);
     }));
@@ -80,13 +77,21 @@ export const RoundWorker = new Worker("round", async (job: Job) => {
 
     await TDungeonDB.BattleEventCollection.createNewBattleEvents(results.actionEvents);
         
-    if (results.aliveHeroes.length) {
-        await Promise.all(results.aliveHeroes.map(async hero => {
-            return await RedisInstance.updateHeroStat(hero);
-        }));
+    await Promise.all([...results.aliveHeroes, ...results.deadHeroes].map(async hero => {
+        return await RedisInstance.updateHeroStat(hero);
+    }));
+    
+
+    if (results.aliveMonsters.length) {
+        await RedisInstance.delAliveMontsers();
+        await RedisInstance.setAliveMonsters(results.aliveMonsters);
     }
 
-    if (results.aliveMonsters.length) await RedisInstance.setAliveMonsters(results.aliveMonsters);
+    if (results.deadHeroes.length) {
+        await Promise.all(results.deadHeroes.map(async hero => {
+            return await RedisInstance.delAliveHero(hero.name);
+        }));
+    }
 
     // @ts-ignore
     const nextTurn = getNextTurn(currentTurn);
@@ -94,10 +99,18 @@ export const RoundWorker = new Worker("round", async (job: Job) => {
     await RedisInstance.setTurn(nextTurn);
     const Nextround = results.nextRound;
     await RedisInstance.setRound(results.nextRound);
+
+    if (currentTurn === Turn.HERO) await RedisInstance.clearAttackingHeroes();
+    
     if (results.isBattleOver === true) {
         const winner = results.winner!;
         const alive = results.aliveHeroes.length ? results.aliveHeroes : results.aliveMonsters;
-        await TDungeonDB.BattleCollection.updateBattle(battleId, { winner, alive })
+        await twitchClient.say("slipperytoads", `${winner} won the battle!`);
+        await TDungeonDB.BattleCollection.updateBattle(battleId, { winner, alive });
+    
+        const heroParticipants = await RedisInstance.getHeroBattleParticipants();
+        await RedisInstance.clearHeroes(heroParticipants);
+        await RedisInstance.clearBattle();
     } else {
         if (nextTurn === Turn.HERO) await HeroInputQueue.add(`battle:heroInput:${round + 1}`, { battleId, round: round + 1 });
         else await RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });

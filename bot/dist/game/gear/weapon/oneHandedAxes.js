@@ -58,6 +58,6 @@ const lumberWicker = () => ({
     },
     effects: [],
     critChance: 10,
-    cleave: { chance: 20, num: { low: 2, high: 3 } },
+    cleave: { chance: 0 },
     flurry: { chance: 0 },
 });

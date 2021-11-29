@@ -33,7 +33,9 @@ export const setHeroAttackAction = async (userName: string) => {
 
         const redisHero = await RedisInstance.getHero(userName);
 
-        if (!redisHero) return { type: ResponseType.IGNORE, text: "Hero not found!" };
+        if (!redisHero) return { type: ResponseType.MESSAGE, text: "Hero not found!" };
+
+        if (parseInt(redisHero.currentHitPoints) <= 0) return { type: ResponseType.MESSAGE, text: `${userName} is dead!` };
 
         const hero = heroFactory(redisHero as any); // fix
 

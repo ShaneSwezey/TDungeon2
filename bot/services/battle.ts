@@ -27,6 +27,7 @@ export const joinBattle = async (userName: string) => {
         });
 
         await RedisInstance.setAliveHero(hero);
+        await RedisInstance.setHeroBattleParticipation(hero);
         await RedisInstance.setHero(hero); 
 
         const monsters = createMonsters(1, 1);

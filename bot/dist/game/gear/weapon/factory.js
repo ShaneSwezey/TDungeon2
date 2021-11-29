@@ -7,6 +7,8 @@ const oneHandedAxes_1 = require("./oneHandedAxes");
 const oneHandedSwords_1 = require("./oneHandedSwords");
 const staffs_1 = require("./staffs");
 const _1 = require(".");
+const doubleHandedAxes_1 = require("./doubleHandedAxes");
+const doubleHandedSword_1 = require("./doubleHandedSword");
 const weaponsFactory = (weaponStrings) => weaponStrings.map(weaponString => weaponSwitch(weaponString));
 exports.weaponsFactory = weaponsFactory;
 const weaponSwitch = (weaponString) => {
@@ -18,10 +20,10 @@ const weaponSwitch = (weaponString) => {
     switch (weaponRecord.type) {
         // case WeaponType.CROSSBOW:
         //     return;
-        // case WeaponType.DOUBLEHANDEDAXE:
-        //     return;
-        // case WeaponType.DOUBLEHANDEDSWORD:
-        //     return;
+        case _1.WeaponType.DOUBLEHANDEDAXE:
+            return doubleHandedAxes_1.doubleHandedAxeFactory(weaponRecord.name);
+        case _1.WeaponType.DOUBLEHANDEDSWORD:
+            return doubleHandedSword_1.doubleHandedSwordFactory(weaponRecord.name);
         case _1.WeaponType.KNIFE:
             return knives_1.knifeFactory(weaponRecord.name);
         // case WeaponType.LONGBOW:

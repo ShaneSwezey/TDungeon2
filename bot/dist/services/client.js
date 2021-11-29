@@ -13,7 +13,7 @@ var Commands;
     Commands["HEROTYPES"] = "!heroTypes";
     Commands["HEROCREATE"] = "!heroCreate";
     Commands["BATTLEJOIN"] = "!battleJoin";
-    Commands["ATTACK"] = "Attack";
+    Commands["ATTACK"] = "!Attack";
 })(Commands || (Commands = {}));
 const parseMessage = (msg) => {
     if (msg.indexOf(' ') === -1)

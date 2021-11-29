@@ -61,5 +61,5 @@ const blacksmithSonPants = () => ({
     hitPoints: 10,
     attackPower: 4,
     rarity: rarity_1.ItemRarity.RARE,
-    description: "This is the work of an apprentice, not to shabby but lacks the polish of a professional!"
+    description: "This is the work of an apprentice, not to shabby but lacks the polish of a Master."
 });

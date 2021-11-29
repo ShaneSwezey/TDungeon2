@@ -9,6 +9,8 @@ var KnifeName;
     KnifeName["BUTTERKNIFE"] = "Butter Knife";
     KnifeName["KRISBLADE"] = "Kris Blade";
     KnifeName["LETTEROPENER"] = "Letter Opener";
+    KnifeName["THIEFBLADE"] = "Thief Blade";
+    KnifeName["SHANK"] = "Shank";
 })(KnifeName = exports.KnifeName || (exports.KnifeName = {}));
 const knifeFactory = (knifeName) => {
     switch (knifeName) {
@@ -18,6 +20,10 @@ const knifeFactory = (knifeName) => {
             return krisBlade();
         case KnifeName.LETTEROPENER:
             return letterOpener();
+        case KnifeName.THIEFBLADE:
+            return thiefBlade();
+        case KnifeName.SHANK:
+            return shank();
         default:
             throw new Error(`Knife: ${knifeName} was not found!`);
     }
@@ -54,11 +60,37 @@ const letterOpener = () => ({
     type: _1.WeaponType.KNIFE,
     rarity: rarity_1.ItemRarity.UNCOMMON,
     damage: {
-        low: 5,
-        high: 8
+        low: 3,
+        high: 7
     },
     critChance: 10,
     cleave: { chance: 0 },
     flurry: { chance: 0 },
     effects: [poison_1.poisonEffectFactory(poison_1.PoisonEffect.BLACKINK)]
+});
+const thiefBlade = () => ({
+    name: KnifeName.THIEFBLADE,
+    type: _1.WeaponType.KNIFE,
+    rarity: rarity_1.ItemRarity.UNCOMMON,
+    damage: {
+        high: 8,
+        low: 6,
+    },
+    critChance: 5,
+    cleave: { chance: 0 },
+    flurry: { chance: 10, num: { high: 2, low: 2 } },
+    effects: []
+});
+const shank = () => ({
+    name: KnifeName.SHANK,
+    type: _1.WeaponType.KNIFE,
+    rarity: rarity_1.ItemRarity.RARE,
+    damage: {
+        high: 10,
+        low: 7,
+    },
+    critChance: 10,
+    cleave: { chance: 0 },
+    flurry: { chance: 25, num: { high: 3, low: 2 } },
+    effects: []
 });
