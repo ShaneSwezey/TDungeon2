@@ -2,7 +2,7 @@ import { ActionEvent } from "../../persistence/mongo/collections/battleEvent";
 import { Turn } from "../enum/round";
 import { Hero } from "../hero";
 import { Monster } from "../monster";
-import { attackHeroes, attackMonsters, executeHeroesAttack, executeMonstersAttack } from "./attack";
+import { executeHeroesAttack, executeMonstersAttack } from "./attack";
 
 
 export interface RoundArgs {

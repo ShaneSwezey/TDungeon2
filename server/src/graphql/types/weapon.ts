@@ -15,6 +15,9 @@ export class WeaponType {
 
     @Field(() => WeaponDamageType, { nullable: false })
     damage: WeaponDamageType;
+    
+    @Field({ nullable: true })
+    rarity?: string 
 
     @Field({ nullable: true })
     description?: string;

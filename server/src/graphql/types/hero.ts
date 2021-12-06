@@ -1,7 +1,18 @@
-import { Field, ID, Int, ObjectType } from "type-graphql";
+import { createUnionType, Field, ID, Int, ObjectType } from "type-graphql";
 import { WeaponType } from "./weapon";
 import { ArmorType } from "./armor";
 import { StaminaType } from "./stamina";
+
+const ArmorWeaponTypeUnion = createUnionType({
+    name: "Item",
+    types: () => [ArmorType, WeaponType],
+    resolveType: value => {
+        // @ts-ignore
+        if (value.slot) return ArmorType;
+        else return WeaponType;
+    }
+});
+
 
 @ObjectType("Hero")
 export class HeroType {
@@ -27,4 +38,7 @@ export class HeroType {
 
     @Field(() => [WeaponType])
     weapons: WeaponType[];
+
+    @Field(() => [ArmorWeaponTypeUnion], { nullable: true })
+    inventory?: (ArmorType | WeaponType)[]
 }

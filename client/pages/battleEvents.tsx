@@ -1,13 +1,99 @@
-import { Container, Flex, Heading, VStack, Spacer, Text, Center, Box, Stack, Badge } from "@chakra-ui/layout";
+import { Container, Flex, Heading, VStack, Spacer, Text, Center, Box, Stack } from "@chakra-ui/layout";
 import { ChevronUpIcon } from '@chakra-ui/icons';
 import { useColorModeValue } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { BattleEvent, Event, Hero, HeroAttack, Monster, Weapon } from "../interfaces";
-import Image from 'next/image'
+import { BattleEvent, Event, Hero, HeroAttack, Monster } from "../interfaces";
+import Image from 'next/image';
+import { gql, useQuery } from "@apollo/client";
 
-interface Props {
-    battleEvents: BattleEvent[];
-}
+const Hero_Fragment = gql`
+    fragment HeroFragment on Hero {
+      id
+      name
+      type
+      stamina {
+        hitPoints
+        maxHitPoints
+      }
+      armor {
+        name
+        type
+        slot
+        hitPoints
+      }
+    }
+`;
+  
+  const Hero_Attack_Fragment = gql`
+    fragment HeroAttackFragment on HeroAttackType {
+      id
+      name
+      type
+      stamina {
+        hitPoints
+        maxHitPoints
+      }
+      armor {
+        name
+        type
+        slot
+        hitPoints
+      }
+      weapon {
+        name
+        type
+        damage {
+          low
+          high
+        }
+      }
+    }
+  `;
+  
+  const Monster_Fragment = gql`
+    fragment MonsterFragment on Monster {
+      id
+      type
+      stamina {
+        hitPoints
+        maxHitPoints
+      }
+      attack {
+        low
+        high
+      }
+    }
+  `;
+  
+  const Battle_Events_Query = gql`
+    ${Hero_Fragment}
+    ${Monster_Fragment}
+    ${Hero_Attack_Fragment}
+    query BattleEvents($battleId: String!) {
+      battleEvents(battleId: $battleId) {
+        _id
+        battleId
+        round
+        iteration
+        event {
+          type
+          value
+          isCrit
+          deathBlow
+          to {
+            ...HeroFragment
+            ...MonsterFragment
+          }
+          from {
+            ...HeroAttackFragment
+            ...MonsterFragment
+          }
+        }
+      }
+    }
+  `;
+
+
 
 const determineBorderColor = (type: string) => {
     switch(type) {
@@ -136,7 +222,6 @@ const NameRow: NextPage<RowProps> = ({ battleEvent } : RowProps) =>  {
     const heroColor = isToTypeHero ? "red.500" : "blue.300";
     const monster = (!isToTypeHero ? battleEvent.event.to : battleEvent.event.from) as Monster;
     const monsterColor = isToTypeHero ? "green.300" : "red.500";
-    console.log('monster.stamina.hitPoints:', monster.stamina.hitPoints);
     return (
         <Flex
             direction="row" 
@@ -154,33 +239,37 @@ const NameRow: NextPage<RowProps> = ({ battleEvent } : RowProps) =>  {
     );
 }
 
+interface Props {
+    battleId: number
+}
 
-const BattleEvents: NextPage<Props> = ({ battleEvents }: Props)=> {
+const BattleEvents: NextPage<Props> = ({ battleId }: Props)=> {
+    const {loading, error, data} = useQuery(Battle_Events_Query, { variables: { battleId }});
+
     const formBackground = useColorModeValue("gray.100", "gray.700");
-    console.log('battleEventsSON:', battleEvents);
+    if (loading) return <div>Loading...</div>;
     return (
         <Container mt={10}>
             <Flex direction="column" background={formBackground} p={12} rounded={5}>
-                <Heading mb={6}>{`Events #${battleEvents[0].battleId.substring(battleEvents[0].battleId.length - 5)}`}</Heading>
+                <Heading mb={6}>{`Events #${data.battleEvents[0].battleId.substring(data.battleEvents[0].battleId.length - 5)}`}</Heading>
                 <VStack spacing="5px" mb={5} >
                     {
-                        battleEvents.map(battleEvent => 
-                            <>
-                            <Flex
-                                direction="row" 
-                                w="100%" 
-                                h="70px" 
-                                border="solid" 
-                                borderColor={determineBorderColor(battleEvent.event.from.type)} 
-                                rounded={5} 
-                                key={battleEvent.event.to.id}
-                                p={1}
-                                mb={0}
-                            >
-                                <Row battleEvent={battleEvent} />
-                            </Flex>
-                            <NameRow battleEvent={battleEvent}/>
-                            </>
+                        data.battleEvents.map((battleEvent: any) => 
+                            <Box w="100%" key={battleEvent._id}>
+                                <Flex
+                                    direction="row" 
+                                    w="100%" 
+                                    h="70px" 
+                                    border="solid" 
+                                    borderColor={determineBorderColor(battleEvent.event.from.type)} 
+                                    rounded={5} 
+                                    p={1}
+                                    mb={0}
+                                >
+                                    <Row battleEvent={battleEvent} />
+                                </Flex>
+                                <NameRow battleEvent={battleEvent}/>
+                            </Box>
                         )
                     }
                 </VStack>

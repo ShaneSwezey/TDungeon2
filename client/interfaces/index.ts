@@ -45,6 +45,7 @@ export interface Hero {
     readonly type: HeroType;
     readonly armor: Armor[];
     readonly weapons: Weapon[];
+    readonly inventory?: (Armor|Weapon)[]
 }
 
 export enum HeroType {
@@ -75,15 +76,18 @@ export enum MonsterAttackType {
 
 export interface Weapon {
     readonly name: string
+    readonly rarity: string;
     readonly damage: WeaponDamage;
     readonly type: WeaponType;
     //readonly effects: Effect[];
     readonly description?: string; 
+    
 }
 
 export interface Armor {
     readonly name: string;
     readonly hitPoints: number;
+    readonly rarity: string;
     readonly type: ArmorType;
     readonly slot: ArmorSlot;
     readonly description?: string;

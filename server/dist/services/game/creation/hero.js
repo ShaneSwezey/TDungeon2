@@ -11,10 +11,11 @@ const oneHandedSwords_1 = require("../gear/weapon/oneHandedSwords");
 const math_1 = require("../utils/math");
 const factory_1 = require("../gear/armor/factory");
 const factory_2 = require("../gear/weapon/factory");
+const chest_2 = require("../gear/armor/mail/chest");
 const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }) => {
     switch (type) {
         case hero_1.HeroType.Melee:
-            const meleeArmor = armor ? factory_1.armorFactory(armor.split(",")) : [chest_1.leatherChestFactory(chest_1.LeatherChestName.TATTEREDCHEST)];
+            const meleeArmor = armor ? factory_1.armorFactory(armor.split(",")) : [chest_2.mailChestFactory(chest_2.MailChestName.RUSTYCHAINCHEST)];
             return new hero_1.Hero({
                 id: id ? id : math_1.getUuid(),
                 name,

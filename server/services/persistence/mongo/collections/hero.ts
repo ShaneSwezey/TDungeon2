@@ -14,12 +14,15 @@ interface Weapon {
     type: WeaponType;
 }
 
+type Item = Armor | Weapon;
+
 interface HeroModel {
     _id: ObjectId;
     name: string;
     type: HeroType;
     armor: Armor[];
     weapons: Weapon[];
+    inventory: Item[];
     createdAt: string;
     updatedAt: string;
 }
@@ -40,6 +43,7 @@ export class HeroCollection {
                 type: hero.type,
                 armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
                 weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
+                inventory: [],
                 createdAt: date,
                 updatedAt: date,
             });
@@ -57,6 +61,7 @@ export class HeroCollection {
                 type: hero.type,
                 armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
                 weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
+                inventory: [],
                 createdAt: date,
                 updatedAt: date,
             })));
@@ -69,6 +74,15 @@ export class HeroCollection {
     public async findHeroById(id: string) {
         try {
             const res = await this.heroCollection.findOne({ _id: new ObjectId(id) });
+            return res;
+        } catch(error) {
+            throw error;
+        }
+    }
+
+    public async findHeroByName(name: string) {
+        try {
+            const res = await this.heroCollection.findOne({ name });
             return res;
         } catch(error) {
             throw error;

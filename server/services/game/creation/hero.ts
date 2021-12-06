@@ -8,8 +8,9 @@ import { oneHandedSwordFactory, OneHandedSwordName } from "../gear/weapon/oneHan
 import { getUuid } from "../utils/math";
 import { armorFactory } from '../gear/armor/factory';
 import { weaponsFactory } from "../gear/weapon/factory";
+import { mailChestFactory, MailChestName } from "../gear/armor/mail/chest";
 
-export interface HeroStats {
+export interface RedisHeroStats {
     type: string;
     name: string;
     id?: string;
@@ -18,11 +19,10 @@ export interface HeroStats {
     weapons?: string;
 }
 
-
-export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }: HeroStats): IHero => {
+export const heroFactory = ({ type, id, name, currentHitPoints, armor, weapons }: RedisHeroStats): IHero => {
     switch(type) {
         case HeroType.Melee:
-            const meleeArmor = armor ? armorFactory(armor.split(",")) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)]
+            const meleeArmor = armor ? armorFactory(armor.split(",")) : [mailChestFactory(MailChestName.RUSTYCHAINCHEST)];
             return new Hero({
                 id: id ? id : getUuid(),
                 name,

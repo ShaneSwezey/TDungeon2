@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attackMonsters = exports.attackHeroes = exports.isDeathBlow = exports.executeHeroesAttack = exports.executeMonstersAttack = void 0;
 const monster_1 = require("../monster");
+const ghoul_1 = require("../monster/ghoul");
 const goblin_1 = require("../monster/goblin");
 const orc_1 = require("../monster/orc");
 const math_1 = require("../utils/math");
@@ -19,8 +20,8 @@ const monsterExecutionSwitch = (monster, heroes) => {
             return orc_1.ExecuteOrcAttack(monster, heroes);
         case monster_1.MonsterType.Goblin:
             return goblin_1.executeGoblinAttack(monster, heroes);
-        // case MonsterType.Spiderling:
-        //     return executeSpiderlingAttack(monster as SpiderLing, heroes);
+        case monster_1.MonsterType.GHOUL:
+            return ghoul_1.executeGhoulAttack(monster, heroes);
         default:
             throw new Error(`${monster.type} does not exist`);
     }

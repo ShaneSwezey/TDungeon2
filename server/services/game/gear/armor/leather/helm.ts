@@ -37,7 +37,7 @@ const leatherHeadBand = (): LeatherHelm => ({
     hitPoints: 4,
     type: ArmorType.LEATHER,
     slot: ArmorSlot.HELM,
-    rarity: ItemRarity.LEGENDARY
+    rarity: ItemRarity.COMMON
 })
 
 const tribalWarHelm = (): LeatherHelm => ({
@@ -46,5 +46,5 @@ const tribalWarHelm = (): LeatherHelm => ({
     attackPower: 5,
     type: ArmorType.LEATHER,
     slot: ArmorSlot.HELM,
-    rarity: ItemRarity.RARE
+    rarity: ItemRarity.COMMON
 })

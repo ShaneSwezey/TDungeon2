@@ -1,12 +1,11 @@
-import { ActionEvent } from '../../persistence/mongo/collections/battleEvent';
-import { Effect, EffectType } from '../effects';
-import { Weapon } from '../gear/weapon';
+import { ActionEvent } from "../../persistence/mongo/collections/battleEvent";
 import { IHero } from '../hero';
 import { Monster, MonsterType } from '../monster';
+import { executeGhoulAttack, Ghoul } from "../monster/ghoul";
 import { executeGoblinAttack, Goblin } from '../monster/goblin';
 import { ExecuteOrcAttack, Orc } from '../monster/orc';
 import { Stamina } from '../stats/stamina';
-import { getRandomInt, getUuid, selectRandom } from '../utils/math';
+import { getRandomInt, selectRandom } from '../utils/math';
 
 interface ExecutionPayload {
     heroes: IHero[],
@@ -29,8 +28,8 @@ const monsterExecutionSwitch = (monster: Monster, heroes: IHero[]) => {
             return ExecuteOrcAttack(monster as Orc, heroes);
         case MonsterType.Goblin:
             return executeGoblinAttack(monster as Goblin, heroes);
-        // case MonsterType.Spiderling:
-        //     return executeSpiderlingAttack(monster as SpiderLing, heroes);
+        case MonsterType.GHOUL:
+            return executeGhoulAttack(monster as Ghoul, heroes);
         default:
             throw new Error(`${monster.type} does not exist`);
     }
@@ -158,7 +157,7 @@ export const attackMonsters = (heroes: IHero[], monsters: Monster[], battleId: s
                             deathBlow: isDeathBlow(currentMonsterStatus.stamina),
                             to: currentMonsterStatus,
                             from: {
-                                id: hero.id,
+                                id: hero.id!,
                                 name: hero.name,
                                 type: hero.type,
                                 stamina: hero.stamina,

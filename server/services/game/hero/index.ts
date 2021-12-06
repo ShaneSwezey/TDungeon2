@@ -62,7 +62,7 @@ export class Hero implements IHero {
             // can I cleave
             // chance of cleave
             let numOfMonstersToHit = 1;
-            if (weapon.cleave.chance && getRandomInt(1,100) <= weapon.cleave.chance) numOfMonstersToHit = getRandomInt(weapon.cleave.num.low, weapon.cleave.num.high);
+            if (weapon.cleave.chance && getRandomInt(1,100) <= weapon.cleave.chance) numOfMonstersToHit = getRandomInt(weapon.cleave.num!.low, weapon.cleave.num!.high);
 
             const aliveMonsters = monsters.filter(monster => monster.stamina.hitPoints > 0);
 
@@ -74,7 +74,7 @@ export class Hero implements IHero {
                 let numOfHits = 1;
                 let attackType = "Physical Attack";
                 if (weapon.flurry.chance && getRandomInt(1, 100) <= weapon.flurry.chance) {
-                    numOfHits = getRandomInt(weapon.flurry.num.low, weapon.flurry.num.high);
+                    numOfHits = getRandomInt(weapon.flurry.num!.low, weapon.flurry.num!.high);
                     attackType = "Flurry";
                 }
 
@@ -105,7 +105,7 @@ export class Hero implements IHero {
                         deathBlow: monster.stamina.hitPoints <= 0,
                         to: monsterSnapShot,
                         from: {
-                            id: this.id,
+                            id: this.id!,
                             name: this.name,
                             type: this.type,
                             stamina: this.stamina,

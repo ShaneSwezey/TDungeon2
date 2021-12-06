@@ -32,7 +32,7 @@ const leatherHeadBand = () => ({
     hitPoints: 4,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.HELM,
-    rarity: rarity_1.ItemRarity.LEGENDARY
+    rarity: rarity_1.ItemRarity.COMMON
 });
 const tribalWarHelm = () => ({
     name: LeatherHelmName.BUGINFESTEDLEATHERHELM,
@@ -40,5 +40,5 @@ const tribalWarHelm = () => ({
     attackPower: 5,
     type: __1.ArmorType.LEATHER,
     slot: __1.ArmorSlot.HELM,
-    rarity: rarity_1.ItemRarity.RARE
+    rarity: rarity_1.ItemRarity.COMMON
 });
