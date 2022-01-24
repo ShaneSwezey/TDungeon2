@@ -1,0 +1,30 @@
+import { IMonster } from "../interfaces/monster";
+import { IHero } from "../interfaces/hero";
+import { IStamina } from "../interfaces/stamina";
+import { IWeapon } from "../interfaces/weapon";
+import { IArmor } from "../interfaces/armor";
+import { Turn } from '../enums/round';
+import { CurrentAvailiableItemRarity, ItemRarity } from '../enums/item';
+export declare const getRandomInt: (min: number, max: number) => number;
+export declare const getStaminaPercentage: (stamina: IStamina) => number;
+export declare const getRandomTurn: () => Turn;
+export declare const getNextTurn: (currentTurn: string) => Turn;
+export declare const selectRandomHeroes: (heroes: IHero[], numberOfheroes: number) => IHero[];
+export declare const getAliveHeroes: (heroes: IHero[]) => IHero[];
+export declare const selectRandomMonsters: (monsters: IMonster[], numberOfMonsters: number) => IMonster[];
+export declare const getAliveMonsters: (monsters: IMonster[]) => IMonster[];
+export declare function selectRandom<Type>(array: Type[], numberToSelect: number): Type[];
+export declare const probabilityDistributor: (categories: CurrentAvailiableItemRarity[], weights: number[]) => CurrentAvailiableItemRarity;
+export declare const getUuid: () => string;
+export declare const getMonsterPhysicalAttack: (monster: IMonster, weapon: IWeapon) => {
+    value: number;
+    isCrit: boolean;
+};
+export declare const calcCrit: (armor: IArmor[]) => number;
+export declare const calcDodge: (armor: IArmor[]) => number;
+export declare const calcAttackPower: (weapons: IWeapon[], armor: IArmor[]) => number;
+export declare const getRandomType: <T>(types: T[]) => T;
+export declare const getItemGoldValue: (rarity: ItemRarity) => 5 | 10 | 1 | 20 | 50;
+export declare const getHeroAttackList: (heroes: IHero[], monsterGroupValue: number) => IHero[];
+export declare const getMonsterAttackList: (monsters: IMonster[], heroGroupValue: number) => IMonster[];
+//# sourceMappingURL=math.d.ts.map

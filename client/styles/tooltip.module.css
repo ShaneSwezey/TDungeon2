@@ -4,6 +4,12 @@
   position: relative;
 }
 
+.TooltipBattleEventWrapper {
+  display: inline-block;
+  position: relative;
+  margin: 0px 0px -6px 0px !important;
+}
+
 /* Absolute positioning */
 .Tooltip {
   position: absolute;
@@ -15,8 +21,10 @@
   line-height: 1;
   z-index: 100;
   white-space: nowrap;
-  width: 175px;
+  width: auto;
   padding: 10px;
+  margin: 0;
+  overflow-wrap: break-word;
 }
 
 /* CSS border triangles */
@@ -82,32 +90,27 @@
   transform: translateX(0) translateY(-50%);
   border-left-color: black;
 }
-
-.derp {
-  display: flex;
-  direction: row;
-  justify-content: space-between;
-}
  
 .itemTitleCommon {
   font-weight: bold;
-  color: grey;
+  color: #FFFFFF;
 }
 
 .itemTitleUncommon {
   font-weight: bold;
-  color: green;
+  color: #1EFF0C;
 }
 
 .itemTitleRare {
   font-weight: bold;
-  color: blue;
+  color: #0070FF;
 }
 
 .itemTitleEpic {
   font-weight: bold;
-  color: purple;
+  color: #A335EE;
 }
+
 .itemSlot {
   margin-top: 5px;
   margin-bottom: 5px;

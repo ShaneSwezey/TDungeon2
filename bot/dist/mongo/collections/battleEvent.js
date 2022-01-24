@@ -13,14 +13,5 @@ class BattleEventCollection {
             throw error;
         }
     }
-    async findBattleEvents(battleId) {
-        try {
-            const records = await this.battleEventCollection.find({ battleId }).toArray();
-            return records.map(record => ({ ...record, _id: record._id.toString() }));
-        }
-        catch (error) {
-            throw error;
-        }
-    }
 }
 exports.BattleEventCollection = BattleEventCollection;

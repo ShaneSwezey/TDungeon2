@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RedisInstance = void 0;
 const ioredis_1 = __importDefault(require("ioredis"));
+const options_1 = require("./options");
 class RedisInstance {
     constructor() { }
     static async setBattleId(battleId) {
@@ -89,7 +90,7 @@ class RedisInstance {
     }
     static async setAliveHero(hero) {
         try {
-            return await this.redis.sadd(this.battleHeroAlive, `${hero.name}`);
+            return await this.redis.sadd(this.battleHeroAlive, hero.name);
         }
         catch (error) {
             throw error;
@@ -97,7 +98,7 @@ class RedisInstance {
     }
     static async setAliveHeroes(heroes) {
         try {
-            return await this.redis.sadd(this.battleHeroAlive, heroes.map(({ name }) => `${name}`));
+            return await this.redis.sadd(this.battleHeroAlive, heroes.map(({ name }) => name));
         }
         catch (error) {
             throw error;
@@ -146,12 +147,13 @@ class RedisInstance {
     static async setHero(hero) {
         try {
             const heroMap = new Map();
+            heroMap.set("id", hero.id);
             heroMap.set("name", hero.name);
             heroMap.set("type", hero.type);
-            heroMap.set("currentHitPoints", `${hero.stamina.hitPoints}`);
+            heroMap.set("hitPoints", `${hero.stamina.hitPoints}`);
             heroMap.set("armor", this.getArmorString(hero.armor));
             heroMap.set("weapons", this.getWeaponString(hero.weapons));
-            return await this.redis.hmset(`battle:${hero.name}`, heroMap);
+            return await this.redis.hmset(`${this.heroPrefix}:${hero.name}`, heroMap);
         }
         catch (error) {
             throw error;
@@ -159,7 +161,7 @@ class RedisInstance {
     }
     static async updateHeroStat(hero) {
         try {
-            return await this.redis.hmset(`battle:${hero.name}`, 'currentHitPoints', `${hero.stamina.hitPoints}`);
+            return await this.redis.hmset(`${this.heroPrefix}:${hero.name}`, 'hitPoints', `${hero.stamina.hitPoints}`);
         }
         catch (error) {
             throw error;
@@ -167,7 +169,16 @@ class RedisInstance {
     }
     static async getHero(heroName) {
         try {
-            return await this.redis.hgetall(`battle:${heroName}`);
+            const redisHeroRecord = await this.redis.hgetall(`${this.heroPrefix}:${heroName}`);
+            return redisHeroRecord ?
+                {
+                    id: redisHeroRecord.id,
+                    name: redisHeroRecord.name,
+                    type: redisHeroRecord.type,
+                    hitPoints: redisHeroRecord.hitPoints,
+                    armor: this.createArmorRecords(redisHeroRecord.armor),
+                    weapons: this.createWeaponRecords(redisHeroRecord.weapons)
+                } : null;
         }
         catch (error) {
             throw error;
@@ -182,17 +193,17 @@ class RedisInstance {
             throw error;
         }
     }
-    static async delAliveMontsers() {
+    static async getAliveMonsters() {
         try {
-            await this.redis.del(this.battleMonsterAlive);
+            return await this.redis.lrange(this.battleMonsterAlive, 0, -1);
         }
         catch (error) {
             throw error;
         }
     }
-    static async getAliveMonsters() {
+    static async delAliveMontsers() {
         try {
-            return await this.redis.lrange(this.battleMonsterAlive, 0, -1);
+            await this.redis.del(this.battleMonsterAlive);
         }
         catch (error) {
             throw error;
@@ -218,14 +229,14 @@ class RedisInstance {
     static async clearHeroes(heroNames) {
         try {
             return await Promise.all(heroNames.map(async (heroName) => {
-                return await this.redis.del(`battle:${heroName}`);
+                return await this.redis.del(`hero:${heroName}`);
             }));
         }
         catch (error) {
             throw error;
         }
     }
-    static disconnect() {
+    static async disconnect() {
         try {
             return this.redis.disconnect();
         }
@@ -241,9 +252,20 @@ class RedisInstance {
     static getWeaponString(weapons) {
         return weapons.map(({ name, type }) => `${name}:${type}`).toString();
     }
+    static createArmorRecords(armorString) {
+        return armorString.split(",").map(armorString => {
+            const parsedString = armorString.split(":");
+            return { name: parsedString[0], type: parsedString[1], slot: parsedString[2] };
+        });
+    }
+    static createWeaponRecords(weaponString) {
+        return weaponString.split(",").map(weaponString => {
+            const parsedString = weaponString.split(":");
+            return { name: parsedString[0], type: parsedString[1] };
+        });
+    }
 }
 exports.RedisInstance = RedisInstance;
-RedisInstance.battlePrefix = "battle";
 RedisInstance.heroPrefix = "hero";
 RedisInstance.battleId = "battle:id";
 RedisInstance.battleStatus = "battle:status";
@@ -253,7 +275,4 @@ RedisInstance.battleParticipants = "battle:hero:participants";
 RedisInstance.battleHeroAlive = "battle:hero:alive";
 RedisInstance.battleHeroAttack = "battle:hero:attack";
 RedisInstance.battleMonsterAlive = "battle:monster:alive";
-RedisInstance.redis = new ioredis_1.default({
-    host: "127.0.0.1",
-    port: 6379
-});
+RedisInstance.redis = new ioredis_1.default(options_1.RedisConfig);

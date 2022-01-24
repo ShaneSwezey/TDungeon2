@@ -1,71 +1,36 @@
 import { ObjectId, Collection, Db } from 'mongodb';
-import { ArmorSlot, ArmorType } from '../../game/gear/armor';
-import { WeaponType } from '../../game/gear/weapon';
-import { Hero, HeroType } from '../../game/hero';
+import { HeroType } from '../../game/enums/hero';
+import { IArmor, IArmorRecord } from '../../game/interfaces/armor';
+import { IHero } from '../../game/interfaces/hero';
+import { IWeapon, IWeaponRecord } from '../../game/interfaces/weapon';
 
-interface Armor {
-    name: string;
-    type: ArmorType;
-    slot: ArmorSlot;
-}
-
-interface Weapon {
-    name: string;
-    type: WeaponType;
-}
-
-type Item = Armor | Weapon;
-
-interface HeroModel {
+interface IHeroRecord {
     _id: ObjectId;
     name: string;
     type: HeroType;
-    armor: Armor[];
-    weapons: Weapon[];
-    inventory: Item[];
-    createdAt: string;
-    updatedAt: string;
+    armor: IArmorRecord[];
+    weapons: IWeaponRecord[];
+    active: boolean;
 }
 
 export class HeroCollection {
     
-    private heroCollection: Collection<HeroModel>;
+    private heroCollection: Collection<IHeroRecord>;
 
     constructor(tdungeon: Db) {
-        this.heroCollection = tdungeon.collection<HeroModel>("Hero");
+        this.heroCollection = tdungeon.collection<IHeroRecord>("Hero");
     }
 
-    public async createNewHero(hero: Hero) {
+    public async createNewHero(hero: IHero) {
         try {
-            const date = new Date().toUTCString();
             const res = await this.heroCollection.insertOne({
                 name: hero.name,
                 type: hero.type,
-                armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
-                weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
-                inventory: [],
-                createdAt: date,
-                updatedAt: date,
+                armor: this.createArmorRecords(hero.armor),
+                weapons: this.createWeaponRecords(hero.weapons),
+                active: true
             });
-            return true;
-        } catch(error) {
-            throw error;
-        }
-    }
-
-    public async createNewHeroes(heroes: Hero[]) {
-        try {
-            const date = new Date().toUTCString();
-            const res = await this.heroCollection.insertMany(heroes.map(hero => ({
-                name: hero.name,
-                type: hero.type,
-                armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
-                weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
-                inventory: [],
-                createdAt: date,
-                updatedAt: date,
-            })));
-            return true;
+            return res;
         } catch(error) {
             throw error;
         }
@@ -73,29 +38,48 @@ export class HeroCollection {
 
     public async findHeroById(id: string) {
         try {
-            const res = await this.heroCollection.findOne({ _id: new ObjectId(id) });
-            return res;
+            const heroRecord = await this.heroCollection.findOne({ _id: new ObjectId(id) });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         } catch(error) {
             throw error;
         }
     }
 
-    public async findHeroByAttr(name: string, type?: HeroType) {
+    public async findHeroByType(name: string, type: HeroType) {
         try {
-
-            const res = await this.heroCollection.findOne({ name });
-            return res;
+            const heroRecord = await this.heroCollection.findOne({ name, type });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         } catch(error) {
             throw error;
         }
     }
 
-    public async getAllHeroes() {
+    public async findActiveHeroByName(name: string) {
         try {
-            return await this.heroCollection.find().toArray();
+            const heroRecord = await this.heroCollection.findOne({ name, active: true });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         } catch(error) {
             throw error;
         }
     }
 
+
+    private unWrapHeroRecord(heroRecord: IHeroRecord) {
+        return {
+            id: heroRecord._id.toString(),
+            name: heroRecord.name,
+            type: heroRecord.type,
+            active: heroRecord.active,
+            armor: heroRecord.armor,
+            weapons: heroRecord.weapons
+        }
+    }
+
+    private createWeaponRecords(weapons: IWeapon[]) {
+        return weapons.map(({ name, type }) => ({ name, type }));
+    }
+
+    private createArmorRecords(weapons: IArmor[]) {
+        return weapons.map(({ name, type, slot }) => ({ name, type, slot }));
+    }
 }

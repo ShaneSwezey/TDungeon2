@@ -1,0 +1,1 @@
+{"version":3,"file":"gear.d.ts","sourceRoot":"","sources":["../../interfaces/gear.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,SAAS,CAAC;AACjC,OAAO,EAAE,OAAO,EAAE,MAAM,UAAU,CAAC;AAEnC,MAAM,WAAW,YAAY;IACzB,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,MAAM,CAAC,EAAE,OAAO,CAAC;CACpB"}

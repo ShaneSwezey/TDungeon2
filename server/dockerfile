@@ -1,0 +1,17 @@
+FROM node:latest
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . /app
+
+RUN npm i -g typescript 
+
+RUN npm run tsc
+
+EXPOSE 8000
+
+CMD [ "npm", "start" ]

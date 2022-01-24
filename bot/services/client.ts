@@ -1,12 +1,12 @@
 import { ChatClient, PrivmsgMessage } from 'dank-twitch-irc'; 
-import { ResponseType } from '../enums/responseType';
-import { Response } from '../interfaces/response';
 import { getHeroTypes, createHero, setHeroAttackAction } from './hero';
 import { joinBattle } from './battle';
+import { ResponseType } from './enum/response';
+import { ChannelName } from '../bull/enums/channel';
 
-const CHANNEL_NAME = "slipperytoads";
-const BOTNAME = "tdungeonbot";
-const token = 'oauth:pmdo7cc4znd1qgtjoo55e7fpta3pqi';
+const CHANNEL_NAME = process.env.CHANNEL_NAME;
+const BOT_NAME = process.env.BOT_NAME;
+const token = process.env.TOKEN;
 
 enum Commands {
     HEROTYPES = "!heroTypes",
@@ -15,13 +15,18 @@ enum Commands {
     ATTACK ="!Attack"
 }
 
+interface IResponse {
+    type: ResponseType
+    text: string;
+}
+
 const parseMessage = (msg: string) => {
     if (msg.indexOf(' ') === -1) return msg;
     else return msg.slice(0, msg.indexOf(' '));
 }
 
-const enactCommand = async (privmsgMessage: PrivmsgMessage): Promise<Response> => {
-    if (privmsgMessage.ircPrefix?.username === BOTNAME) return { type: ResponseType.IGNORE, text: "Messages from bot!" };
+const enactCommand = async (privmsgMessage: PrivmsgMessage): Promise<IResponse> => {
+    if (privmsgMessage.ircPrefix?.username === BOT_NAME) return { type: ResponseType.IGNORE, text: "Messages from bot!" };
     switch(parseMessage(privmsgMessage.messageText)) {
         case Commands.HEROTYPES:
             return getHeroTypes();
@@ -36,10 +41,10 @@ const enactCommand = async (privmsgMessage: PrivmsgMessage): Promise<Response> =
     }
 }
 
-const responseFilter = async (response: Response, client: ChatClient, user: string) => {
+const responseFilter = async (response: IResponse, client: ChatClient, user: string) => {
     switch(response.type) {
         case ResponseType.MESSAGE:
-            await client.say(CHANNEL_NAME, response.text);
+            await client.say(ChannelName.SLIPPERYTOADS, response.text);
             break;
         case ResponseType.WHISPER:
             await client.whisper(user, response.text);
@@ -49,8 +54,11 @@ const responseFilter = async (response: Response, client: ChatClient, user: stri
     }
 }
 
+console.log('CHANNEL_NAME:', CHANNEL_NAME);
+console.log('BOT_NAME:', BOT_NAME);
+
 const twitchClient = new ChatClient({
-    username: BOTNAME,
+    username: BOT_NAME,
     password: token,
 });
 

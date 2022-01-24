@@ -1,0 +1,1 @@
+{"version":3,"file":"inventory.d.ts","sourceRoot":"","sources":["../../interfaces/inventory.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AACvC,OAAO,EAAE,aAAa,EAAE,MAAM,UAAU,CAAC;AAEzC,MAAM,WAAW,qBAAqB;IAClC,eAAe,EAAE,aAAa,EAAE,CAAC;IACjC,cAAc,EAAE,YAAY,EAAE,CAAC;CAClC"}

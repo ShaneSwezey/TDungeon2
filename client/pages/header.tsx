@@ -1,11 +1,9 @@
 import { Center, Flex, Heading, Spacer } from "@chakra-ui/layout";
 import { SunIcon, MoonIcon } from '@chakra-ui/icons';
-import { NextPage } from "next";
 import { useColorMode, useColorModeValue, Button, Box, Stack } from "@chakra-ui/react";
 import { useSession, signIn, signOut } from "next-auth/react";
 
-
-const Header: NextPage = () => {
+const Header = () => {
     
     const { data: session, status } = useSession();
     
@@ -21,7 +19,7 @@ const Header: NextPage = () => {
                 mt={4}
                 ml={7}
             >
-                <Heading>TDungeon ProtoType v#0.0</Heading>
+                <Heading>TDungeon Alpha V#0.0</Heading>
             </Center>
             <Spacer />
             {
@@ -34,7 +32,14 @@ const Header: NextPage = () => {
                     </Stack>
                 :
                     <Center mt={4}>
-                        <Button mr={5} onClick={() => signIn()}>Twitch Login</Button>
+                        <Button 
+                            mr={5} 
+                            backgroundColor="#bf94ff"
+                            _hover={{ bg: "#bf94ff" }} 
+                            onClick={() => signIn()}
+                        >
+                            Twitch Login
+                        </Button>
                     </Center>
             }
             <Center 

@@ -1,23 +1,25 @@
 import React, { useState } from 'react'
 import type { NextPage } from 'next';
-import Header from './header';
-import Battles from './battle';
-import Gear from './gear';
 import { useSession } from 'next-auth/react';
 import { Button, Stack } from "@chakra-ui/react";
+import Header from './header';
+import Battles from './battle';
+import Heroes from './heroes';
+import Admin from './admin/admin';
 
-enum Page {
+enum Section {
+  ADMIN = "Admin",
   BATTLES = "Battles",
-  Inventory = "Inventory"
+  HEROES = "Heroes",
 }
 
 const Home: NextPage = () => {
-  const { data: session, status } = useSession();
-  const [show, setShow] = useState("Battles");
+  const { data: session } = useSession();
+  const [show, setShow] = useState<Section>(Section.BATTLES);
 
-  const setShowClick = (newShow: string) => {
-    if (show === newShow) return;
-    setShow(newShow);
+  const setShowClick = (newSection: Section) => {
+    if (show === newSection) return;
+    setShow(newSection);
   }
 
   return (
@@ -26,17 +28,31 @@ const Home: NextPage = () => {
       {
         session &&
         <Stack direction="row" mt={5} ml={7} spacing={5}>
-          <Button onClick={() => setShowClick(Page.BATTLES)}>Battles</Button>
-          <Button onClick={() => setShowClick(Page.Inventory)}>Inventory</Button>
+          <Button onClick={() => setShowClick(Section.BATTLES)}>Battles</Button>
+          <Button onClick={() => setShowClick(Section.HEROES)}>Heroes</Button>
+          {
+            session.user!.name === "SlipperyToads" &&
+            <Button  
+              mr={5} 
+              backgroundColor="#E53E3E"
+              onClick={() => setShowClick(Section.ADMIN)}
+            >
+              Admin
+            </Button>
+          }
         </Stack>
       }
       {
-        show === Page.BATTLES &&
+        show === Section.BATTLES &&
         <Battles />
       }
       {
-        show === Page.Inventory &&
-        <Gear  name={session!.user!.name!.toLowerCase()}/>
+        show === Section.HEROES &&
+        <Heroes name={session!.user!.name!.toLowerCase()} />
+      }
+      {
+        show === Section.ADMIN &&
+        <Admin />
       }
     </>
   );

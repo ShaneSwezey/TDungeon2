@@ -1,38 +1,44 @@
 import "reflect-metadata";
 import express from 'express';
-import Redis from 'ioredis';
 import cors from "cors";
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'type-graphql';
-import resolvers from './src/graphql/resolver/index';
+import resolvers from './graphql/resolver/index';
 import { MongoClient } from "mongodb";
-import { BattleCollection } from "./services/persistence/mongo/collections/battle";
-import { HeroCollection } from "./services/persistence/mongo/collections/hero";
-import { BattleEventCollection } from "./services/persistence/mongo/collections/battleEvent";
-import { RedisInstance } from "./services/persistence/redis/instance";
+import { RedisInstance } from "./redis/instance";
+import { Mongo } from "./mongo/collections";
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import Redis from "ioredis";
+import { pubSub } from "./redis/pubsub";
+import { BattleResultsWorker } from "./bullmq/worker";
+import { getRedisConnectionConfig } from "./redis";
+import { getMongoConnectionString } from "./mongo";
 
 const expressPlayground = require("graphql-playground-middleware-express").default;
 const PORT = process.env.PORT || 8000;
 
-const client = new MongoClient("mongodb://127.0.0.1:27017");
+const client = new MongoClient(getMongoConnectionString());
 const db = client.db('tdungeon');
 
-// create new Battle
-const BattleCol = new BattleCollection(db);
-const HeroCol = new HeroCollection(db);
-const BattleEventCol = new BattleEventCollection(db);
+const mongo = new Mongo(db);
 
 const bootstrap = async () => {
     try {
+        BattleResultsWorker.on("failed", (job, err) => console.error(`Job #${job.id} - Error:`, err));
+        
         const app = express();
 
         await client.connect();
 
-        const redisInstance = new RedisInstance()
+        const redis = new Redis(getRedisConnectionConfig());
+
+        const redisInstance = new RedisInstance(redis);
 
         const schema = await buildSchema({
             resolvers,
             dateScalarMode: "isoDate",
+            pubSub
         });
 
         app.use(cors({
@@ -46,15 +52,21 @@ const bootstrap = async () => {
             context: {
                 redis: redisInstance,
                 req: request,
-                battleCol: BattleCol,
-                heroCol: HeroCol,
-                battleEventCol: BattleEventCol,
+                mongo
             }
         })));
 
         app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
 
-        app.listen(PORT, () => console.log(`Server is running on PORT:${PORT}`));
+        const server = app.listen(PORT, () => {
+            const wsServer = new WebSocketServer({
+                server,
+                path: "/graphql"
+            });
+
+            useServer({ schema }, wsServer);
+            console.log(`[Server] is running on PORT: ${PORT}`)
+        });
     } catch(error) {
         console.error('[server]', error);
         throw error;
@@ -64,6 +76,4 @@ const bootstrap = async () => {
 bootstrap()
     .catch(async error => {
         console.error('[server]', error);
-    }).finally(() => {
-
     });

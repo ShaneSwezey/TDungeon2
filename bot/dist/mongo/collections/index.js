@@ -5,6 +5,7 @@ const mongodb_1 = require("mongodb");
 const battle_1 = require("./battle");
 const battleEvent_1 = require("./battleEvent");
 const hero_1 = require("./hero");
+const inventory_1 = require("./inventory");
 class TDungeonDB {
     static async connect() {
         try {
@@ -14,6 +15,7 @@ class TDungeonDB {
                 this.BattleCollection = new battle_1.BattleCollection(db);
                 this.HeroCollection = new hero_1.HeroCollection(db);
                 this.BattleEventCollection = new battleEvent_1.BattleEventCollection(db);
+                this.InventoryCollection = new inventory_1.InventoryCollection(db);
                 this.mongoClient = await mC.connect();
             }
             return true;

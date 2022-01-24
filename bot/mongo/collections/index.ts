@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb';
 import { BattleCollection } from './battle';
 import { BattleEventCollection } from './battleEvent';
 import { HeroCollection } from './hero';
+import { InventoryCollection } from './inventory';
 
 export class TDungeonDB {
 
@@ -9,6 +10,7 @@ export class TDungeonDB {
     public static BattleCollection: BattleCollection;
     public static BattleEventCollection: BattleEventCollection;
     public static HeroCollection: HeroCollection;
+    public static InventoryCollection: InventoryCollection;
 
     public static async connect() {
         try {
@@ -18,6 +20,7 @@ export class TDungeonDB {
                 this.BattleCollection = new BattleCollection(db);
                 this.HeroCollection = new HeroCollection(db);
                 this.BattleEventCollection = new BattleEventCollection(db);
+                this.InventoryCollection = new InventoryCollection(db);
                 this.mongoClient = await mC.connect();
             }
             return true;

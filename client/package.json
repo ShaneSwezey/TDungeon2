@@ -15,12 +15,18 @@
     "@emotion/styled": "^11.3.0",
     "framer-motion": "^4.1.17",
     "graphql": "^15.7.2",
-    "next": "12.0.3",
+    "graphql-ws": "^5.5.5",
+    "isomorphic-ws": "^4.0.1",
+    "lodash": "^4.17.21",
+    "next": "^12.0.7",
     "next-auth": "^4.0.0-beta.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "subscriptions-transport-ws": "^0.11.0",
+    "ws": "^7.5.6"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.178",
     "@types/node": "16.11.7",
     "@types/react": "17.0.34",
     "eslint": "7.32.0",

@@ -8,33 +8,14 @@ class HeroCollection {
     }
     async createNewHero(hero) {
         try {
-            const date = new Date().toUTCString();
             const res = await this.heroCollection.insertOne({
                 name: hero.name,
                 type: hero.type,
-                armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
-                weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
-                createdAt: date,
-                updatedAt: date,
+                armor: this.createArmorRecords(hero.armor),
+                weapons: this.createWeaponRecords(hero.weapons),
+                active: true
             });
-            return true;
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    async createNewHeroes(heroes) {
-        try {
-            const date = new Date().toUTCString();
-            const res = await this.heroCollection.insertMany(heroes.map(hero => ({
-                name: hero.name,
-                type: hero.type,
-                armor: hero.armor.map(({ name, type, slot }) => ({ name, type, slot })),
-                weapons: hero.weapons.map(({ name, type }) => ({ name, type })),
-                createdAt: date,
-                updatedAt: date,
-            })));
-            return true;
+            return res;
         }
         catch (error) {
             throw error;
@@ -42,29 +23,46 @@ class HeroCollection {
     }
     async findHeroById(id) {
         try {
-            const res = await this.heroCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
-            return res;
+            const heroRecord = await this.heroCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         }
         catch (error) {
             throw error;
         }
     }
-    async findHeroByAttr(name, type) {
+    async findHeroByType(name, type) {
         try {
-            const res = await this.heroCollection.findOne({ name });
-            return res;
+            const heroRecord = await this.heroCollection.findOne({ name, type });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         }
         catch (error) {
             throw error;
         }
     }
-    async getAllHeroes() {
+    async findActiveHeroByName(name) {
         try {
-            return await this.heroCollection.find().toArray();
+            const heroRecord = await this.heroCollection.findOne({ name, active: true });
+            return heroRecord ? this.unWrapHeroRecord(heroRecord) : null;
         }
         catch (error) {
             throw error;
         }
+    }
+    unWrapHeroRecord(heroRecord) {
+        return {
+            id: heroRecord._id.toString(),
+            name: heroRecord.name,
+            type: heroRecord.type,
+            active: heroRecord.active,
+            armor: heroRecord.armor,
+            weapons: heroRecord.weapons
+        };
+    }
+    createWeaponRecords(weapons) {
+        return weapons.map(({ name, type }) => ({ name, type }));
+    }
+    createArmorRecords(weapons) {
+        return weapons.map(({ name, type, slot }) => ({ name, type, slot }));
     }
 }
 exports.HeroCollection = HeroCollection;

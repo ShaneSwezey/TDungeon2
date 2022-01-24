@@ -1,15 +1,18 @@
-import { NextPage } from 'next';
 import React, { useState } from 'react';
-import { Armor, Weapon } from '../interfaces';
+import { ItemRarity } from '../enums/item';
+import { IArmor } from '../interfaces/armor';
+import { IWeapon } from '../interfaces/weapon';
 import styles from '../styles/tooltip.module.css';
+import { formatArmorSlot, formatArmorType } from '../utils/gear';
+import { formatWeaponType } from '../utils/weapon';
 
-const getItemTitleCss = (rarity: string) => {
+const getItemTitleCss = (rarity: ItemRarity) => {
     switch(rarity) {
-        case "Uncommon":
+        case ItemRarity.UNCOMMON:
             return styles.itemTitleUncommon;
-        case "Rare":
+        case ItemRarity.RARE:
             return styles.itemTitleRare;
-        case "Epic":
+        case ItemRarity.EPIC:
             return styles.itemTitleEpic;
         default:
             return styles.itemTitleCommon;
@@ -17,40 +20,44 @@ const getItemTitleCss = (rarity: string) => {
 }
 
 interface ArmorItemProps {
-    armor: Armor;
+    armor: IArmor;
 }
 
-const ArmorItem: NextPage<ArmorItemProps> = ({ armor }: ArmorItemProps) => (
+const ArmorItem = ({ armor }: ArmorItemProps) => (
     <div className={styles.Tooltip}>
         <p className={getItemTitleCss(armor.rarity)}>{armor.name}</p>
-        <p className={styles.itemSlot}>{armor.type} {armor.slot}</p>
-        HP: {armor.hitPoints}
+        <p className={styles.itemSlot}>{formatArmorType(armor.type)} {formatArmorSlot(armor.slot)}</p>
+        <p>Hp: {armor.hitPoints}</p>
+        { armor.attackPower && <p>Ap: {armor.attackPower}</p> }
     </div>
 );
 
 interface WeaponItemProps {
-    weapon: Weapon;
+    weapon: IWeapon;
 }
 
-const WeaponItem: NextPage<WeaponItemProps> = ({ weapon }: WeaponItemProps) => {
-    console.log('weapon:', weapon);
-    return ( 
-        <div className={styles.Tooltip}>
-            <p className={getItemTitleCss(weapon.rarity)}>{weapon.name}</p>
-            <p>{weapon.type}</p>
-            <p>Dmg: {weapon.damage.low} - {weapon.damage.high}</p>
-        </div> 
-    );
-};
+const WeaponItem  = ({ weapon }: WeaponItemProps) => (
+    <div className={styles.Tooltip}>
+        <p className={getItemTitleCss(weapon.rarity)}>{weapon.name}</p>
+        <p>{formatWeaponType(weapon.type)}</p>
+        <p>Dmg: {weapon.damage.low} - {weapon.damage.high}</p>
+        { weapon.crit && <p>Crit: {weapon.crit.chance}%</p> }
+        { weapon.flurry && <p>Flurry: {weapon.flurry.chance}% x({weapon.flurry.num.low}-{weapon.flurry.num.high})</p>}
+        { weapon.cleave && <p>Cleave: {weapon.cleave.chance}% x({weapon.cleave.num.low}-{weapon.cleave.num.high})</p>}
+    </div> 
+);
 
 interface ItemToolTipProps {
-    item: any; // fix this Armor | Weapon
+    item?: IArmor | IWeapon;
+    type: string;
     delay?: number;
     direction?: string; 
+    battleEvent?: boolean
+    children: React.ReactNode
 }
 
-const ItemToolTip = (props: any) => {
-    let timeout: any;
+const ItemToolTip = (props: ItemToolTipProps) => {
+    let timeout: NodeJS.Timeout;
     const [active, setActive] = useState(false);
 
     const showTip = () => {
@@ -66,22 +73,22 @@ const ItemToolTip = (props: any) => {
 
     return (
         <div
-            className={styles.TooltipWrapper}
+            className={props.battleEvent ? styles.TooltipBattleEventWrapper : styles.TooltipWrapper}
             // When to show the tooltip
             onMouseEnter={showTip}
             onMouseLeave={hideTip}
         >
-        {props.children}
-        {
-            props.item && active ?
-                props.item.slot ?
-                    <ArmorItem armor={props.item} />
-                    :
-                    <WeaponItem weapon={props.item} />
-            :
-                <></>
-        }
-    </div>
+            {props.children}
+            {
+                props.item && active ?
+                    props.type === "Armor" ?
+                        <ArmorItem armor={props.item as IArmor} />
+                        :
+                        <WeaponItem weapon={props.item as IWeapon} />
+                :
+                    <></>
+            }
+        </div>
     );
 };
 

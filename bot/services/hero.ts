@@ -1,18 +1,18 @@
-import { ResponseType } from "../enums/responseType";
-import { heroFactory } from "../game/creation/hero";
+import { AvailableHeroTypes, HeroType } from "../game/enums/hero";
+import { heroFactory } from "../game/hero";
 import { TDungeonDB } from "../mongo/collections/index";
 import { RedisInstance } from "../redis";
+import { ResponseType } from "./enum/response";
 
-enum HeroType {
-    Melee = "Melee",
-    Ranged = "Ranged"
-}
-
-export const getHeroTypes = () => ({ type: ResponseType.MESSAGE, text: Object.values(HeroType).toString().replace(/,/g, ', ') });
+export const getHeroTypes = () => ({ type: ResponseType.MESSAGE, text: Object.values(AvailableHeroTypes).toString().replace(/,/g, ', ') });
 
 export const createHero = async (creationCommand: string, name: string) => {
     try {
         const type = getHeroType(creationCommand);
+
+        const hero = await TDungeonDB.HeroCollection.findHeroByType(name, type);
+
+        if (hero) return { type: ResponseType.IGNORE, text: `${name} already has a ${type} hero!`};
 
         const newHero = heroFactory({ name, type });
 
@@ -35,9 +35,9 @@ export const setHeroAttackAction = async (userName: string) => {
 
         if (!redisHero) return { type: ResponseType.MESSAGE, text: "Hero not found!" };
 
-        if (parseInt(redisHero.currentHitPoints) <= 0) return { type: ResponseType.MESSAGE, text: `${userName} is dead!` };
+        if (parseInt(redisHero.hitPoints) <= 0) return { type: ResponseType.MESSAGE, text: `${userName} is dead!` };
 
-        const hero = heroFactory(redisHero as any); // fix
+        const hero = heroFactory(redisHero);
 
         await RedisInstance.setAttackingHero(hero);
 
@@ -51,13 +51,13 @@ export const setHeroAttackAction = async (userName: string) => {
 const getHeroType = (creationCommand: string) => {
     const creationArray = creationCommand.split(" ");
     switch(creationArray[1]) {
-        case HeroType.Melee:
-            return HeroType.Melee;
-        case HeroType.Ranged:
-            return HeroType.Ranged;
+        case HeroType.WARRIOR:
+            return HeroType.WARRIOR;
+        case HeroType.ROGUE:
+            return HeroType.ROGUE;
         // case HeroType.Caster:
         //     return HeroType.Caster;
         default:
-            return HeroType.Melee;
+            return HeroType.WARRIOR;
     }
 }
