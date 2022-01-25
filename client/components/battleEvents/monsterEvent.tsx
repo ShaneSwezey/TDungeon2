@@ -15,9 +15,6 @@ interface Props {
 }
 
 const MonsterEvent = ({ monster, initiatorType, initiatorAction, receiverAction }: Props) => {
-    console.log("initiatorType:", initiatorType);
-    console.log("initiatorAction:", initiatorAction);
-    console.log("receiverAction:", receiverAction);
     return (
         <HStack>
             {
@@ -43,6 +40,7 @@ const MonsterEvent = ({ monster, initiatorType, initiatorAction, receiverAction 
                                         fontSize={12}
                                         rounded={5}
                                         m={0}
+                                        key={event}
                                     >
                                         {event}
                                     </Badge>
@@ -50,15 +48,15 @@ const MonsterEvent = ({ monster, initiatorType, initiatorAction, receiverAction 
                             }
                         </Stack>
                     <ItemToolTip item={initiatorAction.weapon} type={"Weapon"} battleEvent={true}>
-                        <Image src={initiatorAction.weapon.imgSrc} width={60} height={60}/>
+                        <Image src={initiatorAction.weapon.imgSrc} alt="Weapon Picture" width={60} height={60}/>
                     </ItemToolTip>
                     </>
             }
             {
                 initiatorType === EventCharacter.HERO && receiverAction.type.find(event => event === Event.HIT) ?
-                    <Image src={getMonsterHitImageSrc(monster.monsterType)} width={60} height={60} />
+                    <Image src={getMonsterHitImageSrc(monster.monsterType)} alt="Monster Hit Picture" width={60} height={60} />
                 :
-                    <Image src={getMonsterImageSrc(monster.monsterType)} width={60} height={60} />
+                    <Image src={getMonsterImageSrc(monster.monsterType)} alt="Monster Picture" width={60} height={60} />
             }
         </HStack>
     );

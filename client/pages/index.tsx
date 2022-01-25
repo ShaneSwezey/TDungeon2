@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { Button, Stack } from "@chakra-ui/react";
-import Header from './header';
-import Battles from './battle';
-import Heroes from './heroes';
-import Admin from './admin/admin';
+import Header from '../components/header';
+import Battles from '../components/battle';
+import Heroes from '../components/heroes';
+import Admin from '../components/admin/admin';
 
 enum Section {
   ADMIN = "Admin",

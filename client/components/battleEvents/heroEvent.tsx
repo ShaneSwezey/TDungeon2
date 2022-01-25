@@ -16,18 +16,18 @@ interface Props {
 
 const HeroEvent = ({ hero, initiatorType, initiatorAction, receiverAction }: Props) => {
     return (
-        <HStack padding={0}>
+        <HStack>
             {
                 initiatorType === EventCharacter.MONSTER && receiverAction.type.find(event => event === Event.HIT) ?
-                    <Image src={getHeroHitClassImageSrc(hero.heroType)} width={60} height={60} />
+                    <Image src={getHeroHitClassImageSrc(hero.heroType)} alt="Hero Hit Picture" width={60} height={60} />
                 :
-                    <Image src={getHeroClassImageSrc(hero.heroType)} width={60} height={60} />
+                    <Image src={getHeroClassImageSrc(hero.heroType)} alt="Hero Picture" width={60} height={60} />
             }
             {
                 initiatorType === EventCharacter.HERO && initiatorAction.weapon &&
                     <>
                         <ItemToolTip item={initiatorAction.weapon} type={"Weapon"} battleEvent={true}>
-                            <Image src={initiatorAction.weapon.imgSrc} width={60} height={60}/>
+                            <Image src={initiatorAction.weapon.imgSrc} alt="Weapon Picture" width={60} height={60}/>
                         </ItemToolTip>
                         <Stack 
                             direction="column"
@@ -41,6 +41,7 @@ const HeroEvent = ({ hero, initiatorType, initiatorAction, receiverAction }: Pro
                                         fontSize={12}
                                         rounded={5}
                                         m={0}
+                                        key={event}
                                     >
                                         {event}
                                     </Badge>
