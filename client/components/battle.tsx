@@ -35,8 +35,6 @@ const Battles = () => {
 
   const onClick = (id: string) => setSelectedBattleId(id);
 
-  console.log('data:', data);
-
   return (
     <Flex direction="row">
       <Container m={10}>

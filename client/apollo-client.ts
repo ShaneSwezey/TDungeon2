@@ -43,12 +43,16 @@ class WebSocketLink extends ApolloLink {
 }
 
 const wsLink = () => new WebSocketLink({
-  url: `ws://${process.env.HOST}:${process.env.PORT}/graphql`,
+  url: `ws://localhost:8000/graphql`,
   webSocketImpl: ws,
 });
 
+// const httpLink = () => new HttpLink({
+//   uri: `http://${process.env.HOST}:${process.env.PORT}/graphql`,
+// });
+
 const httpLink = () => new HttpLink({
-  uri: `http://${process.env.HOST}:${process.env.PORT}/graphql`,
+  uri: `http://localhost:8000/graphql`,
 });
 
 const splitLink = split(
