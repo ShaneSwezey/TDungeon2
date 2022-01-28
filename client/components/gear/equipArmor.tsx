@@ -17,7 +17,23 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { IArmor } from "../../interfaces/armor";
 import { useMutation } from "@apollo/client";
 import { EQUIP_ARMOR_MUTATION } from "../../graphql/mutations";
-import { HERO_GEAR_QUERY } from "../../graphql/queries";
+import { ArmorSlot } from "../../enums/armor";
+
+interface EquipMutationData {
+    equipArmor: boolean;
+}
+
+interface EquipMutationParameters {
+    heroId: string;
+    armorToEquip: {
+        name: string;
+        slot: ArmorSlot;
+    }
+    armorToReplace?: {
+        name: string;
+        slot: ArmorSlot;
+    }
+}
 
 interface Props {
     heroId: string;
@@ -25,13 +41,31 @@ interface Props {
     armorToReplace?: IArmor;
     isOpen: boolean;
     onClose: () => void;
+    refreshData: () => Promise<boolean>;
 }
 
-const EquipArmor = ({ heroId, selectedArmor, armorToReplace, isOpen, onClose }: Props) => {
-    const [ equipArmor ] = useMutation(
-        EQUIP_ARMOR_MUTATION,
-        { refetchQueries: [ { query: HERO_GEAR_QUERY, variables: { heroId } }, "HEROANDGEAR"] }
-    )
+const EquipArmor = ({ heroId, selectedArmor, armorToReplace, isOpen, onClose, refreshData }: Props) => {
+    const [ equipArmor ] = useMutation<EquipMutationData, EquipMutationParameters>(EQUIP_ARMOR_MUTATION);
+
+    async function equip() {
+        const { data } = await equipArmor({
+            variables: {
+                heroId,
+                armorToEquip: {
+                    name: selectedArmor.name,
+                    slot: selectedArmor.slot
+                },
+                armorToReplace: armorToReplace ? {
+                    name: armorToReplace.name,
+                    slot: armorToReplace.slot
+                } : undefined
+            }
+        });
+        if (data && data.equipArmor === true) {
+            refreshData();
+            onClose();
+        }
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -70,22 +104,7 @@ const EquipArmor = ({ heroId, selectedArmor, armorToReplace, isOpen, onClose }: 
                         </Button>
                         <Button 
                             colorScheme="green" 
-                            onClick={() => {
-                                equipArmor({ 
-                                    variables: { 
-                                        heroId,
-                                        armorToEquip: {
-                                            name: selectedArmor.name,
-                                            slot: selectedArmor.slot
-                                        },
-                                        armorToReplace: armorToReplace ? {
-                                            name: armorToReplace.name,
-                                            slot: armorToReplace.slot
-                                        } : undefined
-                                    }
-                                })
-                                onClose()
-                            }}
+                            onClick={() => equip()}
                         >
                             Equip
                         </Button>

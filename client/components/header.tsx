@@ -62,7 +62,10 @@ const Header = () => {
                     session &&
                         <>
                             <Link
-                                href="/heroSelection"
+                                href={{
+                                    pathname: "/heroes",
+                                    query: { name: session.user?.name?.toLowerCase() }
+                                }}
                             >
                                 <Button
                                     ml={5}

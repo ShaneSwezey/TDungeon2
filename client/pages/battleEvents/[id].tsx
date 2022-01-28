@@ -11,7 +11,8 @@ import { EventCharacter } from "../../enums/character";
 import { IBattleEvent } from "../../interfaces/battleEvent";
 import { IBattleEventHero } from "../../interfaces/hero";
 import { IBattleEventMonster } from "../../interfaces/monster";
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import ErrorPage from "next/error";
 
 interface DataQuery {
     battleEvents: IBattleEvent[]
@@ -169,12 +170,15 @@ const getBorderColor = (type: EventCharacter) => {
 }
 
 interface Props {
-    battleEvents: IBattleEvent[]
+    battleEvents?: IBattleEvent[]
+    errorStatus?: number;
 }
 
-const BattleEvents: NextPage<Props> = ({ battleEvents }: Props) => {
+const BattleEvents: NextPage<Props> = ({ battleEvents, errorStatus }: Props) => {
     const router = useRouter();
     const formBackground = useColorModeValue("gray.100", "gray.700");
+
+    if (battleEvents === undefined) return <ErrorPage statusCode={errorStatus!} />
 
     return (
         <>
@@ -235,16 +239,24 @@ const BattleEvents: NextPage<Props> = ({ battleEvents }: Props) => {
 }
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-    const { id } = query;
-    const { data } = await client.query<DataQuery, DataVariables>({
-        query: Battle_Events_Query,
-        variables: { battleId: id as string }
-    });
+    try {
+        const { id } = query;
+        const { data } = await client.query<DataQuery, DataVariables>({
+            query: Battle_Events_Query,
+            variables: { battleId: id as string }
+        });
 
-    return {
-        props: {
-            battleEvents: data.battleEvents
+        return {
+            props: {
+                battleEvents: data.battleEvents
+            }
         }
+    } catch(error) {
+        return { 
+            props: {
+                errorStatus: 404 // hard coded for now, will fix later
+            }
+        };
     }
 }
 

@@ -12,18 +12,32 @@ import {
     ModalOverlay, 
     RadioGroup, 
     Stack, 
-    Radio, 
-    useDisclosure
+    Radio,
 } from "@chakra-ui/react";
 import { IWeapon } from "../../interfaces/weapon";
 import ItemToolTip from "../itemToolTip";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { useMutation } from "@apollo/client";
 import { EQUIP_WEAPON_MUTATION } from "../../graphql/mutations";
-import { HERO_GEAR_QUERY } from "../../graphql/queries";
 import { isWeaponOneHandedType } from '../../utils/gear'
 import Image from 'next/image';
 import { useEffect, useState } from "react";
+import { WeaponType } from "../../enums/weapon";
+
+interface EquipWeaponMutationData {
+    equipWeapon: boolean;
+}
+
+interface EquipWeaponParameters {
+    name: string;
+    type: WeaponType;
+}
+
+interface EquipWeaponMuatationParameters {
+    heroId: string;
+    weaponToEquip: EquipWeaponParameters;
+    weaponsToReplace?: EquipWeaponParameters[]
+}
 
 interface Props {
     heroId: string;
@@ -31,19 +45,38 @@ interface Props {
     weaponsToReplace?: IWeapon[];
     isOpen: boolean;
     onClose: () => void;
+    refreshData: () => Promise<boolean>;
 }
 
-const EquipWeapon = ({ heroId, weaponToEquip, weaponsToReplace, isOpen, onClose }: Props) => {
+const EquipWeapon = ({ heroId, weaponToEquip, weaponsToReplace, isOpen, onClose, refreshData }: Props) => {
     const [isEquipDisabled, setIsEquipDisabled] = useState(isWeaponOneHandedType(weaponToEquip) && weaponsToReplace?.every(weapon => isWeaponOneHandedType(weapon)));
     const [weaponsSelectedToReplace, setWeaponsSelectedToReplace] = useState<IWeapon[] | undefined>(weaponsToReplace ? [...weaponsToReplace] : undefined);
-    const [ equipWeapon ] = useMutation(
-        EQUIP_WEAPON_MUTATION,
-        { refetchQueries: [ { query: HERO_GEAR_QUERY, variables: { heroId } }, "HEROANDGEAR"] }
-    );
+    const [ equipWeapon ] = useMutation<EquipWeaponMutationData, EquipWeaponMuatationParameters>(EQUIP_WEAPON_MUTATION);
 
     useEffect(() => {}, [isEquipDisabled]);
 
     const setOneHandedWeaponToReplace = (weapon: IWeapon) => setWeaponsSelectedToReplace([weapon]);
+
+    async function equip() {
+        const { data } = await equipWeapon({
+            variables: {
+                heroId,
+                weaponToEquip: {
+                    name: weaponToEquip.name,
+                    type: weaponToEquip.type
+                },
+                weaponsToReplace: weaponsSelectedToReplace ?
+                weaponsSelectedToReplace.map(weapon => ({
+                    name: weapon.name,
+                    type: weapon.type
+                })) : undefined
+            }
+        });
+        if (data && data.equipWeapon === true) {
+            refreshData();
+            onClose();
+        }
+    }
 
     return(
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -115,23 +148,7 @@ const EquipWeapon = ({ heroId, weaponToEquip, weaponsToReplace, isOpen, onClose 
                     <Button 
                         colorScheme='green'
                         disabled={isEquipDisabled}
-                        onClick={() => {
-                            equipWeapon({
-                                variables: {
-                                    heroId,
-                                    weaponToEquip: {
-                                        name: weaponToEquip.name,
-                                        type: weaponToEquip.type
-                                    },
-                                    weaponsToReplace: weaponsSelectedToReplace ?
-                                        weaponsSelectedToReplace.map(weapon => ({
-                                            name: weapon.name,
-                                            type: weapon.type
-                                        })) : undefined
-                                    }
-                            })
-                            onClose()
-                        }}
+                        onClick={() => equip()}
                     >
                         Equip
                     </Button>

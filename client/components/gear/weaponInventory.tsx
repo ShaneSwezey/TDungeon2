@@ -35,9 +35,10 @@ interface Props {
     heroType: HeroType;
     heroWeapons: IWeapon[];
     weaponInventory: IWeapon[];
+    refreshData: () => Promise<boolean>;
 }
 
-const WeaponInventory = ({ heroId, heroType, heroWeapons, weaponInventory }: Props) => {
+const WeaponInventory = ({ heroId, heroType, heroWeapons, weaponInventory, refreshData }: Props) => {
     const [modalType, setModalType] = useState<ModalType | undefined>(undefined);
     const [weaponSelection, setWeaponSelection] = useState<IEquipWeaponSelection | undefined>(undefined);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -126,6 +127,7 @@ const WeaponInventory = ({ heroId, heroType, heroWeapons, weaponInventory }: Pro
                         weaponsToReplace={weaponSelection!.weaponsToReplace}
                         isOpen={isOpen}
                         onClose={onCloseAlias}
+                        refreshData={refreshData}
                     />
             }
             {

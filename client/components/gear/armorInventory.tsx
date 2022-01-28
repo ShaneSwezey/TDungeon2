@@ -33,10 +33,11 @@ interface Props {
     heroId: string;
     heroType: HeroType;
     heroesArmor: IArmor[];
-    armorInventory: IArmor[]
+    armorInventory: IArmor[];
+    refreshData: () => Promise<boolean>;
 }
 
-const ArmorInventory = ({ heroId, heroType, heroesArmor, armorInventory }: Props) => {
+const ArmorInventory = ({ heroId, heroType, heroesArmor, armorInventory, refreshData }: Props) => {
     const [modalType, setModalType] = useState<ModalType | undefined>(undefined);
     const [armorSelection, setArmorSelection] = useState<IEquipArmorSelection | undefined>(undefined);
    
@@ -63,18 +64,18 @@ const ArmorInventory = ({ heroId, heroType, heroesArmor, armorInventory }: Props
                             <MenuList>
                                 {
                                     isArmorEquipable(heroType, armor) &&
-                                    <MenuItem 
-                                        onClick={() => {
-                                            setModalType(ModalType.EQUIP);
-                                            setArmorSelection({
-                                                selectedArmor: armor,
-                                                armorToReplace: heroesArmor.find(armorPiece => armorPiece.slot === armor.slot)
-                                            })
-                                            onOpen()
-                                        }}
-                                    >
-                                        Equip
-                                    </MenuItem>
+                                        <MenuItem 
+                                            onClick={() => {
+                                                setModalType(ModalType.EQUIP);
+                                                setArmorSelection({
+                                                    selectedArmor: armor,
+                                                    armorToReplace: heroesArmor.find(armorPiece => armorPiece.slot === armor.slot)
+                                                })
+                                                onOpen()
+                                            }}
+                                        >
+                                            Equip
+                                        </MenuItem>
                                 }
                                 <MenuItem
                                     onClick={() => {
@@ -100,6 +101,7 @@ const ArmorInventory = ({ heroId, heroType, heroesArmor, armorInventory }: Props
                         armorToReplace={armorSelection!.armorToReplace}
                         isOpen={isOpen}
                         onClose={onCloseAlias}
+                        refreshData={refreshData}
                     />
             }
             {
