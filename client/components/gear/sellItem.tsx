@@ -18,7 +18,6 @@ import { IArmor } from "../../interfaces/armor";
 import { getItemGoldValue } from "../../utils/gear";
 import { useMutation } from "@apollo/client";
 import { SELL_ITEM_MUTATION } from "../../graphql/mutations";
-import { HERO_GEAR_QUERY } from "../../graphql/queries";
 
 interface Props {
     heroId: string;
@@ -27,14 +26,35 @@ interface Props {
     itemType: string;
     isOpen: boolean;
     onClose: () => void;
+    refreshData: () => Promise<boolean>;
 }
 
+interface SellMutationData {
+    sellItem: boolean;
+}
 
-const SellItem = ({ heroId, isOpen, onClose, itemType, weapon, armor }: Props) => {
-    const [ sellItem ] = useMutation(
-        SELL_ITEM_MUTATION,
-        { refetchQueries: [ { query: HERO_GEAR_QUERY, variables: { heroId } }, "HEROANDGEAR"] }
-    );
+interface SellMutationParameters {
+    heroId: string;
+    itemType: string;
+    itemName: string;
+}
+
+const SellItem = ({ heroId, isOpen, onClose, itemType, weapon, armor, refreshData }: Props) => {
+    const [ sellItem ] = useMutation<SellMutationData, SellMutationParameters>(SELL_ITEM_MUTATION);
+
+    async function sell() {
+        const { data } = await sellItem({ 
+            variables: {
+            heroId,
+            itemType: weapon ? "Weapon" : "Armor",
+            itemName: weapon ? weapon.name : armor!.name
+        }});
+
+        if (data && data.sellItem === true) {
+            refreshData();
+            onClose();
+        }
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -76,25 +96,7 @@ const SellItem = ({ heroId, isOpen, onClose, itemType, weapon, armor }: Props) =
                     </Button>
                     <Button 
                         colorScheme="green"
-                        onClick={() => {
-                            if (weapon) {
-                                sellItem({ 
-                                    variables: {
-                                    heroId,
-                                    itemType: "Weapon",
-                                    itemName: weapon.name
-                                }})
-                            } else {
-                                sellItem({
-                                    variables: {
-                                        heroId,
-                                        itemType: "Armor",
-                                        itemName: armor!.name
-                                    }
-                                })
-                            }
-                            onClose()
-                        }}
+                        onClick={() => sell()}
                     >
                         Sell
                     </Button>

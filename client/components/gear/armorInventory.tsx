@@ -112,6 +112,7 @@ const ArmorInventory = ({ heroId, heroType, heroesArmor, armorInventory, refresh
                         itemType="Armor"
                         isOpen={isOpen}
                         onClose={onCloseAlias}
+                        refreshData={refreshData}
                     />
             }
         </>

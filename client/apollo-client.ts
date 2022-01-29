@@ -52,7 +52,7 @@ const wsLink = () => new WebSocketLink({
 // });
 
 const httpLink = () => new HttpLink({
-  uri: `http://localhost:8000/graphql`,
+  uri: `http://137.184.178.190:8000/graphql`,
 });
 
 const splitLink = split(
