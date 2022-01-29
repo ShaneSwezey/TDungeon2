@@ -53,9 +53,12 @@ const Header = () => {
                 </Center>
             </Flex>
             <Flex direction="row" mt={5} ml={7} spacing={5}>
-                <Link href="/battles">
+                <Link 
+                    href="/battles"
+                    passHref
+                >
                     <Button>
-                    Battles
+                        Battles
                     </Button>
                 </Link>
                 {
@@ -66,6 +69,7 @@ const Header = () => {
                                     pathname: "/heroes",
                                     query: { name: session.user?.name?.toLowerCase() }
                                 }}
+                                passHref
                             >
                                 <Button
                                     ml={5}
@@ -76,7 +80,9 @@ const Header = () => {
                             {
                                 session.user!.name === "SlipperyToads" &&
                                     <Link 
-                                        href="/admin">
+                                        href="/admin"
+                                        passHref
+                                    >
                                         <Button
                                             ml={5} 
                                             backgroundColor="#E53E3E"

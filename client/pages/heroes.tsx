@@ -83,6 +83,7 @@ const Heroes: NextPage<Props> = ({ heroes, errorStatus }: Props) => {
                                                         pathname: "hero/[id]",
                                                         query: { id: hero.id! }
                                                     }}
+                                                    passHref
                                                 >
                                                     <Button>Character</Button>
                                                 </Link>

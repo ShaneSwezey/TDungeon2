@@ -56,6 +56,8 @@ const Battles: NextPage<Props>  = ({ battles }: Props) => {
                                             pathname: 'battleEvents/[id]',
                                             query: { id }
                                         }}
+                                        key={id}
+                                        passHref
                                     >
                                         <Flex 
                                             direction="row" 
