@@ -42,10 +42,11 @@ const CREATE_NEW_HERO_MUTATION = gql`
 
 interface Props {
     heroes?: IHero[];
+    name: string;
     errorStatus?: number;
 }
 
-const Heroes: NextPage<Props> = ({ heroes, errorStatus }: Props) => {
+const Heroes: NextPage<Props> = ({ heroes, name, errorStatus }: Props) => {
     const { data: session } = useSession();
     const [ setHeroActiveMutation ] = useMutation(SET_HERO_ACTIVE_MUTATION);
     const [ createNewHeroMutation ] = useMutation(CREATE_NEW_HERO_MUTATION);
@@ -67,13 +68,13 @@ const Heroes: NextPage<Props> = ({ heroes, errorStatus }: Props) => {
                                     <Text>{upperFirst(hero.type.toLowerCase())}</Text>
                                 </Center>
                                 {
-                                    session && session.user?.name?.toLowerCase() === heroes[0].name &&
+                                    session && session.user?.name?.toLowerCase() === name &&
                                         <>
                                             <Center>
                                                 {
                                                     hero.active ?
                                                         <Button disabled={true} bg={"green"}>Active</Button>
-                                                        :
+                                                    :
                                                         <Button onClick={() => setHeroActiveMutation({ variables: { name: session!.user!.name!.toLowerCase(), heroId: hero.id }})}>Activate</Button>
                                                 }
                                             </Center>
@@ -100,17 +101,17 @@ const Heroes: NextPage<Props> = ({ heroes, errorStatus }: Props) => {
                                 <Center>
                                     <Text>{formatHeroType(type)}</Text>
                                 </Center>
-                                <Center>
-                                    {
-                                        session && session.user?.name?.toLowerCase() === heroes[0].name &&
+                                {
+                                    session && session.user?.name?.toLowerCase() === name &&
+                                        <Center>
                                             <Button 
                                                 onClick={() => createNewHeroMutation({ variables: { name: session!.user!.name!.toLowerCase(), type }})}
                                                 disabled={type !== HeroType.WARRIOR && type !== HeroType.ROGUE && type !== HeroType.RANGER}
                                             >
                                                 Create
                                             </Button>
-                                    }
-                                </Center>
+                                        </Center>
+                                }
                             </Flex>
                         ))
                     }
@@ -138,7 +139,8 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
 
         return {
             props: {
-                heroes: data.heroes
+                heroes: data.heroes,
+                name
             }
         }
     } catch(error) {
