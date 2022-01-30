@@ -3,8 +3,7 @@ import { executeRound } from '../game/actions/round';
 import { heroFactory } from '../game/hero';
 import { getNextTurn, getRandomTurn } from '../game/utils/math';
 import { RedisInstance } from '../redis/index';
-import { twitchClient } from '../services/client';
-import { HeroInputQueue, RoundQueue, BattleResultsQueue } from './queue';
+import { HeroInputQueue, RoundQueue } from './queue';
 import { TDungeonDB } from '../mongo/collections/index';
 import { RedisConfig } from '../redis/options';
 import { monsterFactory } from '../game/monster';
@@ -14,7 +13,7 @@ import { IMonster } from '../game/interfaces/monster';
 import { ChannelName } from './enums/channel';
 import { WorkerName } from './enums/name';
 import { getDroppedItem } from '../game/gear/inventory';
-import { Db } from 'mongodb';
+import { twitchClient } from '../services/tmiClient';
 
 const NewBattleWorker = new Worker(WorkerName.NEWBATTLE, async (job: Job) => {
     const { newBattle } = job.data;
@@ -64,8 +63,6 @@ export const RoundWorker = new Worker(WorkerName.ROUND, async (job: Job) => {
         heroes,
         monsters
     });
-
-    //await BattleResultsQueue.add(`${battleId}:${round}`, { results });
 
     await TDungeonDB.BattleEventCollection.createNewBattleEvents(results.actionEvents.map(actionEvent => ({
         battleId,

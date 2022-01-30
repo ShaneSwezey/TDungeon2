@@ -41,7 +41,7 @@ twitchClient.on("message", async (channel, tags, message, self) => {
 });
 
 const enactCommand = async (message: string, userName: string) => {
-    switch(message.slice(0, message.indexOf(' '))) {
+    switch(message) {
         case Commands.HEROTYPES:
             return getHeroTypes();
         case Commands.HEROCREATE:

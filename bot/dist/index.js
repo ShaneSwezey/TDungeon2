@@ -21,19 +21,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const client_1 = require("./services/client");
 const index_1 = require("./mongo/collections/index");
 const worker_1 = require("./bull/worker");
 const bullmq_1 = require("bullmq");
 const options_1 = require("./redis/options");
+const tmiClient_1 = require("./services/tmiClient");
 const CHANNEL_NAME = "slipperytoads";
 const bootstrap = async () => {
     try {
-        const derp = await index_1.TDungeonDB.connect();
-        if (derp) {
-            await client_1.twitchClient.connect();
-            await client_1.twitchClient.join(CHANNEL_NAME);
-            await client_1.twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
+        const isDBConnected = await index_1.TDungeonDB.connect();
+        if (isDBConnected) {
+            await tmiClient_1.twitchClient.connect();
+            tmiClient_1.twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
             const roundQueueScheduler = new bullmq_1.QueueScheduler("round", { connection: options_1.RedisConfig });
             const heroInputQueueScheduler = new bullmq_1.QueueScheduler("heroInput", { connection: options_1.RedisConfig });
             console.log(`Started workers: ${roundQueueScheduler.name}`);

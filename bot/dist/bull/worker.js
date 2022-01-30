@@ -6,7 +6,6 @@ const round_1 = require("../game/actions/round");
 const hero_1 = require("../game/hero");
 const math_1 = require("../game/utils/math");
 const index_1 = require("../redis/index");
-const client_1 = require("../services/client");
 const queue_1 = require("./queue");
 const index_2 = require("../mongo/collections/index");
 const options_1 = require("../redis/options");
@@ -15,6 +14,7 @@ const round_2 = require("../game/enums/round");
 const channel_1 = require("./enums/channel");
 const name_1 = require("./enums/name");
 const inventory_1 = require("../game/gear/inventory");
+const tmiClient_1 = require("../services/tmiClient");
 const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (job) => {
     const { newBattle } = job.data;
     await index_1.RedisInstance.setBattleId(newBattle.id);
@@ -22,7 +22,7 @@ const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (
     // set turn
     const turn = (0, math_1.getRandomTurn)();
     await index_1.RedisInstance.setTurn(turn);
-    await client_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `New Battle started! Type !battleJoin`);
+    await tmiClient_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `New Battle started! Type !battleJoin`);
     if (turn === round_2.Turn.HEROES) {
         await queue_1.HeroInputQueue.add(`battle:heroInput:${1}`, { battleId: newBattle.id, round: 1 }, { delay: 30000 });
     }
@@ -34,7 +34,7 @@ const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (
 exports.NewBattleWorker = NewBattleWorker;
 exports.HeroInputWorker = new bullmq_1.Worker(name_1.WorkerName.HEROINPUT, async (job) => {
     const { battleId, round } = job.data;
-    await client_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `Heroes turn next Round: type !Attack`);
+    await tmiClient_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `Heroes turn next Round: type !Attack`);
     await queue_1.RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });
 }, { connection: options_1.RedisConfig });
 exports.RoundWorker = new bullmq_1.Worker(name_1.WorkerName.ROUND, async (job) => {
@@ -53,7 +53,6 @@ exports.RoundWorker = new bullmq_1.Worker(name_1.WorkerName.ROUND, async (job) =
         heroes,
         monsters
     });
-    //await BattleResultsQueue.add(`${battleId}:${round}`, { results });
     await index_2.TDungeonDB.BattleEventCollection.createNewBattleEvents(results.actionEvents.map(actionEvent => ({
         battleId,
         turn: currentTurn,
@@ -71,7 +70,7 @@ exports.RoundWorker = new bullmq_1.Worker(name_1.WorkerName.ROUND, async (job) =
     if (results.isBattleOver === true) {
         const winner = results.winner;
         const alive = results.aliveHeroes.length ? results.aliveHeroes : results.aliveMonsters;
-        await client_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `${winner} won the battle!`);
+        await tmiClient_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `${winner} won the battle!`);
         await index_2.TDungeonDB.BattleCollection.updateBattle(battleId, { winner, alive });
         if (winner === "Heroes")
             await distributeLoot(results.aliveHeroes);
