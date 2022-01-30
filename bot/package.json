@@ -16,6 +16,7 @@
     "@types/lodash": "^4.14.178",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.9",
+    "@types/tmi.js": "^1.8.1",
     "@types/uuid": "^8.3.3",
     "chai": "^4.3.4",
     "faker": "^5.5.3",
@@ -29,6 +30,7 @@
     "ioredis": "^4.28.0",
     "lodash": "^4.17.21",
     "mongodb": "^4.2.0",
+    "tmi.js": "^1.8.5",
     "uuid": "^8.3.2"
   }
 }

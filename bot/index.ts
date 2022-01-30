@@ -1,20 +1,19 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { twitchClient } from './services/client';
 import { TDungeonDB } from './mongo/collections/index';
 import { HeroInputWorker, NewBattleWorker, RoundWorker } from './bull/worker';
 import { QueueScheduler } from 'bullmq';
 import { RedisConfig } from './redis/options';
+import { twitchClient } from './services/tmiClient';
 
 const CHANNEL_NAME = "slipperytoads";
 
 const bootstrap = async () => {
     try {
-        const derp = await TDungeonDB.connect();
-        if (derp) {
+        const isDBConnected = await TDungeonDB.connect();
+        if (isDBConnected) {
             await twitchClient.connect();
-            await twitchClient.join(CHANNEL_NAME);
-            await twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
+            twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
             
             const roundQueueScheduler = new QueueScheduler("round", { connection: RedisConfig });
             const heroInputQueueScheduler = new QueueScheduler("heroInput", { connection: RedisConfig });
