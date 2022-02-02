@@ -11,6 +11,7 @@ import Link from "next/link";
 import { client } from "../apollo-client";
 import { GetServerSidePropsContext, NextPage } from "next";
 import ErrorPage from "next/error";
+import { useRouter } from "next/router";
 
 const HEROES_QUERY = gql`
     query heroes($name: String!) {
@@ -50,9 +51,30 @@ const Heroes: NextPage<Props> = ({ heroes, name, errorStatus }: Props) => {
     const { data: session } = useSession();
     const [ setHeroActiveMutation ] = useMutation(SET_HERO_ACTIVE_MUTATION);
     const [ createNewHeroMutation ] = useMutation(CREATE_NEW_HERO_MUTATION);
+    const router = useRouter();
     const formBackground = useColorModeValue("gray.100", "gray.700");
 
     if (heroes === undefined) return <ErrorPage statusCode={errorStatus!} />
+
+    const setHeroActive = async (heroId: string) => {
+        try {
+            const { data } = await setHeroActiveMutation({ variables: { name: session!.user!.name!.toLowerCase(), heroId }});
+            if (data) router.replace(router.asPath);
+        } catch(error) {
+            console.log('[setHeroActive]', error);
+            throw error;
+        }
+    }
+
+    const createNewHero = async (type: HeroType) => {
+        try {
+            const { data } = await createNewHeroMutation({ variables: { name: session!.user!.name!.toLowerCase(), type }});
+            if (data) router.replace(router.asPath);
+        } catch(error) {
+            console.log('[createNewHero]', error);
+            throw error;
+        }
+    }
 
     return (
         <>
@@ -75,7 +97,7 @@ const Heroes: NextPage<Props> = ({ heroes, name, errorStatus }: Props) => {
                                                     hero.active ?
                                                         <Button disabled={true} bg={"green"}>Active</Button>
                                                     :
-                                                        <Button onClick={() => setHeroActiveMutation({ variables: { name: session!.user!.name!.toLowerCase(), heroId: hero.id }})}>Activate</Button>
+                                                        <Button onClick={() => setHeroActive(hero.id!)}>Activate</Button>
                                                 }
                                             </Center>
                                             <Center>
@@ -105,7 +127,7 @@ const Heroes: NextPage<Props> = ({ heroes, name, errorStatus }: Props) => {
                                     session && session.user?.name?.toLowerCase() === name &&
                                         <Center>
                                             <Button 
-                                                onClick={() => createNewHeroMutation({ variables: { name: session!.user!.name!.toLowerCase(), type }})}
+                                                onClick={() => createNewHero(type)}
                                                 disabled={type !== HeroType.WARRIOR && type !== HeroType.ROGUE && type !== HeroType.RANGER}
                                             >
                                                 Create

@@ -32,7 +32,9 @@ const orc = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/fire-axe.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/orc.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/orc-red.svg"
 });
 exports.orc = orc;
 const executeOrcAttack = (orc) => {
@@ -43,7 +45,7 @@ const executeOrcAttack = (orc) => {
     return [
         [
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: orc.weapons[0]

@@ -1,9 +1,9 @@
 import { EventCharacter } from "../enums/character";
 import { Character } from "../types/character";
-import { IAction } from "./action";
+import { IWeapon } from "./weapon";
 
 export interface IBattleEvent extends IActionEvent {
-    id: string;
+    id?: string;
     battleId: string;
     turn: string;
     round: number;
@@ -11,10 +11,18 @@ export interface IBattleEvent extends IActionEvent {
 
 export interface IActionEvent {
     iteration: number;
-    initiatorType: EventCharacter
-    initiator: Character;
-    initiatorAction: IAction;
-    receiverType: EventCharacter;
-    receiver: Character;
-    receiverAction: IAction;
+    initiator: ICharacterAction;
+    receiver: ICharacterAction;
+}
+
+export interface ICharacterAction {
+    character: Character;
+    action: IAction;
+}
+
+export interface IAction {
+    events: Event[];
+    value?: number;
+    isCrit?: boolean; 
+    weapon?: IWeapon;
 }

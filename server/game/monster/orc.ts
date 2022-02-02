@@ -2,7 +2,7 @@ import { Event } from '../enums/event';
 import { ItemRarity } from '../enums/item';
 import { MonsterType } from '../enums/monster';
 import { WeaponType } from '../enums/weapon';
-import { IAction } from '../interfaces/action';
+import { IAction } from '../interfaces/battleEvent';
 import { IMonsterStats, IOrc } from '../interfaces/monster';
 import { getMonsterPhysicalAttack, getUuid } from '../utils/math';
 
@@ -32,7 +32,9 @@ export const orc = ({ id, currentHitPoints }: IMonsterStats): IOrc => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/fire-axe.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/orc.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/orc-red.svg"
 });
 
 
@@ -45,7 +47,7 @@ export const executeOrcAttack = (orc: IOrc): IAction[][] => {
     return [
         [
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: orc.weapons[0]

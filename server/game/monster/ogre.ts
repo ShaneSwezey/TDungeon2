@@ -2,7 +2,7 @@ import { Event } from "../enums/event";
 import { ItemRarity } from "../enums/item";
 import { MonsterType } from "../enums/monster";
 import { WeaponType } from "../enums/weapon";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 import { IMonsterStats, IOgre } from "../interfaces/monster";
 import { getRandomInt, getUuid } from "../utils/math";
 
@@ -54,7 +54,9 @@ export const ogre = ({ id, currentHitPoints }: IMonsterStats): IOgre => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/axe-swing.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ogre.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ogre-red.svg"
 });
 
 // const ogreRage = (ogre: IOgre) => {
@@ -93,7 +95,7 @@ export const executeOgreAttack = (ogre: IOgre): IAction[][] => {
             if (isCleave) events.push(Event.CLEAVE);
 
             const actionOnHero = {
-                type: events,
+                events: events,
                 value: attackValue,
                 isCrit,
                 weapon

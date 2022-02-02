@@ -28,6 +28,8 @@ export const heroFactory = ({ type, id, name, hitPoints, armor, weapons }: IHero
                 attackPower: calcAttackPower(warriorWeapons, warriorArmor),
                 weapons: warriorWeapons,
                 armor: warriorArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior-red.svg" 
             };
         case HeroType.ROGUE:
             const rogueArmor = armor ? armorFactory(armor) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)];
@@ -42,7 +44,9 @@ export const heroFactory = ({ type, id, name, hitPoints, armor, weapons }: IHero
                 block: 0,
                 attackPower: calcAttackPower(rogueWeapons, rogueArmor),
                 weapons: rogueWeapons,
-                armor: rogueArmor
+                armor: rogueArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue-red.svg"
             };
         case HeroType.RANGER:
             const rangerArmor = armor ? armorFactory(armor) : [leatherChestFactory(LeatherChestName.TATTEREDCHEST)];
@@ -51,13 +55,15 @@ export const heroFactory = ({ type, id, name, hitPoints, armor, weapons }: IHero
                 id,
                 name,
                 type: HeroType.RANGER,
-                stamina: getStamina(rangerArmor, undefined),
+                stamina: getStamina(rangerArmor, hitPoints),
                 crit: calcCrit(rangerArmor),
                 dodge: calcDodge(rangerArmor) + 7,
                 block: 0,
                 attackPower: calcAttackPower(rangerWeapons, rangerArmor),
                 weapons: rangerWeapons,
-                armor: rangerArmor
+                armor: rangerArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger-red.svg"
             };
         default:
             throw new Error(`Hero type: ${type} does not exist!`); 
@@ -80,6 +86,8 @@ export const newHeroFactory = ({ type, name }: newHeroArgs): IHero => {
                 attackPower: calcAttackPower(warriorWeapons, warriorArmor),
                 weapons: warriorWeapons,
                 armor: warriorArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior-red.svg" 
             };
         case HeroType.ROGUE:
             const rogueArmor = [leatherChestFactory(LeatherChestName.TATTEREDCHEST)];
@@ -94,7 +102,9 @@ export const newHeroFactory = ({ type, name }: newHeroArgs): IHero => {
                 block: 0,
                 attackPower: calcAttackPower(rogueWeapons, rogueArmor),
                 weapons: rogueWeapons,
-                armor: rogueArmor
+                armor: rogueArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue-red.svg"
             };
         case HeroType.RANGER:
             const rangerArmor = [leatherChestFactory(LeatherChestName.TATTEREDCHEST)];
@@ -109,7 +119,9 @@ export const newHeroFactory = ({ type, name }: newHeroArgs): IHero => {
                 block: 0,
                 attackPower: calcAttackPower(rangerWeapons, rangerArmor),
                 weapons: rangerWeapons,
-                armor: rangerArmor
+                armor: rangerArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger-red.svg"
             };
         default:
             throw new Error(`Hero type: ${type} does not exist!`); 

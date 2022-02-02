@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../hero/index.ts"],"names":[],"mappings":"AAOA,OAAO,EAAE,KAAK,EAAE,YAAY,EAAE,WAAW,EAAE,MAAM,oBAAoB,CAAC;AAOtE,eAAO,MAAM,WAAW,kDAAmD,YAAY,KAAG,KAkDzF,CAAA;AAED,eAAO,MAAM,cAAc,mBAAoB,WAAW,KAAG,KAkD5D,CAAA"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../hero/index.ts"],"names":[],"mappings":"AAOA,OAAO,EAAE,KAAK,EAAE,YAAY,EAAE,WAAW,EAAE,MAAM,oBAAoB,CAAC;AAOtE,eAAO,MAAM,WAAW,kDAAmD,YAAY,KAAG,KAwDzF,CAAA;AAED,eAAO,MAAM,cAAc,mBAAoB,WAAW,KAAG,KAwD5D,CAAA"}

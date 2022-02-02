@@ -1,36 +1,9 @@
-import { createUnionType, Field, ID, Int, ObjectType, registerEnumType } from "type-graphql";
-import { EventCharacter } from "../../game/enums/character";
-import { HeroType } from "../../game/enums/hero";
-import { IAction } from "../../game/interfaces/action";
-import { IBattleEvent } from "../../game/interfaces/battleEvent";
-import { Character } from "../../game/types/character";
-import { ActionGraphqlType } from "./action";
-import { HeroGraphqlType } from "./hero";
-import { MonsterGraphqlType } from "./monster";
-
-registerEnumType(EventCharacter, {
-    name: "EventCharacter"
-});
-
-const CharacterUnion = createUnionType({
-    name: "Character",
-    types: () => [HeroGraphqlType, MonsterGraphqlType] as const,
-    resolveType: value => {
-        if (
-            value.type === HeroType.WARRIOR ||
-            value.type === HeroType.RANGER ||
-            value.type === HeroType.ROGUE || 
-            value.type === HeroType.MAGE ||
-            value.type === HeroType.SORCERER||
-            value.type === HeroType.PRIEST
-        ) return HeroGraphqlType;
-        else return MonsterGraphqlType;
-    }
-});
+import { Field, ID, Int, ObjectType } from "type-graphql";
+import { IBattleEvent, ICharacterAction } from "../../game/interfaces/battleEvent";
+import { CharacterActionGraphqlType } from "./characterAction";
 
 @ObjectType("BattleEvent")
 export class BattleEventGraphqlType implements IBattleEvent {
-    
     @Field(() => ID)
     id: string;
 
@@ -45,22 +18,10 @@ export class BattleEventGraphqlType implements IBattleEvent {
 
     @Field({ nullable: false })
     turn: string;
-
-    @Field(() => EventCharacter, { nullable: false })
-    initiatorType: EventCharacter;
     
-    @Field(() => CharacterUnion, { nullable: false })
-    initiator: Character;
+    @Field(() => CharacterActionGraphqlType, { nullable: false })
+    initiator: ICharacterAction;
 
-    @Field(() => ActionGraphqlType, { nullable: false })
-    initiatorAction: IAction;
-
-    @Field(() => EventCharacter, { nullable: false })
-    receiverType: EventCharacter;
-
-    @Field(() => CharacterUnion, { nullable: false })
-    receiver: Character;
-
-    @Field(() => ActionGraphqlType, { nullable: false })
-    receiverAction: IAction;
+    @Field(() => CharacterActionGraphqlType, { nullable: false })
+    receiver: ICharacterAction;
 }

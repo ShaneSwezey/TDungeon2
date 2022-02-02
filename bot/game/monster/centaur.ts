@@ -2,7 +2,7 @@ import { Event } from "../enums/event";
 import { ItemRarity } from "../enums/item";
 import { MonsterType } from "../enums/monster";
 import { WeaponType } from "../enums/weapon";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 import { ICentaur, IMonsterStats } from "../interfaces/monster";
 import { getMonsterPhysicalAttack, getRandomInt, getUuid } from "../utils/math";
 
@@ -39,7 +39,9 @@ export const centaur = ({ id, currentHitPoints }: IMonsterStats): ICentaur => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/high-shot.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/centaur.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/centaur-red.svg"
 });
 
 export const executeCentaurAttack = (centaur: ICentaur): IAction[][] => {
@@ -61,7 +63,7 @@ export const executeCentaurAttack = (centaur: ICentaur): IAction[][] => {
 
         actions.push(
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: centaur.weapons[0]

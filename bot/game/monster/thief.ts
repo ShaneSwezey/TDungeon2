@@ -2,7 +2,7 @@ import { Event } from "../enums/event";
 import { ItemRarity } from "../enums/item";
 import { MonsterType } from "../enums/monster";
 import { WeaponType } from "../enums/weapon";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 import { IMonsterStats, IThief } from "../interfaces/monster";
 import { getMonsterPhysicalAttack, getUuid } from "../utils/math";
 
@@ -46,7 +46,9 @@ export const thief = ({ id, currentHitPoints }: IMonsterStats): IThief => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/plain-dagger.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/robber.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/robber-red.svg"
 });
 
 export const executeThiefAttack = (thief: IThief): IAction[][] => {
@@ -58,7 +60,7 @@ export const executeThiefAttack = (thief: IThief): IAction[][] => {
         if (isCrit) events.push(Event.CRITICAL);
 
         actions.push({
-            type: events,
+            events: events,
             value,
             isCrit,
             weapon

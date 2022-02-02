@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:slim
 
 WORKDIR /app
 
@@ -16,4 +16,4 @@ RUN npm run tsc
 
 EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD ["node", "dist/index.js" ]

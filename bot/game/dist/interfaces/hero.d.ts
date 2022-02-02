@@ -13,6 +13,21 @@ export interface IHero {
     readonly armor: IArmor[];
     readonly weapons: IWeapon[];
     readonly stamina: IStamina;
+    readonly heroImgSrc: string;
+    readonly heroHitImgSrc: string;
+}
+export interface IBattleEventHero {
+    id: string;
+    crit: number;
+    dodge: number;
+    block: number;
+    attackPower: number;
+    readonly name: string;
+    readonly type: HeroType;
+    readonly armor: IArmor[];
+    readonly weapons: IWeapon[];
+    readonly stamina: IStamina;
+    readonly imgSrc: string;
 }
 export interface IHeroDBStats {
     id?: string;

@@ -39,7 +39,9 @@ const centaur = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/high-shot.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/centaur.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/centaur-red.svg"
 });
 exports.centaur = centaur;
 const executeCentaurAttack = (centaur) => {
@@ -58,7 +60,7 @@ const executeCentaurAttack = (centaur) => {
         if (isCrit)
             events.push(event_1.Event.CRITICAL);
         actions.push({
-            type: events,
+            events: events,
             value,
             isCrit,
             weapon: centaur.weapons[0]

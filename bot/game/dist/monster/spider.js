@@ -32,7 +32,9 @@ const forestSpider = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/insect-jaws.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/spider-alt.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/spider-red.svg"
 });
 exports.forestSpider = forestSpider;
 const executeForestSpiderAttack = (forestSpider) => {
@@ -42,7 +44,7 @@ const executeForestSpiderAttack = (forestSpider) => {
         events.push(event_1.Event.CRITICAL);
     return [[
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: forestSpider.weapons[0]

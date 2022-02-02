@@ -29,6 +29,8 @@ const heroFactory = ({ type, id, name, hitPoints, armor, weapons }) => {
                 attackPower: (0, math_1.calcAttackPower)(warriorWeapons, warriorArmor),
                 weapons: warriorWeapons,
                 armor: warriorArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior-red.svg"
             };
         case hero_1.HeroType.ROGUE:
             const rogueArmor = armor ? (0, factory_1.armorFactory)(armor) : [(0, chest_1.leatherChestFactory)(armor_1.LeatherChestName.TATTEREDCHEST)];
@@ -43,7 +45,9 @@ const heroFactory = ({ type, id, name, hitPoints, armor, weapons }) => {
                 block: 0,
                 attackPower: (0, math_1.calcAttackPower)(rogueWeapons, rogueArmor),
                 weapons: rogueWeapons,
-                armor: rogueArmor
+                armor: rogueArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue-red.svg"
             };
         case hero_1.HeroType.RANGER:
             const rangerArmor = armor ? (0, factory_1.armorFactory)(armor) : [(0, chest_1.leatherChestFactory)(armor_1.LeatherChestName.TATTEREDCHEST)];
@@ -52,13 +56,15 @@ const heroFactory = ({ type, id, name, hitPoints, armor, weapons }) => {
                 id,
                 name,
                 type: hero_1.HeroType.RANGER,
-                stamina: (0, stamina_1.getStamina)(rangerArmor, undefined),
+                stamina: (0, stamina_1.getStamina)(rangerArmor, hitPoints),
                 crit: (0, math_1.calcCrit)(rangerArmor),
                 dodge: (0, math_1.calcDodge)(rangerArmor) + 7,
                 block: 0,
                 attackPower: (0, math_1.calcAttackPower)(rangerWeapons, rangerArmor),
                 weapons: rangerWeapons,
-                armor: rangerArmor
+                armor: rangerArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger-red.svg"
             };
         default:
             throw new Error(`Hero type: ${type} does not exist!`);
@@ -81,6 +87,8 @@ const newHeroFactory = ({ type, name }) => {
                 attackPower: (0, math_1.calcAttackPower)(warriorWeapons, warriorArmor),
                 weapons: warriorWeapons,
                 armor: warriorArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/warrior-red.svg"
             };
         case hero_1.HeroType.ROGUE:
             const rogueArmor = [(0, chest_1.leatherChestFactory)(armor_1.LeatherChestName.TATTEREDCHEST)];
@@ -95,7 +103,9 @@ const newHeroFactory = ({ type, name }) => {
                 block: 0,
                 attackPower: (0, math_1.calcAttackPower)(rogueWeapons, rogueArmor),
                 weapons: rogueWeapons,
-                armor: rogueArmor
+                armor: rogueArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/rogue-red.svg"
             };
         case hero_1.HeroType.RANGER:
             const rangerArmor = [(0, chest_1.leatherChestFactory)(armor_1.LeatherChestName.TATTEREDCHEST)];
@@ -110,7 +120,9 @@ const newHeroFactory = ({ type, name }) => {
                 block: 0,
                 attackPower: (0, math_1.calcAttackPower)(rangerWeapons, rangerArmor),
                 weapons: rangerWeapons,
-                armor: rangerArmor
+                armor: rangerArmor,
+                heroImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger.svg",
+                heroHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/heroes/ranger-red.svg"
             };
         default:
             throw new Error(`Hero type: ${type} does not exist!`);

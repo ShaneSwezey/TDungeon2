@@ -46,7 +46,9 @@ const thief = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/plain-dagger.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/robber.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/robber-red.svg"
 });
 exports.thief = thief;
 const executeThiefAttack = (thief) => {
@@ -57,7 +59,7 @@ const executeThiefAttack = (thief) => {
         if (isCrit)
             events.push(event_1.Event.CRITICAL);
         actions.push({
-            type: events,
+            events: events,
             value,
             isCrit,
             weapon

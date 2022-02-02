@@ -39,7 +39,9 @@ const goblin = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/bone-knife.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/goblin.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/goblin-red.svg"
 });
 exports.goblin = goblin;
 const executeGoblinAttack = (goblin) => {
@@ -58,7 +60,7 @@ const executeGoblinAttack = (goblin) => {
         if (isCrit)
             events.push(event_1.Event.CRITICAL);
         actions.push({
-            type: events,
+            events: events,
             value,
             isCrit,
             weapon: goblin.weapons[0]

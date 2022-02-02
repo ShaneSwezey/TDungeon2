@@ -4,7 +4,7 @@ import { WeaponType } from "../enums/weapon";
 import { ItemRarity } from "../enums/item";
 import { MonsterType } from "../enums/monster";
 import { Event } from "../enums/event";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 
 export const ghoul = ({ id, currentHitPoints }: IMonsterStats): IGhoul => ({
     id: id ? id : getUuid(),
@@ -32,7 +32,9 @@ export const ghoul = ({ id, currentHitPoints }: IMonsterStats): IGhoul => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/evil-hand.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ghoul.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ghoul-red.svg"
 });
 
 export const executeGhoulAttack = (ghoul: IGhoul): IAction[][] => {
@@ -43,7 +45,7 @@ export const executeGhoulAttack = (ghoul: IGhoul): IAction[][] => {
 
     return [[
         {
-            type: events,
+            events: events,
             value,
             isCrit,
             weapon: ghoul.weapons[0]

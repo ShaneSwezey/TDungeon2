@@ -1,0 +1,17 @@
+FROM node:slim
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . /app
+
+RUN npm install -g typescript
+
+RUN npm run tsc
+
+EXPOSE 443
+
+CMD ["node", "dist/index.js"]

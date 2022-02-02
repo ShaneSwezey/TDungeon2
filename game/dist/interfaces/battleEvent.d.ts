@@ -1,6 +1,6 @@
-import { EventCharacter } from "../enums/character";
-import { Character } from "../types/character";
-import { IAction } from "./action";
+import { Event } from "../enums/event";
+import { BattleEventCharacter } from "../types/character";
+import { IWeapon } from "./weapon";
 export interface IBattleEvent extends IActionEvent {
     id?: string;
     battleId: string;
@@ -9,11 +9,18 @@ export interface IBattleEvent extends IActionEvent {
 }
 export interface IActionEvent {
     iteration: number;
-    initiatorType: EventCharacter;
-    initiator: Character;
-    initiatorAction: IAction;
-    receiverType: EventCharacter;
-    receiver: Character;
-    receiverAction: IAction;
+    initiator: ICharacterAction;
+    receiver: ICharacterAction;
 }
+interface ICharacterAction {
+    character: BattleEventCharacter;
+    action: IAction;
+}
+export interface IAction {
+    events: Event[];
+    value?: number;
+    isCrit?: boolean;
+    weapon?: IWeapon;
+}
+export {};
 //# sourceMappingURL=battleEvent.d.ts.map

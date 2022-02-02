@@ -1,81 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.executeAttacks = void 0;
-const character_1 = require("../enums/character");
 const event_1 = require("../enums/event");
 const round_1 = require("../enums/round");
 const monster_1 = require("../monster");
 const math_1 = require("../utils/math");
-// const executeMonstersAttack = (heroes: IHero[], monsters: IMonster[]) => {
-//     const actionEvents: IActionEvent[] = [];
-//     let iteration = 0;
-//     monsters.forEach(monster => {
-//         const actionsList = monsterExecutionSwitch(monster);
-//         const selectedHeroes = selectRandomHeroes(getAliveHeroes(heroes), actionsList.length);
-//         selectedHeroes.forEach(hero => {
-//             const actions = actionsList.shift();
-//             (actions || []).forEach(action => {
-//                 if (hero.stamina.hitPoints <= 0)  {
-//                     hero.stamina.hitPoints -= action.value!;
-//                     const heroSnapShot = generateHeroSnapShot(hero);
-//                     actionEvents.push({
-//                         iteration,
-//                         receiverType: EventCharacter.HERO,
-//                         receiver: heroSnapShot,
-//                         receiverAction: {
-//                             type: [Event.HIT]
-//                         },
-//                         initiatorType: EventCharacter.MONSTER,
-//                         initiator: monster,
-//                         initiatorAction: action
-//                     });
-//                 } else if (getRandomInt(1, 100) <= hero.dodge) {
-//                     const heroSnapShot = generateHeroSnapShot(hero);
-//                     actionEvents.push({
-//                         iteration,
-//                         receiverType: EventCharacter.HERO,
-//                         receiver: heroSnapShot,
-//                         receiverAction: {
-//                             type: [Event.DODGE]
-//                         },
-//                         initiatorType: EventCharacter.MONSTER,
-//                         initiator: monster,
-//                         initiatorAction: action
-//                     });
-//                 } else if (hero.block !== 0 && getRandomInt(1, 100) <= hero.block) {
-//                     const heroSnapShot = generateHeroSnapShot(hero);
-//                     actionEvents.push({
-//                         iteration,
-//                         receiverType: EventCharacter.HERO,
-//                         receiver: heroSnapShot,
-//                         receiverAction: {
-//                             type: [Event.BLOCK]
-//                         },
-//                         initiatorType: EventCharacter.MONSTER,
-//                         initiator: monster,
-//                         initiatorAction: action
-//                     });
-//                 } else {
-//                     hero.stamina.hitPoints -= action.value!;
-//                     const heroSnapShot = generateHeroSnapShot(hero);
-//                     actionEvents.push({
-//                         iteration,
-//                         receiverType: EventCharacter.HERO,
-//                         receiver: heroSnapShot,
-//                         receiverAction: {
-//                             type: [Event.HIT]
-//                         },
-//                         initiatorType: EventCharacter.MONSTER,
-//                         initiator: monster,
-//                         initiatorAction: action
-//                     });
-//                 }
-//             });
-//         });
-//         iteration++;
-//     });
-//     return actionEvents;
-// };
 const executeMonstersAttack = (heroes, monsters) => {
     const actionEvents = [];
     let iteration = 0;
@@ -86,141 +15,42 @@ const executeMonstersAttack = (heroes, monsters) => {
         const selectedHeroes = (0, math_1.selectRandomHeroes)(heroAttackList.slice(0, actionsList.length), actionsList.length);
         selectedHeroes.forEach(hero => {
             const actions = actionsList.shift();
+            let events = [];
             (actions || []).forEach(action => {
                 if (hero.stamina.hitPoints <= 0) {
                     hero.stamina.hitPoints -= action.value;
-                    const heroSnapShot = generateHeroSnapShot(hero);
-                    actionEvents.push({
-                        iteration,
-                        receiverType: character_1.EventCharacter.HERO,
-                        receiver: heroSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.HIT]
-                        },
-                        initiatorType: character_1.EventCharacter.MONSTER,
-                        initiator: monster,
-                        initiatorAction: action
-                    });
+                    events = [event_1.Event.HIT];
                 }
                 else if ((0, math_1.getRandomInt)(1, 100) <= hero.dodge) {
-                    const heroSnapShot = generateHeroSnapShot(hero);
-                    actionEvents.push({
-                        iteration,
-                        receiverType: character_1.EventCharacter.HERO,
-                        receiver: heroSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.DODGE]
-                        },
-                        initiatorType: character_1.EventCharacter.MONSTER,
-                        initiator: monster,
-                        initiatorAction: action
-                    });
+                    events = [event_1.Event.DODGE];
                 }
                 else if (hero.block !== 0 && (0, math_1.getRandomInt)(1, 100) <= hero.block) {
-                    const heroSnapShot = generateHeroSnapShot(hero);
-                    actionEvents.push({
-                        iteration,
-                        receiverType: character_1.EventCharacter.HERO,
-                        receiver: heroSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.BLOCK]
-                        },
-                        initiatorType: character_1.EventCharacter.MONSTER,
-                        initiator: monster,
-                        initiatorAction: action
-                    });
+                    events = [event_1.Event.BLOCK];
                 }
                 else {
                     hero.stamina.hitPoints -= action.value;
-                    const heroSnapShot = generateHeroSnapShot(hero);
-                    actionEvents.push({
-                        iteration,
-                        receiverType: character_1.EventCharacter.HERO,
-                        receiver: heroSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.HIT]
-                        },
-                        initiatorType: character_1.EventCharacter.MONSTER,
-                        initiator: monster,
-                        initiatorAction: action
-                    });
+                    events = [event_1.Event.HIT];
                 }
+                const heroSnapShot = generateHeroSnapShot(hero);
+                actionEvents.push({
+                    iteration,
+                    receiver: {
+                        character: heroSnapShot,
+                        action: {
+                            events
+                        },
+                    },
+                    initiator: {
+                        character: monster,
+                        action
+                    }
+                });
             });
         });
         iteration++;
     });
     return actionEvents;
 };
-// const executeHeroesAttack = (heroes: IHero[], monsters: IMonster[]) => {
-//     const actionEvents: IActionEvent[] = [];
-//     let iteration = 0;
-//     heroes.forEach(hero => {
-//         const actionsList = executeHeroAttack(hero);
-//         const selectedMonsters = selectRandomMonsters(getAliveMonsters(monsters), actionsList.length);
-//         selectedMonsters.forEach(monster => {
-//             const actions = actionsList.shift();
-//             (actions || []).forEach(action => {
-//                 if (monster.stamina.hitPoints <= 0) {
-//                     monster.stamina.hitPoints -= action.value!;
-//                     const monsterSnapShot = generateMonsterSnapShot(monster);
-//                     actionEvents.push({
-//                         iteration,
-//                         initiatorType: EventCharacter.HERO,
-//                         initiator: hero,
-//                         initiatorAction: action,
-//                         receiverType: EventCharacter.MONSTER,
-//                         receiver: monsterSnapShot,
-//                         receiverAction: {
-//                             type: [Event.HIT]
-//                         }
-//                     });
-//                 } else if (getRandomInt(1, 100) <= monster.dodge) {
-//                     const monsterSnapShot = generateMonsterSnapShot(monster);
-//                     actionEvents.push({
-//                         iteration,
-//                         initiatorType: EventCharacter.HERO,
-//                         initiator: hero,
-//                         initiatorAction: action,
-//                         receiverType: EventCharacter.MONSTER,
-//                         receiver: monsterSnapShot,
-//                         receiverAction: {
-//                             type: [Event.DODGE]
-//                         }
-//                     });
-//                 } else if (monster.block !== 0 && getRandomInt(1, 100) <= monster.block) {
-//                     const monsterSnapShot = generateMonsterSnapShot(monster);
-//                     actionEvents.push({
-//                         iteration,
-//                         initiatorType: EventCharacter.HERO,
-//                         initiator: hero,
-//                         initiatorAction: action,
-//                         receiverType: EventCharacter.MONSTER,
-//                         receiver: monsterSnapShot,
-//                         receiverAction: {
-//                             type: [Event.BLOCK]
-//                         }
-//                     });
-//                 } else {
-//                     monster.stamina.hitPoints -= action.value!;
-//                     const monsterSnapShot = generateMonsterSnapShot(monster);
-//                     actionEvents.push({
-//                         iteration,
-//                         initiatorType: EventCharacter.HERO,
-//                         initiator: hero,
-//                         initiatorAction: action,
-//                         receiverType: EventCharacter.MONSTER,
-//                         receiver: monsterSnapShot,
-//                         receiverAction: {
-//                             type: [Event.HIT]
-//                         }
-//                     });
-//                 }
-//             });
-//         });
-//         iteration++;
-//     });
-//     return actionEvents;
-// };
 const executeHeroesAttack = (heroes, monsters) => {
     const actionEvents = [];
     let iteration = 0;
@@ -231,65 +61,36 @@ const executeHeroesAttack = (heroes, monsters) => {
         const selectedMonsters = (0, math_1.selectRandomMonsters)(monsterAttackList.slice(0, actionsList.length), actionsList.length);
         selectedMonsters.forEach(monster => {
             const actions = actionsList.shift();
+            let events = [];
             (actions || []).forEach(action => {
                 if (monster.stamina.hitPoints <= 0) {
                     monster.stamina.hitPoints -= action.value;
-                    const monsterSnapShot = generateMonsterSnapShot(monster);
-                    actionEvents.push({
-                        iteration,
-                        initiatorType: character_1.EventCharacter.HERO,
-                        initiator: hero,
-                        initiatorAction: action,
-                        receiverType: character_1.EventCharacter.MONSTER,
-                        receiver: monsterSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.HIT]
-                        }
-                    });
+                    events = [event_1.Event.HIT];
                 }
                 else if ((0, math_1.getRandomInt)(1, 100) <= monster.dodge) {
-                    const monsterSnapShot = generateMonsterSnapShot(monster);
-                    actionEvents.push({
-                        iteration,
-                        initiatorType: character_1.EventCharacter.HERO,
-                        initiator: hero,
-                        initiatorAction: action,
-                        receiverType: character_1.EventCharacter.MONSTER,
-                        receiver: monsterSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.DODGE]
-                        }
-                    });
+                    events = [event_1.Event.DODGE];
                 }
                 else if (monster.block !== 0 && (0, math_1.getRandomInt)(1, 100) <= monster.block) {
-                    const monsterSnapShot = generateMonsterSnapShot(monster);
-                    actionEvents.push({
-                        iteration,
-                        initiatorType: character_1.EventCharacter.HERO,
-                        initiator: hero,
-                        initiatorAction: action,
-                        receiverType: character_1.EventCharacter.MONSTER,
-                        receiver: monsterSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.BLOCK]
-                        }
-                    });
+                    events = [event_1.Event.BLOCK];
                 }
                 else {
                     monster.stamina.hitPoints -= action.value;
-                    const monsterSnapShot = generateMonsterSnapShot(monster);
-                    actionEvents.push({
-                        iteration,
-                        initiatorType: character_1.EventCharacter.HERO,
-                        initiator: hero,
-                        initiatorAction: action,
-                        receiverType: character_1.EventCharacter.MONSTER,
-                        receiver: monsterSnapShot,
-                        receiverAction: {
-                            type: [event_1.Event.HIT]
-                        }
-                    });
+                    events = [event_1.Event.HIT];
                 }
+                const monsterSnapShot = generateMonsterSnapShot(monster);
+                actionEvents.push({
+                    iteration,
+                    initiator: {
+                        character: hero,
+                        action,
+                    },
+                    receiver: {
+                        character: monsterSnapShot,
+                        action: {
+                            events
+                        }
+                    }
+                });
             });
         });
         iteration++;
@@ -322,7 +123,7 @@ const executeHeroAttack = (hero) => {
                 }
                 attackValue += hero.attackPower;
                 actionsOnMonster.push({
-                    type: events,
+                    events,
                     value: attackValue,
                     isCrit,
                     weapon
@@ -333,13 +134,6 @@ const executeHeroAttack = (hero) => {
     });
     return actions;
 };
-// export const executeAttacks = (turn: string, heroes: IHero[], monsters: IMonster[]) => {
-//     if (turn === Turn.HEROES) {
-//         return executeHeroesAttack(heroes, monsters);
-//     } else {
-//         return executeMonstersAttack(heroes, monsters);
-//     }
-// };
 const executeAttacks = (turn, heroes, monsters) => {
     if (turn === round_1.Turn.HEROES) {
         return executeHeroesAttack(heroes, monsters);

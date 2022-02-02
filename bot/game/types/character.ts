@@ -1,4 +1,4 @@
-import { IHero } from "../interfaces/hero";
-import { IMonster } from "../interfaces/monster";
+import { IBattleEventHero } from "../interfaces/hero";
+import { IBattleEventMonster } from "../interfaces/monster";
 
-export type Character = IHero | IMonster;
+export type BattleEventCharacter = IBattleEventHero | IBattleEventMonster;

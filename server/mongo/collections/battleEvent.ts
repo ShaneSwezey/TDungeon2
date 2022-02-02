@@ -30,12 +30,8 @@ export class BattleEventCollection {
                 turn: battleEventRecord.turn,
                 round: battleEventRecord.round,
                 iteration: battleEventRecord.iteration,
-                initiatorType: battleEventRecord.initiatorType,
                 initiator: battleEventRecord.initiator,
-                initiatorAction: battleEventRecord.initiatorAction,
-                receiverType: battleEventRecord.receiverType,
                 receiver: battleEventRecord.receiver,
-                receiverAction: battleEventRecord.receiverAction
             }));
         } catch(error) {
             throw error;

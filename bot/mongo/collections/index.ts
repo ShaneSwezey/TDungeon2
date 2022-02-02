@@ -30,4 +30,13 @@ export class TDungeonDB {
         }
     }
 
+    public static async disconnect() {
+        try {
+            return await this.mongoClient.close();
+        } catch(error) {
+            console.error('[disconnect]', error);
+            throw error;
+        }
+    }
+
 }

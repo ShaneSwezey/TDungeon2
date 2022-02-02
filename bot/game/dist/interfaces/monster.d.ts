@@ -10,6 +10,19 @@ export interface IMonster {
     block: number;
     readonly type: MonsterType;
     readonly weapons: IWeapon[];
+    readonly monsterImgSrc: string;
+    readonly monsterHitImgSrc: string;
+}
+export interface IBattleEventMonster {
+    id?: string;
+    stamina: IStamina;
+    crit: number;
+    dodge: number;
+    attackPower: number;
+    block: number;
+    readonly type: MonsterType;
+    readonly weapons: IWeapon[];
+    readonly imgSrc: string;
 }
 export interface IMonsterStats {
     type: string;

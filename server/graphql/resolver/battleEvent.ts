@@ -1,4 +1,4 @@
-import { Arg, Ctx, Query, Resolver, ArgsType, Field } from "type-graphql";
+import { Arg, Ctx, Query, Resolver } from "type-graphql";
 import { Context } from "../../interface/context";
 import { BattleEventGraphqlType } from "../types/battleEvent";
 

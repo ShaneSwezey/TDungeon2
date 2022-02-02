@@ -4,7 +4,7 @@ import { MonsterType } from "../enums/monster";
 import { WeaponType } from "../enums/weapon";
 import { ItemRarity } from "../enums/item";
 import { Event } from "../enums/event";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 
 export const goblin = ({ id, currentHitPoints }: IMonsterStats): IGoblin => ({
     id: id ? id : getUuid(),
@@ -39,7 +39,9 @@ export const goblin = ({ id, currentHitPoints }: IMonsterStats): IGoblin => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/bone-knife.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/goblin.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/goblin-red.svg"
 });
 
 export const executeGoblinAttack = (goblin: IGoblin): IAction[][] => {
@@ -61,7 +63,7 @@ export const executeGoblinAttack = (goblin: IGoblin): IAction[][] => {
 
         actions.push(
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: goblin.weapons[0]

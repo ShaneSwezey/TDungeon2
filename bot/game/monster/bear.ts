@@ -2,7 +2,7 @@ import { Event } from "../enums/event";
 import { ItemRarity } from "../enums/item";
 import { MonsterType } from "../enums/monster";
 import { WeaponType } from "../enums/weapon";
-import { IAction } from "../interfaces/action";
+import { IAction } from "../interfaces/battleEvent";
 import { IBearCub, IMonsterStats } from "../interfaces/monster";
 import { getMonsterPhysicalAttack, getUuid } from "../utils/math";
 
@@ -39,7 +39,9 @@ export const bearCub = ({ id, currentHitPoints }: IMonsterStats): IBearCub => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/triple-scratches.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/bear-head.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/bear-head-red.svg"
 });
 
 export const executeBearCubAttack = (bearCub: IBearCub): IAction[][] => {
@@ -50,7 +52,7 @@ export const executeBearCubAttack = (bearCub: IBearCub): IAction[][] => {
 
     return [[
         {
-            type: events,
+            events,
             value,
             isCrit,
             weapon: bearCub.weapons[0]

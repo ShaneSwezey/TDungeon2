@@ -53,4 +53,22 @@ const bootstrap = async () => {
         throw error;
     }
 };
+const startGraceFulShutdown = async () => {
+    try {
+        console.log('Starting shutdown of bot...');
+        await Promise.all([
+            index_1.TDungeonDB.disconnect(),
+            tmiClient_1.twitchClient.disconnect(),
+            worker_1.HeroInputWorker.disconnect(),
+            worker_1.NewBattleWorker.disconnect(),
+            worker_1.RoundWorker.disconnect()
+        ]);
+    }
+    catch (error) {
+        console.error('[startGraceFulShutdown]:', error);
+        throw error;
+    }
+};
+process.on('SIGTERM', startGraceFulShutdown);
+process.on('SIGINT', startGraceFulShutdown);
 bootstrap();

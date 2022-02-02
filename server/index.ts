@@ -22,6 +22,7 @@ const client = new MongoClient(getMongoConnectionString());
 const db = client.db('tdungeon');
 
 const mongo = new Mongo(db);
+const redis = new Redis(getRedisConnectionConfig());
 
 const bootstrap = async () => {
     try {
@@ -30,8 +31,6 @@ const bootstrap = async () => {
         const app = express();
 
         await client.connect();
-
-        const redis = new Redis(getRedisConnectionConfig());
 
         const redisInstance = new RedisInstance(redis);
 
@@ -72,6 +71,20 @@ const bootstrap = async () => {
         throw error;
     }
 };
+
+const startGraceFulShutdown = async () => {
+    try {
+        console.log('Starting graceful shutdown of server...');
+        redis.disconnect();
+        await client.close();
+    } catch(error) {
+        console.error('[startGraceFulShutdown]', error);
+        throw error;
+    }
+}
+
+process.on("SIGTERM", startGraceFulShutdown);
+process.on("SIGINT", startGraceFulShutdown);
 
 bootstrap()
     .catch(async error => {

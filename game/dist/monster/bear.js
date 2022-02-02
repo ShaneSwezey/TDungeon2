@@ -39,7 +39,9 @@ const bearCub = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/triple-scratches.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/bear-head.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/bear-head-red.svg"
 });
 exports.bearCub = bearCub;
 const executeBearCubAttack = (bearCub) => {
@@ -49,7 +51,7 @@ const executeBearCubAttack = (bearCub) => {
         events.push(event_1.Event.CRITICAL);
     return [[
             {
-                type: events,
+                events,
                 value,
                 isCrit,
                 weapon: bearCub.weapons[0]

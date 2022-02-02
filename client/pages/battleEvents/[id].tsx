@@ -94,64 +94,66 @@ const Battle_Events_Query = gql`
             battleId
             round
             iteration
-            initiatorType
             initiator {
-                ...HeroFragment
-                ...MonsterFragment
-            }
-            initiatorAction {
-                type
-                value
-                isCrit
-                weapon {
-                    name
+                character {
+                    ...HeroFragment
+                    ...MonsterFragment
+                }
+                action {
                     type
-                    damage {
-                        low
-                        high
-                    }
-                    rarity
-                    crit {
-                        chance
-                    }
-                    cleave {
-                        chance
-                        num {
+                    value
+                    isCrit
+                    weapon {
+                        name
+                        type
+                        damage {
                             low
                             high
                         }
-                    }
-                    flurry {
-                        chance
-                        num {
-                            low
-                            high
+                        rarity
+                        crit {
+                            chance
                         }
+                        cleave {
+                            chance
+                            num {
+                                low
+                                high
+                            }
+                        }
+                        flurry {
+                            chance
+                            num {
+                                low
+                                high
+                            }
+                        }
+                        imgSrc
                     }
-                    imgSrc
                 }
             }
-            receiverType
             receiver {
-                ...HeroFragment
-                ...MonsterFragment
-            }
-            receiverAction {
-                type
-                value
-                isCrit
-                weapon {
-                    name
+                character {
+                    ...HeroFragment
+                    ...MonsterFragment
+                }
+                action {
                     type
-                    damage {
-                        low
-                        high
+                    value
+                    isCrit
+                    weapon {
+                        name
+                        type
+                        damage {
+                            low
+                            high
+                        }
+                        rarity
+                        crit {
+                            chance
+                        }
+                        imgSrc
                     }
-                    rarity
-                    crit {
-                        chance
-                    }
-                    imgSrc
                 }
             }
         }

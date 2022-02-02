@@ -32,7 +32,9 @@ const ghoul = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/evil-hand.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ghoul.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ghoul-red.svg"
 });
 exports.ghoul = ghoul;
 const executeGhoulAttack = (ghoul) => {
@@ -42,7 +44,7 @@ const executeGhoulAttack = (ghoul) => {
         events.push(event_1.Event.CRITICAL);
     return [[
             {
-                type: events,
+                events: events,
                 value,
                 isCrit,
                 weapon: ghoul.weapons[0]

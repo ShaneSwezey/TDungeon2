@@ -53,7 +53,9 @@ const ogre = ({ id, currentHitPoints }) => ({
             },
             imgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/weapons/monster/axe-swing.svg"
         }
-    ]
+    ],
+    monsterImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ogre.svg",
+    monsterHitImgSrc: "https://tdungeon.s3.us-west-2.amazonaws.com/monsters/ogre-red.svg"
 });
 exports.ogre = ogre;
 // const ogreRage = (ogre: IOgre) => {
@@ -86,7 +88,7 @@ const executeOgreAttack = (ogre) => {
             if (isCleave)
                 events.push(event_1.Event.CLEAVE);
             const actionOnHero = {
-                type: events,
+                events: events,
                 value: attackValue,
                 isCrit,
                 weapon

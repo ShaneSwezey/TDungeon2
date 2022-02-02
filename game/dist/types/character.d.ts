@@ -1,4 +1,4 @@
-import { IHero } from "../interfaces/hero";
-import { IMonster } from "../interfaces/monster";
-export declare type Character = IHero | IMonster;
+import { IBattleEventHero } from "../interfaces/hero";
+import { IBattleEventMonster } from "../interfaces/monster";
+export declare type BattleEventCharacter = IBattleEventHero | IBattleEventMonster;
 //# sourceMappingURL=character.d.ts.map

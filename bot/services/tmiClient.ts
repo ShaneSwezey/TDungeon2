@@ -28,20 +28,10 @@ const twitchClient = new client({
     channels: [ CHANNEL_NAME! ]
 });
 
-
-twitchClient.on("message", async (channel, tags, message, self) => {
-    try {
-        if (self || !message.startsWith("!")) return;
-        const response = await enactCommand(message, tags.username!);
-        await responseFilter(channel, response);
-    } catch(error) {
-        console.error('message:', error);
-        throw error;
-    }
-});
-
 const enactCommand = async (message: string, userName: string) => {
-    switch(message) {
+    const spaceIndex = message.indexOf(" ");
+    const slicedMessage = spaceIndex === -1 ? message : message.slice(0, spaceIndex);
+    switch(slicedMessage) {
         case Commands.HEROTYPES:
             return getHeroTypes();
         case Commands.HEROCREATE:
@@ -64,5 +54,16 @@ const responseFilter = async (channel: string, response: IResponse) => {
             return;
     }
 }
+
+twitchClient.on("message", async (channel, tags, message, self) => {
+    try {
+        if (self || !message.startsWith("!")) return;
+        const response = await enactCommand(message, tags.username!.toLowerCase());
+        await responseFilter(channel, response);
+    } catch(error) {
+        console.error('message:', error);
+        throw error;
+    }
+});
 
 export { twitchClient };
