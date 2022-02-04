@@ -72,19 +72,20 @@ const bootstrap = async () => {
     }
 };
 
-const startGraceFulShutdown = async () => {
-    try {
-        console.log('Starting graceful shutdown of server...');
-        redis.disconnect();
-        await client.close();
-    } catch(error) {
-        console.error('[startGraceFulShutdown]', error);
-        throw error;
-    }
-}
+// const startGraceFulShutdown = async () => {
+//     try {
+//         console.log('Starting graceful shutdown of server...');
+//         redis.disconnect();
+//         await client.close();
+//         return true;
+//     } catch(error) {
+//         console.error('[startGraceFulShutdown]', error);
+//         throw error;
+//     }
+// }
 
-process.on("SIGTERM", startGraceFulShutdown);
-process.on("SIGINT", startGraceFulShutdown);
+// process.on("SIGTERM", startGraceFulShutdown);
+// process.on("SIGINT", startGraceFulShutdown);
 
 bootstrap()
     .catch(async error => {

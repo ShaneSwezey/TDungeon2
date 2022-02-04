@@ -19,13 +19,21 @@ const CREATE_BATTLE_MUTATION = gql`
     }
 `;
 
+interface ICreateBattleData {
+    createBattle: {
+        id: string;
+    }
+}
+
 interface Props {
     currentBattle: boolean;
 }
 
 const Admin: NextPage<Props> = ({ currentBattle }: Props) => {
-    const [ createBattle, { loading, data } ] = useMutation(CREATE_BATTLE_MUTATION);
+    const [ createBattle, { loading, data } ] = useMutation<ICreateBattleData>(CREATE_BATTLE_MUTATION);
     const formBackground = useColorModeValue("gray.100", "gray.700");
+
+    console.log("data:", data);
 
     return (
         <>
@@ -36,10 +44,17 @@ const Admin: NextPage<Props> = ({ currentBattle }: Props) => {
                     <Button
                         backgroundColor="#E53E3E"
                         isDisabled={currentBattle}
+                        onClick={() => createBattle()}
                     >
                         New Battle
                     </Button>
                 </Container>
+                {
+                    data && 
+                        <Container m={10} background={formBackground} p={12} rounded={5}>
+                            <Heading mb={6}>{data.createBattle.id}</Heading>
+                        </Container>
+                }
             </Flex>
         </>
     );

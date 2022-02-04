@@ -25,22 +25,29 @@ const twitchClient = new tmi_js_1.client({
 });
 exports.twitchClient = twitchClient;
 const enactCommand = async (message, userName) => {
-    const spaceIndex = message.indexOf(" ");
-    const slicedMessage = spaceIndex === -1 ? message : message.slice(0, spaceIndex);
-    switch (slicedMessage) {
-        case Commands.HEROTYPES:
-            return (0, hero_1.getHeroTypes)();
-        case Commands.HEROCREATE:
-            return await (0, hero_1.createHero)(message, userName);
-        case Commands.BATTLEJOIN:
-            return await (0, battle_1.joinBattle)(userName);
-        case Commands.ATTACK:
-            return await (0, hero_1.setHeroAttackAction)(userName);
-        default:
-            return { type: response_1.ResponseType.IGNORE, text: "Command not found!" };
+    try {
+        const spaceIndex = message.indexOf(" ");
+        const slicedMessage = spaceIndex === -1 ? message : message.slice(0, spaceIndex);
+        switch (slicedMessage) {
+            case Commands.HEROTYPES:
+                return (0, hero_1.getHeroTypes)();
+            case Commands.HEROCREATE:
+                return await (0, hero_1.createHero)(message, userName);
+            case Commands.BATTLEJOIN:
+                return await (0, battle_1.joinBattle)(userName);
+            case Commands.ATTACK:
+                return await (0, hero_1.setHeroAttackAction)(userName);
+            default:
+                return { type: response_1.ResponseType.IGNORE, text: "Command not found!" };
+        }
+    }
+    catch (error) {
+        console.error('[enactCommand]', error);
+        throw error;
     }
 };
 const responseFilter = async (channel, response) => {
+    console.log('response:', response);
     switch (response.type) {
         case response_1.ResponseType.MESSAGE:
             await twitchClient.say(channel, response.text);

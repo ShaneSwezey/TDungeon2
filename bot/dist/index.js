@@ -32,7 +32,7 @@ const bootstrap = async () => {
         const isDBConnected = await index_1.TDungeonDB.connect();
         if (isDBConnected) {
             await tmiClient_1.twitchClient.connect();
-            tmiClient_1.twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
+            await tmiClient_1.twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
             const roundQueueScheduler = new bullmq_1.QueueScheduler("round", { connection: options_1.RedisConfig });
             const heroInputQueueScheduler = new bullmq_1.QueueScheduler("heroInput", { connection: options_1.RedisConfig });
             console.log(`Started workers: ${roundQueueScheduler.name}`);
@@ -53,22 +53,21 @@ const bootstrap = async () => {
         throw error;
     }
 };
-const startGraceFulShutdown = async () => {
-    try {
-        console.log('Starting shutdown of bot...');
-        await Promise.all([
-            index_1.TDungeonDB.disconnect(),
-            tmiClient_1.twitchClient.disconnect(),
-            worker_1.HeroInputWorker.disconnect(),
-            worker_1.NewBattleWorker.disconnect(),
-            worker_1.RoundWorker.disconnect()
-        ]);
-    }
-    catch (error) {
-        console.error('[startGraceFulShutdown]:', error);
-        throw error;
-    }
-};
-process.on('SIGTERM', startGraceFulShutdown);
-process.on('SIGINT', startGraceFulShutdown);
+// const startGraceFulShutdown = async () => {
+//     try {
+//         console.log('Starting shutdown of bot...');
+//         return await Promise.all([
+//             TDungeonDB.disconnect(),
+//             twitchClient.disconnect(),
+//             HeroInputWorker.disconnect(),
+//             NewBattleWorker.disconnect(),
+//             RoundWorker.disconnect()
+//         ]);
+//     } catch(error) {
+//         console.error('[startGraceFulShutdown]:', error);
+//         throw error;
+//     }
+// }
+// process.on('SIGTERM', startGraceFulShutdown);
+// process.on('SIGINT', startGraceFulShutdown)
 bootstrap();

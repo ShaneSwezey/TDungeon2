@@ -16,10 +16,12 @@ const executeMonstersAttack = (heroes, monsters) => {
         selectedHeroes.forEach(hero => {
             const actions = actionsList.shift();
             let events = [];
+            let hit = false;
             (actions || []).forEach(action => {
                 if (hero.stamina.hitPoints <= 0) {
                     hero.stamina.hitPoints -= action.value;
                     events = [event_1.Event.HIT];
+                    hit = true;
                 }
                 else if ((0, math_1.getRandomInt)(1, 100) <= hero.dodge) {
                     events = [event_1.Event.DODGE];
@@ -30,18 +32,18 @@ const executeMonstersAttack = (heroes, monsters) => {
                 else {
                     hero.stamina.hitPoints -= action.value;
                     events = [event_1.Event.HIT];
+                    hit = true;
                 }
-                const heroSnapShot = generateHeroSnapShot(hero);
                 actionEvents.push({
                     iteration,
                     receiver: {
-                        character: heroSnapShot,
+                        character: generateHeroSnapShot(hero, hit),
                         action: {
                             events
                         },
                     },
                     initiator: {
-                        character: monster,
+                        character: generateMonsterSnapShot(monster, false),
                         action
                     }
                 });
@@ -62,10 +64,12 @@ const executeHeroesAttack = (heroes, monsters) => {
         selectedMonsters.forEach(monster => {
             const actions = actionsList.shift();
             let events = [];
+            let hit = false;
             (actions || []).forEach(action => {
                 if (monster.stamina.hitPoints <= 0) {
                     monster.stamina.hitPoints -= action.value;
                     events = [event_1.Event.HIT];
+                    hit = true;
                 }
                 else if ((0, math_1.getRandomInt)(1, 100) <= monster.dodge) {
                     events = [event_1.Event.DODGE];
@@ -76,16 +80,16 @@ const executeHeroesAttack = (heroes, monsters) => {
                 else {
                     monster.stamina.hitPoints -= action.value;
                     events = [event_1.Event.HIT];
+                    hit = true;
                 }
-                const monsterSnapShot = generateMonsterSnapShot(monster);
                 actionEvents.push({
                     iteration,
                     initiator: {
-                        character: hero,
+                        character: generateHeroSnapShot(hero, false),
                         action,
                     },
                     receiver: {
-                        character: monsterSnapShot,
+                        character: generateMonsterSnapShot(monster, hit),
                         action: {
                             events
                         }
@@ -143,21 +147,37 @@ const executeAttacks = (turn, heroes, monsters) => {
     }
 };
 exports.executeAttacks = executeAttacks;
-const generateMonsterSnapShot = (monster) => {
+const generateMonsterSnapShot = (monster, hit) => {
     return {
-        ...monster,
+        id: monster.id,
+        type: monster.type,
+        crit: monster.crit,
+        dodge: monster.dodge,
+        attackPower: monster.attackPower,
+        block: monster.block,
+        weapons: monster.weapons,
         stamina: {
             hitPoints: monster.stamina.hitPoints,
             maxHitPoints: monster.stamina.maxHitPoints
-        }
+        },
+        imgSrc: hit ? monster.monsterHitImgSrc : monster.monsterImgSrc
     };
 };
-const generateHeroSnapShot = (hero) => {
+const generateHeroSnapShot = (hero, hit) => {
     return {
-        ...hero,
+        id: hero.id,
+        name: hero.name,
+        type: hero.type,
+        crit: hero.crit,
+        dodge: hero.dodge,
+        block: hero.block,
+        attackPower: hero.attackPower,
+        armor: hero.armor,
+        weapons: hero.weapons,
         stamina: {
             hitPoints: hero.stamina.hitPoints,
             maxHitPoints: hero.stamina.maxHitPoints
-        }
+        },
+        imgSrc: hit ? hero.heroHitImgSrc : hero.heroImgSrc
     };
 };

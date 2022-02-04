@@ -68,7 +68,6 @@ const Battles: NextPage<Props>  = ({ battles }: Props) => {
                                             rounded={5} 
                                             _hover={{ cursor: "pointer" }} key={id}
                                             p={1}
-                                            onClick={() => setSelectedBattleId(id)}
                                         >
                                             {
                                                 winner === "Heroes" ?
