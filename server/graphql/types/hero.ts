@@ -54,7 +54,7 @@ export class HeroGraphqlType implements IHero {
 }
 
 @ObjectType("BattleEventHero")
-export class BattleEventHero implements IBattleEventHero {
+export class BattleEventHeroGraphqlType implements IBattleEventHero {
     @Field(() => ID)
     id: string;
     

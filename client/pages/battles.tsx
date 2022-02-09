@@ -13,7 +13,6 @@ import type { NextPage } from 'next';
 import { client } from '../apollo-client';
 import { IBattle } from '../interfaces/battle';
 import Image from 'next/image'
-import { useState } from 'react';
 import Header from '../components/header';
 import Link from "next/link";
 
@@ -38,7 +37,6 @@ interface Props {
 }
 
 const Battles: NextPage<Props>  = ({ battles }: Props) => {
-    const [selectedBattleId, setSelectedBattleId] = useState<string | undefined>(undefined);
     const formBackground = useColorModeValue("gray.100", "gray.700");
     
     return (

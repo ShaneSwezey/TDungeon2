@@ -2,38 +2,30 @@ import { Badge, HStack, Stack, Text  } from "@chakra-ui/react";
 import Image from "next/image";
 import { EventCharacter } from "../../enums/character";
 import { Event } from "../../enums/event";
-import { IAction } from "../../interfaces/action";
+import { IAction } from "../../interfaces/battleEvent";
 import { IBattleEventHero } from "../../interfaces/hero";
-import { getHeroClassImageSrc, getHeroHitClassImageSrc } from "../../utils/hero";
 import ItemToolTip from "../itemToolTip";
 
 interface Props {
     hero: IBattleEventHero;
-    initiatorType: EventCharacter;
-    initiatorAction: IAction;
-    receiverAction: IAction;
+    action: IAction;
 }
 
-const HeroEvent = ({ hero, initiatorType, initiatorAction, receiverAction }: Props) => {
+const HeroEvent = ({ hero, action }: Props) => {
     return (
         <HStack>
+            <Image src={hero.imgSrc} alt="Hero Picture" width={60} height={60} />
             {
-                initiatorType === EventCharacter.MONSTER && receiverAction.type.find(event => event === Event.HIT) ?
-                    <Image src={getHeroHitClassImageSrc(hero.heroType)} alt="Hero Hit Picture" width={60} height={60} />
-                :
-                    <Image src={getHeroClassImageSrc(hero.heroType)} alt="Hero Picture" width={60} height={60} />
-            }
-            {
-                initiatorType === EventCharacter.HERO && initiatorAction.weapon &&
+                action.weapon &&
                     <>
-                        <ItemToolTip item={initiatorAction.weapon} type={"Weapon"} battleEvent={true}>
-                            <Image src={initiatorAction.weapon.imgSrc} alt="Weapon Picture" width={60} height={60}/>
+                        <ItemToolTip item={action.weapon} type={"Weapon"} battleEvent={true}>
+                            <Image src={action.weapon.imgSrc} alt="Weapon Picture" width={60} height={60}/>
                         </ItemToolTip>
                         <Stack 
                             direction="column"
                         >
                             {
-                                initiatorAction.type.map(event => (
+                                action.events.map(event => (
                                     <Badge 
                                         backgroundColor="blue.300"
                                         variant="solid"
@@ -49,14 +41,6 @@ const HeroEvent = ({ hero, initiatorType, initiatorAction, receiverAction }: Pro
                             }
                         </Stack>
                     </>
-            }
-            {
-                initiatorType === EventCharacter.MONSTER && receiverAction.type.find(event => event === Event.HIT) &&
-                    <Text color="#E53E3E" fontWeight="bolder" fontSize={initiatorAction.isCrit ? 40 : 20}>-{initiatorAction.value}</Text>
-            }
-            {
-                initiatorType === EventCharacter.MONSTER && receiverAction.type.find(event => event === Event.DODGE) &&
-                    <Text fontWeight="bolder" fontSize={initiatorAction.isCrit ? 40 : 20}>{initiatorAction.value}</Text>
             }
         </HStack>
     );

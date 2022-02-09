@@ -40,4 +40,5 @@ export interface IBattleEventMonster {
     block: number;
     readonly monsterType: MonsterType;
     readonly weapons: IWeapon[];
+    readonly imgSrc: string;
 }

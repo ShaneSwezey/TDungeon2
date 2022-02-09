@@ -48,6 +48,8 @@ export class BattleResolver {
 
             const newBattle = await mongo.battleCollection.createNewBattle();
 
+            console.log('newBattle:', newBattle);
+
             // drop in bullmq 
             await NewBattleQueue.add(`battle:${newBattle.id}`, { newBattle });
 

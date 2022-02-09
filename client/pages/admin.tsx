@@ -1,7 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { Button, Container, Flex, Heading, useColorModeValue } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { getSession } from 'next-auth/react';
 import { client } from '../apollo-client';
 import Header from '../components/header';
 

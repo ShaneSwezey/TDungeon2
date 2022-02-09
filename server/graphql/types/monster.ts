@@ -43,7 +43,7 @@ export class MonsterGraphqlType implements IMonster {
 }
 
 @ObjectType("BattleEventMonster")
-export class BattleEventMonster implements IBattleEventMonster {
+export class BattleEventMonsterGraphqlHeroType implements IBattleEventMonster {
     @Field(() => ID)
     id: string;
 

@@ -50,4 +50,5 @@ export interface IBattleEventHero {
     readonly armor: IArmor[];
     readonly weapons: IWeapon[];
     readonly stamina: IStamina;
+    readonly imgSrc: string;
 }

@@ -47,12 +47,8 @@ const wsLink = () => new WebSocketLink({
   webSocketImpl: ws,
 });
 
-// const httpLink = () => new HttpLink({
-//   uri: `http://${process.env.HOST}:${process.env.PORT}/graphql`,
-// });
-
 const httpLink = () => new HttpLink({
-  uri: `http://137.184.178.190:8000/graphql`,
+  uri: `http://localhost:8000/graphql`,
 });
 
 const splitLink = split(

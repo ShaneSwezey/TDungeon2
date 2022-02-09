@@ -1,6 +1,6 @@
-import { EventCharacter } from "../enums/character";
 import { Character } from "../types/character";
 import { IWeapon } from "./weapon";
+import { Event } from "../enums/event";
 
 export interface IBattleEvent extends IActionEvent {
     id?: string;

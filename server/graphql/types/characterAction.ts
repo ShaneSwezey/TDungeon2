@@ -3,12 +3,12 @@ import { HeroType } from "../../game/enums/hero";
 import { IAction, ICharacterAction } from "../../game/interfaces/battleEvent";
 import { BattleEventCharacter } from "../../game/types/character";
 import { ActionGraphqlType } from "./action";
-import { HeroGraphqlType } from "./hero";
-import { MonsterGraphqlType } from "./monster";
+import { BattleEventHeroGraphqlType } from "./hero";
+import { BattleEventMonsterGraphqlHeroType } from "./monster";
 
 const CharacterUnion = createUnionType({
     name: "Character",
-    types: () => [HeroGraphqlType, MonsterGraphqlType] as const,
+    types: () => [BattleEventHeroGraphqlType, BattleEventMonsterGraphqlHeroType] as const,
     resolveType: value => {
         if (
             value.type === HeroType.WARRIOR ||
@@ -17,8 +17,8 @@ const CharacterUnion = createUnionType({
             value.type === HeroType.MAGE ||
             value.type === HeroType.SORCERER ||
             value.type === HeroType.PRIEST
-        ) return HeroGraphqlType;
-        else return MonsterGraphqlType;
+        ) return BattleEventHeroGraphqlType;
+        else return BattleEventMonsterGraphqlHeroType;
     }
 });
 

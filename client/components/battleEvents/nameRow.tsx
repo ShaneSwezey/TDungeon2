@@ -11,7 +11,6 @@ interface Props {
 
 
 const NameRow = ({ hero, monster }: Props) =>  {
-  
     return (
         <Flex
             direction="row" 

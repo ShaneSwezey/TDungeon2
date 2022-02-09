@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { Center, Container, Flex, Heading, HStack, Icon, Spacer, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Center, Container, Flex, Heading, HStack, Icon, useColorModeValue, VStack } from "@chakra-ui/react";
 import { GetServerSidePropsContext, NextPage } from "next";
 import { client } from "../../apollo-client";
 import HeroEvent from "../../components/battleEvents/heroEvent";
@@ -8,7 +8,7 @@ import MonsterEvent from "../../components/battleEvents/monsterEvent";
 import NameRow from "../../components/battleEvents/nameRow";
 import Header from "../../components/header";
 import { EventCharacter } from "../../enums/character";
-import { IBattleEvent } from "../../interfaces/battleEvent";
+import { IAction, IBattleEvent } from "../../interfaces/battleEvent";
 import { IBattleEventHero } from "../../interfaces/hero";
 import { IBattleEventMonster } from "../../interfaces/monster";
 import { useRouter } from 'next/router';
@@ -23,7 +23,7 @@ interface DataVariables {
 }
 
 const HERO_FRAGMENT = gql`
-    fragment HeroFragment on Hero {
+    fragment HeroFragment on BattleEventHero {
         id
         name
         heroType: type
@@ -31,6 +31,7 @@ const HERO_FRAGMENT = gql`
         dodge
         block
         attackPower
+        imgSrc
         stamina {
             maxHitPoints
             hitPoints
@@ -44,11 +45,11 @@ const HERO_FRAGMENT = gql`
         weapons {
             name
             type
+            rarity
             damage {
                 high
                 low
             }
-            rarity
             crit {
                 chance
             }
@@ -58,7 +59,7 @@ const HERO_FRAGMENT = gql`
 `;
 
 const MONSTER_FRAGMENT = gql`
-    fragment MonsterFragment on Monster {
+    fragment MonsterFragment on BattleEventMonster {
         id
         monsterType: type
         stamina {
@@ -69,14 +70,15 @@ const MONSTER_FRAGMENT = gql`
         dodge
         attackPower
         block
+        imgSrc
         weapons {
             name
             type
+            rarity
             damage {
                 high
                 low
             }
-            rarity
             crit {
                 chance
             }
@@ -84,6 +86,9 @@ const MONSTER_FRAGMENT = gql`
         }
     }
 `;
+
+
+
   
 const Battle_Events_Query = gql`
     ${HERO_FRAGMENT}
@@ -94,23 +99,24 @@ const Battle_Events_Query = gql`
             battleId
             round
             iteration
+            turn
             initiator {
                 character {
                     ...HeroFragment
                     ...MonsterFragment
                 }
                 action {
-                    type
+                    events
                     value
                     isCrit
                     weapon {
                         name
                         type
+                        rarity
                         damage {
                             low
                             high
                         }
-                        rarity
                         crit {
                             chance
                         }
@@ -138,7 +144,7 @@ const Battle_Events_Query = gql`
                     ...MonsterFragment
                 }
                 action {
-                    type
+                    events
                     value
                     isCrit
                     weapon {
@@ -160,7 +166,7 @@ const Battle_Events_Query = gql`
     }
 `;
 
-const getBorderColor = (type: EventCharacter) => {
+const getBorderColor = (type: string) => {
     switch(type) {
         case EventCharacter.HERO:
             return "blue.300";
@@ -206,7 +212,7 @@ const BattleEvents: NextPage<Props> = ({ battleEvents, errorStatus }: Props) => 
                                         w="100%" 
                                         h="70px" 
                                         border="solid" 
-                                        borderColor={getBorderColor(battleEvent.initiatorType) as EventCharacter} 
+                                        borderColor={getBorderColor(battleEvent.turn)} 
                                         rounded={5} 
                                         p={1}
                                         mb={0}
@@ -214,22 +220,18 @@ const BattleEvents: NextPage<Props> = ({ battleEvents, errorStatus }: Props) => 
                                     >
                                         <>
                                             <HeroEvent 
-                                                hero={(battleEvent.initiatorType === EventCharacter.HERO ? battleEvent.initiator : battleEvent.receiver) as IBattleEventHero}
-                                                initiatorType={battleEvent.initiatorType}
-                                                receiverAction={battleEvent.receiverAction}
-                                                initiatorAction={battleEvent.initiatorAction}
+                                                hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero}
+                                                action={(battleEvent.turn === "HEROES" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
                                             />
                                             <MonsterEvent 
-                                                monster={(battleEvent.initiatorType === EventCharacter.MONSTER ? battleEvent.initiator : battleEvent.receiver) as IBattleEventMonster}
-                                                initiatorType={battleEvent.initiatorType}
-                                                receiverAction={battleEvent.receiverAction}
-                                                initiatorAction={battleEvent.initiatorAction}
+                                                monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster}
+                                                action={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
                                             />
                                         </>
                                     </HStack>
                                     <NameRow 
-                                        hero={(battleEvent.initiatorType === EventCharacter.HERO ? battleEvent.initiator : battleEvent.receiver) as IBattleEventHero} 
-                                        monster={(battleEvent.initiatorType === EventCharacter.MONSTER ? battleEvent.initiator : battleEvent.receiver) as IBattleEventMonster} 
+                                        hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero} 
+                                        monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster} 
                                     />
                                 </VStack>
                             ))
@@ -254,6 +256,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
             }
         }
     } catch(error) {
+        console.log('error:', error);
         return { 
             props: {
                 errorStatus: 404 // hard coded for now, will fix later
