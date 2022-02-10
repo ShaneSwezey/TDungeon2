@@ -17,7 +17,6 @@ const inventory_1 = require("../game/gear/inventory");
 const tmiClient_1 = require("../services/tmiClient");
 const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (job) => {
     const { newBattle } = job.data;
-    console.log('newBattle:', newBattle);
     await index_1.RedisInstance.setBattleId(newBattle.id);
     await index_1.RedisInstance.setBattleStatus("join");
     // set turn

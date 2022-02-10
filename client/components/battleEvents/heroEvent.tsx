@@ -1,17 +1,17 @@
-import { Badge, HStack, Stack, Text  } from "@chakra-ui/react";
+import { Badge, HStack, Stack, Text } from "@chakra-ui/react";
 import Image from "next/image";
-import { EventCharacter } from "../../enums/character";
-import { Event } from "../../enums/event";
 import { IAction } from "../../interfaces/battleEvent";
 import { IBattleEventHero } from "../../interfaces/hero";
 import ItemToolTip from "../itemToolTip";
+import { Event } from '../../enums/event';
 
 interface Props {
     hero: IBattleEventHero;
     action: IAction;
+    turn: string;
 }
 
-const HeroEvent = ({ hero, action }: Props) => {
+const HeroEvent = ({ hero, action, turn }: Props) => {
     return (
         <HStack>
             <Image src={hero.imgSrc} alt="Hero Picture" width={60} height={60} />
@@ -41,6 +41,14 @@ const HeroEvent = ({ hero, action }: Props) => {
                             }
                         </Stack>
                     </>
+            }
+            {
+                turn === "MONSTERS" && action.events.find(event => event === Event.HIT) &&
+                    <Text color="#E53E3E" fontWeight="bolder" fontSize={action.isCrit ? 40 : 20}>-{action.value}</Text>
+            }
+            {
+                turn === "MONSTERS" && action.events.find(event => event === Event.DODGE) &&
+                    <Text fontWeight="bolder" fontSize={action.isCrit ? 40 : 20}>{action.value}</Text>
             }
         </HStack>
     );

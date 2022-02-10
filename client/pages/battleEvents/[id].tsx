@@ -147,19 +147,6 @@ const Battle_Events_Query = gql`
                     events
                     value
                     isCrit
-                    weapon {
-                        name
-                        type
-                        damage {
-                            low
-                            high
-                        }
-                        rarity
-                        crit {
-                            chance
-                        }
-                        imgSrc
-                    }
                 }
             }
         }
@@ -222,10 +209,12 @@ const BattleEvents: NextPage<Props> = ({ battleEvents, errorStatus }: Props) => 
                                             <HeroEvent 
                                                 hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero}
                                                 action={(battleEvent.turn === "HEROES" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
+                                                turn={battleEvent.turn}
                                             />
                                             <MonsterEvent 
                                                 monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster}
                                                 action={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
+                                                turn={battleEvent.turn}
                                             />
                                         </>
                                     </HStack>
