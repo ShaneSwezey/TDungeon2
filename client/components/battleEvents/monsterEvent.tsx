@@ -4,6 +4,7 @@ import { IBattleEventMonster} from "../../interfaces/monster";
 import ItemToolTip from "../itemToolTip";
 import { IAction } from "../../interfaces/battleEvent";
 import { Event } from "../../enums/event";
+import { formatEvent } from "../../utils/event";
 
 interface Props {
     monster: IBattleEventMonster;
@@ -20,7 +21,29 @@ const MonsterEvent = ({ monster, action, turn }: Props) => {
             }
             {
                 turn === "HEROES" && action.events.find(event => event === Event.DODGE) &&
-                    <Text fontWeight="bolder" fontSize={action.isCrit ? 40 : 20} mr={2}>{action.value}</Text>
+                    <>
+                        <Text fontWeight="bolder" fontSize={action.isCrit ? 40 : 20}>{action.value}</Text>
+                        <Stack 
+                            direction="column"
+                        >
+                            {
+                                action.events.map(event => (
+                                    <Badge 
+                                        backgroundColor="green.300"
+                                        variant="solid"
+                                        color="white"
+                                        fontSize={12}
+                                        rounded={5}
+                                        mr={2}
+                                        width="fit-content"
+                                        key={event}
+                                    >
+                                        {formatEvent(event)}
+                                    </Badge>
+                                ))
+                            }
+                        </Stack>
+                    </>
             }
             {
                 action.weapon &&
@@ -36,10 +59,11 @@ const MonsterEvent = ({ monster, action, turn }: Props) => {
                                         color="white"
                                         fontSize={12}
                                         rounded={5}
-                                        m={0}
+                                        mr={2}
+                                        width="fit-content"
                                         key={event}
                                     >
-                                        {event}
+                                        {formatEvent(event)}
                                     </Badge>
                                 ))
                             }

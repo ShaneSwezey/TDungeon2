@@ -155,9 +155,9 @@ const Battle_Events_Query = gql`
 
 const getBorderColor = (type: string) => {
     switch(type) {
-        case EventCharacter.HERO:
+        case "HEROES":
             return "blue.300";
-        case EventCharacter.MONSTER:
+        case "MONSTERS":
             return "green.400";
         default:
             return "blue.300";

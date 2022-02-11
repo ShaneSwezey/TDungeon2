@@ -4,6 +4,7 @@ import { IAction } from "../../interfaces/battleEvent";
 import { IBattleEventHero } from "../../interfaces/hero";
 import ItemToolTip from "../itemToolTip";
 import { Event } from '../../enums/event';
+import { formatEvent } from "../../utils/event";
 
 interface Props {
     hero: IBattleEventHero;
@@ -33,9 +34,10 @@ const HeroEvent = ({ hero, action, turn }: Props) => {
                                         fontSize={12}
                                         rounded={5}
                                         m={0}
+                                        width="fit-content"
                                         key={event}
                                     >
-                                        {event}
+                                        {formatEvent(event)}
                                     </Badge>
                                 ))
                             }
@@ -48,7 +50,29 @@ const HeroEvent = ({ hero, action, turn }: Props) => {
             }
             {
                 turn === "MONSTERS" && action.events.find(event => event === Event.DODGE) &&
-                    <Text fontWeight="bolder" fontSize={action.isCrit ? 40 : 20}>{action.value}</Text>
+                    <>
+                        <Stack 
+                            direction="column"
+                        >
+                            {
+                                action.events.map(event => (
+                                    <Badge 
+                                        backgroundColor="blue.300"
+                                        variant="solid"
+                                        color="white"
+                                        fontSize={12}
+                                        rounded={5}
+                                        m={0}
+                                        width="fit-content"
+                                        key={event}
+                                    >
+                                        {formatEvent(event)}
+                                    </Badge>
+                                ))
+                            }
+                        </Stack>
+                        <Text fontWeight="bolder" fontSize={action.isCrit ? 40 : 20}>{action.value}</Text>
+                    </>
             }
         </HStack>
     );

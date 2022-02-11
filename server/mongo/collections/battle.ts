@@ -60,22 +60,23 @@ export class BattleCollection {
         }
     }
 
+    // key set pagination
     public async getBattles(limit: number, next?: string) {
         try {
             let battleRecords: IBattleRecord[];
 
             if (next) {
                 battleRecords = await this.battleCollection.find({
-                    _id: { $lt: new ObjectId(next) }
-                })
-                .sort({ _id: -1 })
-                .limit(limit)
-                .toArray();
+                        _id: { $lt: new ObjectId(next) }
+                    })
+                    .sort({ _id: -1 })
+                    .limit(limit)
+                    .toArray();
             } else {
                 battleRecords = await this.battleCollection.find()
-                .sort({ _id: -1 })
-                .limit(limit)
-                .toArray();
+                    .sort({ _id: -1 })
+                    .limit(limit)
+                    .toArray();
             }
             
             return {

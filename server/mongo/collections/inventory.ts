@@ -25,7 +25,6 @@ export class InventoryCollection {
                 armorInventory: [],
                 weaponInventory:[]
             });
-            console.log('inventoryRes:', res);
             return res;
         } catch(error) {
             console.error('[createNewInventory]', error);

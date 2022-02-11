@@ -38,7 +38,7 @@ interface Props {
 
 const Battles: NextPage<Props>  = ({ battles }: Props) => {
     const formBackground = useColorModeValue("gray.100", "gray.700");
-    
+
     return (
         <>
             <Header />
