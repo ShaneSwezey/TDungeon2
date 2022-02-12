@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "redis-cli flushall && node ./dist/index.js"
+    "start": "redis-cli flushall && node ./dist/index.js",
+    "tsc": "tsc --build ."
   },
   "author": "",
   "license": "ISC",
