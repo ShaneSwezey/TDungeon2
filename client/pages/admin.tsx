@@ -32,8 +32,6 @@ const Admin: NextPage<Props> = ({ currentBattle }: Props) => {
     const [ createBattle, { loading, data } ] = useMutation<ICreateBattleData>(CREATE_BATTLE_MUTATION);
     const formBackground = useColorModeValue("gray.100", "gray.700");
 
-    console.log("data:", data);
-
     return (
         <>
             <Header />

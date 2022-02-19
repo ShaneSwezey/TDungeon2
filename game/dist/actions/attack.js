@@ -39,7 +39,9 @@ const executeMonstersAttack = (heroes, monsters) => {
                     receiver: {
                         character: generateHeroSnapShot(hero, hit),
                         action: {
-                            events
+                            events,
+                            value: action.value,
+                            isCrit: action.isCrit
                         },
                     },
                     initiator: {
@@ -91,7 +93,9 @@ const executeHeroesAttack = (heroes, monsters) => {
                     receiver: {
                         character: generateMonsterSnapShot(monster, hit),
                         action: {
-                            events
+                            events,
+                            value: action.value,
+                            isCrit: action.isCrit
                         }
                     }
                 });

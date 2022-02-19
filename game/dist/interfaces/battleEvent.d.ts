@@ -12,7 +12,7 @@ export interface IActionEvent {
     initiator: ICharacterAction;
     receiver: ICharacterAction;
 }
-interface ICharacterAction {
+export interface ICharacterAction {
     character: BattleEventCharacter;
     action: IAction;
 }
@@ -22,5 +22,4 @@ export interface IAction {
     isCrit?: boolean;
     weapon?: IWeapon;
 }
-export {};
 //# sourceMappingURL=battleEvent.d.ts.map
