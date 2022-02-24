@@ -4,7 +4,7 @@ import faker from "@faker-js/faker";
 import { assert } from "chai";
 
 describe("Hero", () => {
-    describe("New Hero", () => {
+    describe("Create New Hero", () => {
         it("Create new Warrior", () => {
             const warrior = newHeroFactory({
                 type: HeroType.WARRIOR,
@@ -35,4 +35,4 @@ describe("Hero", () => {
             assert.equal(warrior.type, HeroType.RANGER);
         });
     })
-})
+});
