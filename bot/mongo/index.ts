@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
+import { getMongoConnectionString } from './connection';
 
-const mongoClient = new MongoClient("mongodb://127.0.0.1:27017"); // use env
+const mongoClient = new MongoClient(getMongoConnectionString()); // use env
 
 const startClient = async () => {
     try {

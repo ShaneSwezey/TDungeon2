@@ -5,7 +5,7 @@ import { getNextTurn, getRandomTurn } from '../game/utils/math';
 import { RedisInstance } from '../redis/index';
 import { HeroInputQueue, RoundQueue } from './queue';
 import { TDungeonDB } from '../mongo/collections/index';
-import { RedisConfig } from '../redis/options';
+import { getRedisConnectionConfig } from '../redis/options';
 import { monsterFactory } from '../game/monster';
 import { Turn } from '../game/enums/round';
 import { IHero, IHeroDBStats } from '../game/interfaces/hero';
@@ -14,6 +14,8 @@ import { ChannelName } from './enums/channel';
 import { WorkerName } from './enums/name';
 import { getDroppedItem } from '../game/gear/inventory';
 import { twitchClient } from '../services/tmiClient';
+
+const redisConfig = getRedisConnectionConfig();
 
 const NewBattleWorker = new Worker(WorkerName.NEWBATTLE, async (job: Job) => {
     const { newBattle } = job.data;
@@ -33,13 +35,13 @@ const NewBattleWorker = new Worker(WorkerName.NEWBATTLE, async (job: Job) => {
     }
 
     return true;
-}, { connection: RedisConfig });
+}, { connection: redisConfig });
 
 export const HeroInputWorker = new Worker(WorkerName.HEROINPUT, async (job: Job) => {
     const { battleId, round } = job.data;
     await twitchClient.say(ChannelName.SLIPPERYTOADS, `Heroes turn next Round: type !Attack`);
     await RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });
-}, { connection: RedisConfig });
+}, { connection: redisConfig });
 
 export const RoundWorker = new Worker(WorkerName.ROUND, async (job: Job) => {
     const { battleId, round } = job.data;
@@ -98,7 +100,7 @@ export const RoundWorker = new Worker(WorkerName.ROUND, async (job: Job) => {
         else await RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });
     }
     return true;
-}, { connection: RedisConfig });
+}, { connection: redisConfig });
 
 
 const getHeroNames = async(currentTurn: string) => {

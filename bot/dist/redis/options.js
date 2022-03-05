@@ -1,7 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RedisConfig = void 0;
-exports.RedisConfig = {
-    host: "127.0.0.1",
-    port: 6379,
+exports.getRedisConnectionConfig = void 0;
+const environment_1 = require("../enum/environment");
+const getRedisConnectionConfig = () => {
+    switch (process.env.NODE_ENV) {
+        case environment_1.Environment.DEV:
+            return {
+                host: "127.0.0.1",
+                port: 6379
+            };
+        case environment_1.Environment.DOCKERDEV:
+            return {
+                host: "172.17.0.1",
+                port: 6379
+            };
+        case environment_1.Environment.PRODUCTION:
+            return {
+                host: "redis",
+                port: 6379
+            };
+        default:
+            return {
+                host: "172.17.0.1",
+                port: 6379
+            };
+    }
 };
+exports.getRedisConnectionConfig = getRedisConnectionConfig;

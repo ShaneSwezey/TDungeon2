@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . /app
 
+ENV NODE_ENV=DOCKERDEV
+
 RUN npm install -g typescript
 
 RUN npm run tsc

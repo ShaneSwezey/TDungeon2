@@ -33,8 +33,9 @@ const bootstrap = async () => {
         if (isDBConnected) {
             await tmiClient_1.twitchClient.connect();
             await tmiClient_1.twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
-            const roundQueueScheduler = new bullmq_1.QueueScheduler("round", { connection: options_1.RedisConfig });
-            const heroInputQueueScheduler = new bullmq_1.QueueScheduler("heroInput", { connection: options_1.RedisConfig });
+            const redisConfig = (0, options_1.getRedisConnectionConfig)();
+            const roundQueueScheduler = new bullmq_1.QueueScheduler("round", { connection: redisConfig });
+            const heroInputQueueScheduler = new bullmq_1.QueueScheduler("heroInput", { connection: redisConfig });
             console.log(`Started workers: ${roundQueueScheduler.name}`);
             console.log(`Started workers: ${heroInputQueueScheduler.name}`);
             worker_1.NewBattleWorker.on("completed", (job) => console.log(`Job #${job.id} -`, job.data));

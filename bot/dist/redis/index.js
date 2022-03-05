@@ -275,4 +275,4 @@ RedisInstance.battleParticipants = "battle:hero:participants";
 RedisInstance.battleHeroAlive = "battle:hero:alive";
 RedisInstance.battleHeroAttack = "battle:hero:attack";
 RedisInstance.battleMonsterAlive = "battle:monster:alive";
-RedisInstance.redis = new ioredis_1.default(options_1.RedisConfig);
+RedisInstance.redis = new ioredis_1.default((0, options_1.getRedisConnectionConfig)());

@@ -1,6 +1,27 @@
 import { RedisOptions } from 'ioredis';
+import { Environment } from '../enum/environment';
 
-export const RedisConfig: RedisOptions = {
-    host: "127.0.0.1", // switch to env
-    port: 6379,
+export const getRedisConnectionConfig = (): RedisOptions => {
+    switch(process.env.NODE_ENV) {
+        case Environment.DEV:
+            return {
+                host: "127.0.0.1",
+                port: 6379
+            };
+        case Environment.DOCKERDEV:
+            return {
+                host: "172.17.0.1",
+                port: 6379
+            };
+        case Environment.PRODUCTION:
+            return {
+                host: "redis",
+                port: 6379
+            };
+        default:
+            return {
+                host: "127.0.0.1",
+                port: 6379
+            };
+    }
 }

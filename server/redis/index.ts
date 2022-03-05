@@ -1,5 +1,5 @@
 import { RedisOptions } from 'ioredis';
-import { Environment } from '../enums/enviroment';
+import { Environment } from '../enums/environment';
 
 export const getRedisConnectionConfig = (): RedisOptions => {
     switch(process.env.NODE_ENV) {

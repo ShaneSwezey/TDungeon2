@@ -3,7 +3,7 @@ dotenv.config();
 import { TDungeonDB } from './mongo/collections/index';
 import { HeroInputWorker, NewBattleWorker, RoundWorker } from './bull/worker';
 import { QueueScheduler } from 'bullmq';
-import { RedisConfig } from './redis/options';
+import { getRedisConnectionConfig } from './redis/options';
 import { twitchClient } from './services/tmiClient';
 
 const CHANNEL_NAME = "slipperytoads";
@@ -14,9 +14,11 @@ const bootstrap = async () => {
         if (isDBConnected) {
             await twitchClient.connect();
             await twitchClient.say(CHANNEL_NAME, "Tdungeon is online!");
+
+            const redisConfig = getRedisConnectionConfig();
             
-            const roundQueueScheduler = new QueueScheduler("round", { connection: RedisConfig });
-            const heroInputQueueScheduler = new QueueScheduler("heroInput", { connection: RedisConfig });
+            const roundQueueScheduler = new QueueScheduler("round", { connection: redisConfig });
+            const heroInputQueueScheduler = new QueueScheduler("heroInput", { connection: redisConfig });
             console.log(`Started workers: ${roundQueueScheduler.name}`);
             console.log(`Started workers: ${heroInputQueueScheduler.name}`);
 

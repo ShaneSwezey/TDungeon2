@@ -4,7 +4,7 @@ import { IArmor } from '../game/interfaces/armor';
 import { IHero } from '../game/interfaces/hero';
 import { IMonster } from '../game/interfaces/monster';
 import { IWeapon } from '../game/interfaces/weapon';
-import { RedisConfig } from './options';
+import { getRedisConnectionConfig } from './options';
 
 
 export class RedisInstance {
@@ -19,7 +19,7 @@ export class RedisInstance {
     private static battleHeroAttack = "battle:hero:attack";
     private static battleMonsterAlive = "battle:monster:alive";
 
-    private static redis = new Redis(RedisConfig);
+    private static redis = new Redis(getRedisConnectionConfig());
 
     public constructor() {}
 

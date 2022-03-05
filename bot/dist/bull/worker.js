@@ -15,6 +15,7 @@ const channel_1 = require("./enums/channel");
 const name_1 = require("./enums/name");
 const inventory_1 = require("../game/gear/inventory");
 const tmiClient_1 = require("../services/tmiClient");
+const redisConfig = (0, options_1.getRedisConnectionConfig)();
 const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (job) => {
     const { newBattle } = job.data;
     await index_1.RedisInstance.setBattleId(newBattle.id);
@@ -30,13 +31,13 @@ const NewBattleWorker = new bullmq_1.Worker(name_1.WorkerName.NEWBATTLE, async (
         await queue_1.RoundQueue.add(`battle:${newBattle.id}:round:1`, { battleId: newBattle.id, round: 1 }, { delay: 30000 });
     }
     return true;
-}, { connection: options_1.RedisConfig });
+}, { connection: redisConfig });
 exports.NewBattleWorker = NewBattleWorker;
 exports.HeroInputWorker = new bullmq_1.Worker(name_1.WorkerName.HEROINPUT, async (job) => {
     const { battleId, round } = job.data;
     await tmiClient_1.twitchClient.say(channel_1.ChannelName.SLIPPERYTOADS, `Heroes turn next Round: type !Attack`);
     await queue_1.RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });
-}, { connection: options_1.RedisConfig });
+}, { connection: redisConfig });
 exports.RoundWorker = new bullmq_1.Worker(name_1.WorkerName.ROUND, async (job) => {
     const { battleId, round } = job.data;
     console.log(`battleId:${battleId}:${round}`);
@@ -86,7 +87,7 @@ exports.RoundWorker = new bullmq_1.Worker(name_1.WorkerName.ROUND, async (job) =
             await queue_1.RoundQueue.add(`battle:${battleId}:round:${round + 1}`, { battleId, round: round + 1 }, { delay: 30000 });
     }
     return true;
-}, { connection: options_1.RedisConfig });
+}, { connection: redisConfig });
 const getHeroNames = async (currentTurn) => {
     try {
         if (currentTurn === round_2.Turn.HEROES) {
