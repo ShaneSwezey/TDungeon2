@@ -43,12 +43,12 @@ class WebSocketLink extends ApolloLink {
 }
 
 const wsLink = () => new WebSocketLink({
-  url: `ws://api.tdungeon.quest/:8000/graphql`,
+  url: `ws://api.tdungeon.quest/graphql`,
   webSocketImpl: ws,
 });
 
 const httpLink = () => new HttpLink({
-  uri: `https://api.tdungeon.quest`,
+  uri: `https://api.tdungeon.quest/graphql`,
 });
 
 const splitLink = split(
