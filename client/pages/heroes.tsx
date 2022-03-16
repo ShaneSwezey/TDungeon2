@@ -10,7 +10,6 @@ import { HeroType } from "../enums/hero";
 import Link from "next/link";
 import { client } from "../apollo-client";
 import { GetServerSidePropsContext, NextPage } from "next";
-import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 
 const HEROES_QUERY = gql`
@@ -42,7 +41,7 @@ const CREATE_NEW_HERO_MUTATION = gql`
 `;
 
 interface Props {
-    heroes?: IHero[];
+    heroes: IHero[];
     name: string;
     errorStatus?: number;
 }
@@ -53,8 +52,6 @@ const Heroes: NextPage<Props> = ({ heroes, name, errorStatus }: Props) => {
     const [ createNewHeroMutation ] = useMutation(CREATE_NEW_HERO_MUTATION);
     const router = useRouter();
     const formBackground = useColorModeValue("gray.100", "gray.700");
-
-    if (heroes === undefined) return <ErrorPage statusCode={errorStatus!} />
 
     const setHeroActive = async (heroId: string) => {
         try {
@@ -167,9 +164,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
         }
     } catch(error) {
         return {
-            props: {
-                errorStatus: 404 // hard coded for now, will fix later
-            }
+            notFound: true
         }
     }
 }
