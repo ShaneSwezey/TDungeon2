@@ -11,7 +11,7 @@ const getRedisConnectionConfig = () => {
             };
         case environment_1.Environment.DOCKERDEV:
             return {
-                host: "host.docker.internal",
+                host: "redis",
                 port: 6379
             };
         case environment_1.Environment.PRODUCTION:
@@ -21,7 +21,7 @@ const getRedisConnectionConfig = () => {
             };
         default:
             return {
-                host: "host.docker.internal",
+                host: "redis",
                 port: 6379
             };
     }

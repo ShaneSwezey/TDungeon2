@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import { getMongoConnectionString } from '../connection';
 import { BattleCollection } from './battle';
 import { BattleEventCollection } from './battleEvent';
 import { HeroCollection } from './hero';
@@ -15,7 +16,7 @@ export class TDungeonDB {
     public static async connect() {
         try {
             if (!this.mongoClient) {
-                const mC = new MongoClient("mongodb://127.0.0.1:27017");
+                const mC = new MongoClient(getMongoConnectionString());
                 const db = mC.db("tdungeon");
                 this.BattleCollection = new BattleCollection(db);
                 this.HeroCollection = new HeroCollection(db);
