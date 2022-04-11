@@ -2,7 +2,6 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import { client } from "../../apollo-client";
 import ItemToolTip from "../../components/itemToolTip";
 import { ArmorSlot } from "../../enums/armor";
-import { HeroType } from "../../enums/hero";
 import { IArmor } from "../../interfaces/armor";
 import { IHero } from "../../interfaces/hero";
 import { IInventory } from "../../interfaces/inventory";
@@ -17,7 +16,6 @@ import WeaponInventory from "../../components/gear/weaponInventory";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import Header from "../../components/header";
 import ErrorPage from "next/error";
 
 const HERO_GEAR_QUERY = gql`
@@ -160,103 +158,100 @@ const Hero: NextPage<Props> = ({ hero, inventory, errorStatus }: Props) => {
     const refreshData = () => router.replace(router.asPath);
     
     return (
-        <>
-            <Header />
-            <Flex direction="row">
-                <Container m={10} background={formBackground} p={12} rounded={5}>
-                    <Flex direction="row" spacing={5}>
-                        <Icon 
-                            as={ChevronLeftIcon} 
-                            boxSize={10} 
-                            _hover={{ cursor: "pointer" }}
-                            onClick={() => router.back()} 
-                        />
-                        <Heading mb={6}>{formatHeroType(hero.type)}</Heading>
-                    </Flex>
-                        <Stack direction="column" spacing={5}>
-                            <HStack justifyContent="center">
+        <Flex direction="row">
+            <Container m={10} background={formBackground} p={12} rounded={5}>
+                <Flex direction="row" spacing={5}>
+                    <Icon 
+                        as={ChevronLeftIcon} 
+                        boxSize={10} 
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() => router.back()} 
+                    />
+                    <Heading mb={6}>{formatHeroType(hero.type)}</Heading>
+                </Flex>
+                    <Stack direction="column" spacing={5}>
+                        <HStack justifyContent="center">
                             <ArmorDisplay slot={ArmorSlot.HELM} armor={hero.armor.find(armor => armor.slot === ArmorSlot.HELM)} />
                             <ArmorDisplay slot={ArmorSlot.CHEST} armor={hero.armor.find(armor => armor.slot === ArmorSlot.CHEST)} />
                             <ArmorDisplay slot={ArmorSlot.GLOVES} armor={hero.armor.find(armor => armor.slot === ArmorSlot.GLOVES)} />
                             <ArmorDisplay slot={ArmorSlot.PANTS} armor={hero.armor.find(armor => armor.slot === ArmorSlot.PANTS)} />
-                            </HStack>
-                            <HStack justifyContent="center" spacing="24px">
+                        </HStack>
+                        <HStack justifyContent="center" spacing="24px">
+                            {
+                                hero.weapons.map((weapon, index: number) => (
+                                    <ItemToolTip item={weapon} type={"Weapon"} direction="right" key={index}>
+                                        <Image src={weapon.imgSrc} alt="Vercel Logo" width={60} height={60} />
+                                    </ItemToolTip>
+                                ))
+                            }
+                        </HStack>
+                        <Stack direction="column" background={formBackground} borderRadius={5} p={2} >
+                            <Text fontSize="lg">Hp: {hero.armor.reduce((sum: number, armor) => sum + armor.hitPoints, 0)}</Text>
+                            <Text fontSize="lg">Dmg: {hero.weapons.map(weapon => ` ${weapon.damage.low} - ${weapon.damage.high}`).toString()}</Text>
+                            <Text>Crit: +{hero.crit}%</Text>
+                            <Text>Dodge: {hero.dodge}%</Text>
+                            <Text>Block: {hero.block}%</Text>
+                            <Text>Attack Power: {hero.attackPower}</Text>
+                            {
+                                session && session.user?.name?.toLowerCase() === hero.name && 
+                                    <Text>Gold: {inventory.gold}</Text>
+                            }
+                        </Stack>
+                    </Stack>    
+            </Container>
+            {
+                session && session.user?.name?.toLowerCase() === hero.name && 
+                    <Container m={10}>
+                        <Flex direction="column" background={formBackground} p={12} rounded={5}>
+                            <Heading mb={6}>Inventory</Heading>
+                            <HStack marginBottom={5}>
+                                <Button
+                                    onClick={() => setSelectedGearType(GearType.ARMOR)}
+                                    backgroundColor={selectedGearType === GearType.ARMOR ? "blue.300" : "gray.600"}
+                                >
+                                    Armor
+                                </Button>
+                                <Button
+                                    onClick={() => setSelectedGearType(GearType.WEAPON)}
+                                    backgroundColor={selectedGearType === GearType.WEAPON ? "blue.300" : "gray.600"}
+                                >
+                                    Weapons
+                                </Button>
                                 {
-                                    hero.weapons.map((weapon, index: number) => (
-                                        <ItemToolTip item={weapon} type={"Weapon"} direction="right" key={index}>
-                                            <Image src={weapon.imgSrc} alt="Vercel Logo" width={60} height={60} />
-                                        </ItemToolTip>
-                                    ))
+                                    <Text>{
+                                        selectedGearType === GearType.ARMOR ? 
+                                            `${inventory.armorInventory.length}/20` 
+                                        : 
+                                            `${inventory.weaponInventory.length}/20`}
+                                    </Text>
                                 }
                             </HStack>
-                            <Stack direction="column" background={formBackground} borderRadius={5} p={2} >
-                                <Text fontSize="lg">Hp: {hero.armor.reduce((sum: number, armor) => sum + armor.hitPoints, 0)}</Text>
-                                <Text fontSize="lg">Dmg: {hero.weapons.map(weapon => ` ${weapon.damage.low} - ${weapon.damage.high}`).toString()}</Text>
-                                <Text>Crit: +{hero.crit}%</Text>
-                                <Text>Dodge: {hero.dodge}%</Text>
-                                <Text>Block: {hero.block}%</Text>
-                                <Text>Attack Power: {hero.attackPower}</Text>
+                            <Stack direction="column" spacing={5}>
                                 {
-                                    session && session.user?.name?.toLowerCase() === hero.name && 
-                                        <Text>Gold: {inventory.gold}</Text>
+                                    selectedGearType === GearType.ARMOR &&
+                                        <ArmorInventory 
+                                            heroId={hero.id!}
+                                            heroType={hero.type} 
+                                            heroesArmor={hero.armor}
+                                            armorInventory={inventory.armorInventory}
+                                            refreshData={refreshData} 
+                                        />
+                                }
+                                {
+                                    selectedGearType === GearType.WEAPON && 
+                                        <WeaponInventory 
+                                            heroId={hero.id!}
+                                            heroType={hero.type} 
+                                            heroWeapons={hero.weapons}
+                                            weaponInventory={inventory.weaponInventory} 
+                                            refreshData={refreshData}
+                                        />
                                 }
                             </Stack>
-                        </Stack>    
-                </Container>
-                {
-                    session && session.user?.name?.toLowerCase() === hero.name && 
-                        <Container m={10}>
-                            <Flex direction="column" background={formBackground} p={12} rounded={5}>
-                                <Heading mb={6}>Inventory</Heading>
-                                <HStack marginBottom={5}>
-                                    <Button
-                                        onClick={() => setSelectedGearType(GearType.ARMOR)}
-                                        backgroundColor={selectedGearType === GearType.ARMOR ? "blue.300" : "gray.600"}
-                                    >
-                                        Armor
-                                    </Button>
-                                    <Button
-                                        onClick={() => setSelectedGearType(GearType.WEAPON)}
-                                        backgroundColor={selectedGearType === GearType.WEAPON ? "blue.300" : "gray.600"}
-                                    >
-                                        Weapons
-                                    </Button>
-                                    {
-                                        <Text>{
-                                            selectedGearType === GearType.ARMOR ? 
-                                                `${inventory.armorInventory.length}/20` 
-                                            : 
-                                                `${inventory.weaponInventory.length}/20`}
-                                        </Text>
-                                    }
-                                </HStack>
-                                <Stack direction="column" spacing={5}>
-                                    {
-                                        selectedGearType === GearType.ARMOR &&
-                                            <ArmorInventory 
-                                                heroId={hero.id!}
-                                                heroType={hero.type} 
-                                                heroesArmor={hero.armor}
-                                                armorInventory={inventory.armorInventory}
-                                                refreshData={refreshData} 
-                                            />
-                                    }
-                                    {
-                                        selectedGearType === GearType.WEAPON && 
-                                            <WeaponInventory 
-                                                heroId={hero.id!}
-                                                heroType={hero.type} 
-                                                heroWeapons={hero.weapons}
-                                                weaponInventory={inventory.weaponInventory} 
-                                                refreshData={refreshData}
-                                            />
-                                    }
-                                </Stack>
-                            </Flex>
-                        </Container>
-                }
-            </Flex>
-        </>
+                        </Flex>
+                    </Container>
+            }
+        </Flex>
     );
 }
 

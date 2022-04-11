@@ -1,5 +1,5 @@
-import { gql, useMutation } from '@apollo/client';
-import { Button, Container, Flex, Heading, useColorModeValue } from '@chakra-ui/react';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { Button, Container, Flex, Heading, Spinner, useColorModeValue } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { client } from '../apollo-client';
 import Header from '../components/header';
@@ -24,49 +24,40 @@ interface ICreateBattleData {
     }
 }
 
-interface Props {
+interface CurrentBattlePayload {
     currentBattle: boolean;
 }
 
-const Admin: NextPage<Props> = ({ currentBattle }: Props) => {
-    const [ createBattle, { loading, data } ] = useMutation<ICreateBattleData>(CREATE_BATTLE_MUTATION);
+const Admin: NextPage = () => {
+    const { data: queryData, loading: queryLoading  } = useQuery<CurrentBattlePayload>(IS_BATTLE_QUERY);
+    const [ createBattle, { data: mutationData, loading: mutationLoading } ] = useMutation<ICreateBattleData>(CREATE_BATTLE_MUTATION);
     const formBackground = useColorModeValue("gray.100", "gray.700");
 
     return (
-        <>
-            <Header />
-            <Flex direction="row">
-                <Container m={10} background={formBackground} p={12} rounded={5}>
-                    <Heading mb={6}>Admin Controls</Heading>
-                    <Button
-                        backgroundColor="#E53E3E"
-                        isDisabled={currentBattle}
-                        onClick={() => createBattle()}
-                    >
-                        New Battle
-                    </Button>
-                </Container>
-                {
-                    data && 
-                        <Container m={10} background={formBackground} p={12} rounded={5}>
-                            <Heading mb={6}>{data.createBattle.id}</Heading>
-                        </Container>
-                }
-            </Flex>
-        </>
+        <Flex direction="row">
+            {
+                queryLoading ? 
+                    <Spinner />
+                :
+                    <Container m={10} background={formBackground} p={12} rounded={5}>
+                        <Heading mb={6}>Admin Controls</Heading>
+                        <Button
+                            backgroundColor="#E53E3E"
+                            isDisabled={queryData?.currentBattle}
+                            onClick={() => createBattle()}
+                        >
+                            New Battle
+                        </Button>
+                    </Container>
+            }
+            {
+                mutationData && 
+                    <Container m={10} background={formBackground} p={12} rounded={5}>
+                        <Heading mb={6}>{mutationData?.createBattle.id}</Heading>
+                    </Container>
+            }
+        </Flex>
     );
-}
-
-export async function getServerSideProps() {
-    const { data } = await client.query({
-        query: IS_BATTLE_QUERY
-    });
-
-    return {
-        props: {
-            curentBattle: data.currentBattle
-        }
-    }
 }
 
 export default Admin;

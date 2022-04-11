@@ -5,7 +5,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 
 const Header = () => {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     
     const { toggleColorMode  } = useColorMode();
     const darkModeIcon = useColorModeValue(
@@ -24,7 +24,7 @@ const Header = () => {
                 </Center>
                 <Spacer />
                 {
-                    session ?
+                    status === 'authenticated' ?
                         <Stack direction="row" mr={5}>
                             <Center mt={4}>
                                 <Box fontWeight="bold" mr={5}>Hello, {session.user?.name}</Box>
@@ -62,12 +62,11 @@ const Header = () => {
                     </Button>
                 </Link>
                 {
-                    session &&
+                    status === 'authenticated' &&
                         <>
                             <Link
                                 href={{
                                     pathname: "/heroes",
-                                    query: { name: session.user?.name?.toLowerCase() }
                                 }}
                                 passHref
                             >

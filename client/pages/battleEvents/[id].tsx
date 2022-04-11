@@ -176,58 +176,55 @@ const BattleEvents: NextPage<Props> = ({ battleEvents, errorStatus }: Props) => 
     if (battleEvents === undefined) return <ErrorPage statusCode={errorStatus!} />
 
     return (
-        <>
-            <Header />
-            <Container mt={10} maxWidth="65%">
-                <Flex direction="column" background={formBackground} p={12} rounded={5}>
-                    <HStack mb={5}>
-                        <Icon 
-                            as={ChevronLeftIcon} 
-                            boxSize={10} 
-                            _hover={{ cursor: "pointer" }}
-                            onClick={() => router.back()}
-                        />
-                        <Heading mb={6} ml={5}>Battle Events</Heading>
-                        <Center>
-                            <Heading size="lg">{`#${battleEvents[0].battleId}`}</Heading>
-                        </Center>
-                    </HStack>
-                        {
-                            battleEvents.map(battleEvent => (
-                                <VStack spacing="5px" mb={5} key={battleEvent.id}>
-                                    <HStack
-                                        w="100%" 
-                                        h="70px" 
-                                        border="solid" 
-                                        borderColor={getBorderColor(battleEvent.turn)} 
-                                        rounded={5} 
-                                        p={1}
-                                        mb={0}
-                                        justifyContent="space-between"
-                                    >
-                                        <>
-                                            <HeroEvent 
-                                                hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero}
-                                                action={(battleEvent.turn === "HEROES" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
-                                                turn={battleEvent.turn}
-                                            />
-                                            <MonsterEvent 
-                                                monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster}
-                                                action={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
-                                                turn={battleEvent.turn}
-                                            />
-                                        </>
-                                    </HStack>
-                                    <NameRow 
-                                        hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero} 
-                                        monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster} 
-                                    />
-                                </VStack>
-                            ))
-                        }
-                </Flex>
-            </Container>
-        </>
+        <Container mt={10} maxWidth="65%">
+            <Flex direction="column" background={formBackground} p={12} rounded={5}>
+                <HStack mb={5}>
+                    <Icon 
+                        as={ChevronLeftIcon} 
+                        boxSize={10} 
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() => router.back()}
+                    />
+                    <Heading mb={6} ml={5}>Battle Events</Heading>
+                    <Center>
+                        <Heading size="lg">{`#${battleEvents[0].battleId}`}</Heading>
+                    </Center>
+                </HStack>
+                    {
+                        battleEvents.map(battleEvent => (
+                            <VStack spacing="5px" mb={5} key={battleEvent.id}>
+                                <HStack
+                                    w="100%" 
+                                    h="70px" 
+                                    border="solid" 
+                                    borderColor={getBorderColor(battleEvent.turn)} 
+                                    rounded={5} 
+                                    p={1}
+                                    mb={0}
+                                    justifyContent="space-between"
+                                >
+                                    <>
+                                        <HeroEvent 
+                                            hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero}
+                                            action={(battleEvent.turn === "HEROES" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
+                                            turn={battleEvent.turn}
+                                        />
+                                        <MonsterEvent 
+                                            monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster}
+                                            action={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.action : battleEvent.receiver.action) as IAction}
+                                            turn={battleEvent.turn}
+                                        />
+                                    </>
+                                </HStack>
+                                <NameRow 
+                                    hero={(battleEvent.turn === "HEROES" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventHero} 
+                                    monster={(battleEvent.turn === "MONSTERS" ? battleEvent.initiator.character : battleEvent.receiver.character) as IBattleEventMonster} 
+                                />
+                            </VStack>
+                        ))
+                    }
+            </Flex>
+        </Container>
     );
 }
 
