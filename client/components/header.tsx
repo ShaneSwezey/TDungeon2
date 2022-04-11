@@ -27,7 +27,7 @@ const Header = () => {
                     status === 'authenticated' ?
                         <Stack direction="row" mr={5}>
                             <Center mt={4}>
-                                <Box fontWeight="bold" mr={5}>Hello, {session.user?.name}</Box>
+                                <Box fontWeight="bold" mr={5}>Hello, {session!.user!.name}</Box>
                                 <Button onClick={() => signOut()}>Logout</Button>
                             </Center>
                         </Stack>
@@ -77,7 +77,7 @@ const Header = () => {
                                 </Button>
                             </Link>
                             {
-                                session.user!.name === "SlipperyToads" &&
+                                session!.user!.name === "SlipperyToads" &&
                                     <Link 
                                         href="/admin"
                                         passHref

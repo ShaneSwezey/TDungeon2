@@ -54,7 +54,7 @@ const Heroes: NextPage = () => {
                 status !== 'authenticated' ? 
                         <Spinner />
                     :
-                        <HeroesChild session={session} />
+                        <HeroesChild session={session!} />
             }
         </>
     )
